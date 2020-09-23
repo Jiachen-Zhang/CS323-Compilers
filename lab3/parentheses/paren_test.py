@@ -26,6 +26,8 @@ def valid_parentheses(paren):
     paren_buf = ctypes.c_char_p(paren_b)
     return func(paren_buf)
 
+# print(valid_parentheses("()"))
+
 
 with open('data.pickle', 'rb') as f:
     truematch, falsematch = pickle.load(f)
