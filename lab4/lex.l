@@ -8,7 +8,7 @@ esc \\([\"\\/bfnrt]|{unic})
 scp [^"\\\x00-\x1f]
 string \"({esc}|{scp})*\"
 
-int 0|[1-9][0-9]*
+int 0$|[1-9][0-9]*
 frac \.[0-9]+
 exp [Ee][+-]?[0-9]+
 number -?{int}{frac}?{exp}?
