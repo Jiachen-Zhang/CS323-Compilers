@@ -44,3 +44,6 @@ def check_jsonchecker_fail_syntaxonly():
 
 # check_jsonchecker_fail_withlexical()
 check_jsonchecker_fail_syntaxonly()
+
+print(jsonparser_output('data/jsonchecker/fail13.json'))
+
