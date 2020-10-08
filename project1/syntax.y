@@ -57,6 +57,7 @@ ParamDec: Specifier VarDec
 CompSt: LC DefList StmtList RC
     ;
 StmtList: Stmt StmtList
+    | %empty
     ;
 Stmt: Exp SEMI
     | CompSt
@@ -67,6 +68,7 @@ Stmt: Exp SEMI
     ;
 /* local definition */
 DefList: Def DefList
+    | %empty
     ;
 Def: Specifier DecList SEMI
     ;

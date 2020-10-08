@@ -4,8 +4,6 @@
 #include <stdarg.h>
 #include "ast.h"
 
-
-
 ast *new_ast(char *type, int token_type, char *value, int lineno, int child_num, ...){
     ast *a = malloc(sizeof(ast));
 
