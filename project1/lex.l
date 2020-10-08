@@ -1,5 +1,7 @@
 %{
+    #include <assert.h>
     #include"syntax.tab.h"
+    #include"ast.h"
     // just let you know you have macros!
     #define EXIT_OK 0
     #define EXIT_FAIL 1
@@ -20,7 +22,6 @@ int {decimal_int}|(0[xX][0-9a-fA-F]{1,6})
 float {decimal_int}\.[0-9]+
 letter [a-zA-Z_]
 id [a-zA-Z_][0-9a-zA-Z_]*
-type (int)|(fload)|(char)
 char ('[ -~]')|('0[xX][0-9a-fA-F]{1,2}')
 %%
 (0[0-9]+)|(0[xX])|(0[xX][0-9a-fA-F]{6}[0-9a-fA-F]+) { DISPLAY_TOKEN("ERROR_INT"); return ERROE_INT; }
@@ -28,36 +29,169 @@ char ('[ -~]')|('0[xX][0-9a-fA-F]{1,2}')
 {float} { DISPLAY_TOKEN("FLOAT"); return FLOAT; /* floating point number (only dot-form) */}
 {int} { DISPLAY_TOKEN("INT"); return INT; /* integer in 32-bits (decimal or hexadecimal) */}
 {char} { DISPLAY_TOKEN("CHAR"); return CHAR; /* single character (printable or hex-form) */ }
-"struct" { DISPLAY_TOKEN("STRUCT"); return STRUCT; }
-"if" { DISPLAY_TOKEN("IF"); return IF; }
-"else" { DISPLAY_TOKEN("ELSE"); return ELSE; }
-"while" { DISPLAY_TOKEN("WHILE"); return WHILE; }
-"return" { DISPLAY_TOKEN("RETURN"); return RETURN; }
-{type} { DISPLAY_TOKEN("TYPE"); return TYPE; }
-{id} { DISPLAY_TOKEN("ID"); return ID; /* should be after type */}
-"." { DISPLAY_TOKEN("DOT"); return DOT; }
-";" { DISPLAY_TOKEN("SEMI"); return SEMI; }
-"," { DISPLAY_TOKEN("COMMA"); return COMMA; }
-"=" { DISPLAY_TOKEN("ASSIGN"); return ASSIGN; }
-"<" { DISPLAY_TOKEN("LT"); return LT; }
-"<=" { DISPLAY_TOKEN("LE"); return LE; }
-">" { DISPLAY_TOKEN("GT"); return GT; }
-">=" { DISPLAY_TOKEN("GE"); return GE; }
-"!=" { DISPLAY_TOKEN("NE"); return NE; }
-"==" { DISPLAY_TOKEN("EQ"); return EQ; }
-"+" { DISPLAY_TOKEN("PLUS"); return PLUS; }
-"-" { DISPLAY_TOKEN("MINUS"); return MINUS; }
-"*" { DISPLAY_TOKEN("MUL"); return MUL; }
-"/" { DISPLAY_TOKEN("DIV"); return DIV; }
-"&&" { DISPLAY_TOKEN("AND"); return AND; }
-"||" { DISPLAY_TOKEN("OR"); return OR; }
-"!" { DISPLAY_TOKEN("NOT"); return NOT; }
-"(" { DISPLAY_TOKEN("LP"); return LP; }
-")" { DISPLAY_TOKEN("RP"); return RP; }
-"[" { DISPLAY_TOKEN("LB"); return LB; }
-"]" { DISPLAY_TOKEN("RB"); return RB; }
-"{" { DISPLAY_TOKEN("LC"); return LC; }
-"}" { DISPLAY_TOKEN("RC"); return RC; }
+"struct" {   
+    DISPLAY_TOKEN("STRUCT"); 
+    yylval.ast_node=new_ast_node("STRUCT", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0); 
+    return STRUCT; 
+}
+"if" { 
+    DISPLAY_TOKEN("IF"); 
+    yylval.ast_node=new_ast_node("IF", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0); 
+    return IF; 
+}
+"else" { 
+    DISPLAY_TOKEN("ELSE"); 
+    yylval.ast_node= new_ast_node("ELSE", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return ELSE; 
+}
+"while" {   
+    DISPLAY_TOKEN("WHILE"); 
+    yylval.ast_node= new_ast_node("WHILE", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return WHILE; 
+}
+"return" { 
+    DISPLAY_TOKEN("RETURN");
+    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return RETURN;
+}
+"int" {
+    DISPLAY_TOKEN("TYPE");
+    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITH_VALUE, "int", yylineno, 0);
+    return TYPE;
+}
+"float" {
+    DISPLAY_TOKEN("TYPE");
+    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITH_VALUE, "float", yylineno, 0);
+    return TYPE;
+}
+"char" {
+    DISPLAY_TOKEN("TYPE");
+    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITH_VALUE, "char", yylineno, 0);
+    return TYPE;
+}
+{id} {
+    /* should be after type */
+    DISPLAY_TOKEN("ID");
+    char *value = malloc(strlen(yytext));
+    strcpy(value, yytext);
+    yylval.ast_node = new_ast_node("ID", TOKEN_WITH_VALUE, value, yylineno, 0);
+    return ID;
+}
+"." { 
+    DISPLAY_TOKEN("DOT");
+    yylval.ast_node = new_ast_node("DOT", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return DOT;
+}
+";" { 
+    DISPLAY_TOKEN("SEMI");
+    yylval.ast_node = new_ast_node("SEMI", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return SEMI; 
+}
+"," { 
+    DISPLAY_TOKEN("COMMA"); 
+    yylval.ast_node = new_ast_node("COMMA", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return COMMA;
+}
+"=" {
+    DISPLAY_TOKEN("ASSIGN");
+    yylval.ast_node = new_ast_node("ASSIGN", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return ASSIGN;
+}
+"<" {
+    DISPLAY_TOKEN("LT");
+    yylval.ast_node = new_ast_node("LT", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return LT;
+}
+"<=" {
+    DISPLAY_TOKEN("LE");
+    yylval.ast_node = new_ast_node("LE", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return LE; 
+}
+">" {
+    DISPLAY_TOKEN("GT");
+    yylval.ast_node = new_ast_node("GT", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return GT;
+}
+">=" {
+    DISPLAY_TOKEN("GE");
+    yylval.ast_node = new_ast_node("GE", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return GE;
+}
+"!=" {
+    DISPLAY_TOKEN("NE");
+    yylval.ast_node = new_ast_node("NE", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return NE;
+}
+"==" {
+    DISPLAY_TOKEN("EQ");
+    yylval.ast_node = new_ast_node("EQ", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return EQ; 
+}
+"+" {
+    DISPLAY_TOKEN("PLUS");
+    yylval.ast_node = new_ast_node("PLUS", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return PLUS;
+}
+"-" {
+    DISPLAY_TOKEN("MINUS");
+    yylval.ast_node = new_ast_node("MINUS", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return MINUS;
+}
+"*" {
+    DISPLAY_TOKEN("MUL");
+    yylval.ast_node = new_ast_node("MUL", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return MUL;
+}
+"/" {
+    DISPLAY_TOKEN("DIV");
+    yylval.ast_node = new_ast_node("DIV", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return DIV;
+}
+"&&" {
+    DISPLAY_TOKEN("AND");
+    yylval.ast_node = new_ast_node("AND", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return AND;
+}
+"||" { 
+    DISPLAY_TOKEN("OR");
+    yylval.ast_node = new_ast_node("OR", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return OR; 
+}
+"!" { 
+    DISPLAY_TOKEN("NOT");
+    yylval.ast_node = new_ast_node("NOT", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return NOT;
+}
+"(" {
+    DISPLAY_TOKEN("LP");
+    yylval.ast_node = new_ast_node("LP", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return LP;
+}
+")" {
+    DISPLAY_TOKEN("RP");
+    yylval.ast_node = new_ast_node("RP", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return RP;
+}
+"[" { 
+    DISPLAY_TOKEN("LB");
+    yylval.ast_node = new_ast_node("LB", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return LB; 
+}
+"]" { 
+    DISPLAY_TOKEN("RB"); 
+    yylval.ast_node = new_ast_node("RB", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return RB; 
+}
+"{" {
+    DISPLAY_TOKEN("LC");
+    yylval.ast_node = new_ast_node("LC", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return LC;
+}
+"}" {
+    DISPLAY_TOKEN("RC");
+    yylval.ast_node = new_ast_node("RC", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0);
+    return RC;
+}
 \n { yycolno = 1; }
 [ \t]+ {}
 . { printf("lexical error at line %d col %d: %s\n", yylineno, yycolno, yytext);; return -1; }
