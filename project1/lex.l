@@ -5,8 +5,14 @@
     // just let you know you have macros!
     #define EXIT_OK 0
     #define EXIT_FAIL 1
-    #define DISPLAY_SYNTAX(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
-    #define DISPLAY_TOKEN(token) fprintf(stdout, "    %s[%d](%s)\n", token, yycolno, yytext);
+    #define __DEBUG 0
+    #if __DEBUG
+        #define DISPLAY_SYNTAX(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
+        #define DISPLAY_TOKEN(token) fprintf(stdout, "    %s[%d](%s)\n", token, yycolno, yytext);
+    #else
+        #define DISPLAY_SYNTAX(syntax) 
+        #define DISPLAY_TOKEN(token) 
+    #endif
     #define YY_USER_ACTION \
         yylloc.first_line = yylineno; \
         yylloc.first_column = yycolno; \
@@ -22,13 +28,41 @@ int {decimal_int}|(0[xX][0-9a-fA-F]{1,6})
 float {decimal_int}\.[0-9]+
 letter [a-zA-Z_]
 id [a-zA-Z_][0-9a-zA-Z_]*
-char ('[ -~]')|('0[xX][0-9a-fA-F]{1,2}')
+char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
 %%
 (0[0-9]+)|(0[xX])|(0[xX][0-9a-fA-F]{6}[0-9a-fA-F]+) { DISPLAY_TOKEN("ERROR_INT"); return ERROE_INT; }
 (0\.) { DISPLAY_TOKEN("ERROR_FLOAT"); return ERROR_FLOAT; }
-{float} { DISPLAY_TOKEN("FLOAT"); return FLOAT; /* floating point number (only dot-form) */}
-{int} { DISPLAY_TOKEN("INT"); return INT; /* integer in 32-bits (decimal or hexadecimal) */}
-{char} { DISPLAY_TOKEN("CHAR"); return CHAR; /* single character (printable or hex-form) */ }
+{float} {
+    /* floating point number (only dot-form) */
+    DISPLAY_TOKEN("FLOAT");
+    char *value = malloc(strlen(yytext));
+    strcpy(value, yytext);
+    yylval.ast_node = new_ast_node("FLOAT", TOKEN_WITH_VALUE, value, yylineno, 0);
+    return FLOAT;
+}
+{int} {
+    /* integer in 32-bits (decimal or hexadecimal) */
+    DISPLAY_TOKEN("INT");
+    int int_value = 0;
+    
+    if (strlen(yytext) >= 3 && yytext[0] == '0') /* in hexidecimal form */
+        sscanf(yytext, "%x", &int_value);
+    else /* in decimal form */
+        int_value = atoi(yytext);
+    char *str_value = (char *)malloc(10*sizeof(char));
+    sprintf(str_value, "%d", int_value);
+    yylval.ast_node = new_ast_node("INT", TOKEN_WITH_VALUE, str_value, yylineno, 0);
+    return INT;
+}
+{char} {
+    /* single character (printable or hex-form) */
+    DISPLAY_TOKEN("CHAR");
+    // remove the "'" on the both side
+    char *value = malloc(strlen(yytext-2));
+    strncpy(value, yytext+1, strlen(yytext)-2);
+    yylval.ast_node = new_ast_node("CHAR", TOKEN_WITH_VALUE, value, yylineno, 0);
+    return CHAR; 
+}
 "struct" {   
     DISPLAY_TOKEN("STRUCT"); 
     yylval.ast_node=new_ast_node("STRUCT", TOKEN_WITHOUT_VALUE, NULL, yylineno, 0); 
@@ -56,17 +90,17 @@ char ('[ -~]')|('0[xX][0-9a-fA-F]{1,2}')
 }
 "int" {
     DISPLAY_TOKEN("TYPE");
-    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITH_VALUE, "int", yylineno, 0);
+    yylval.ast_node = new_ast_node("TYPE", TOKEN_WITH_VALUE, "int", yylineno, 0);
     return TYPE;
 }
 "float" {
     DISPLAY_TOKEN("TYPE");
-    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITH_VALUE, "float", yylineno, 0);
+    yylval.ast_node = new_ast_node("TYPE", TOKEN_WITH_VALUE, "float", yylineno, 0);
     return TYPE;
 }
 "char" {
     DISPLAY_TOKEN("TYPE");
-    yylval.ast_node = new_ast_node("RETURN", TOKEN_WITH_VALUE, "char", yylineno, 0);
+    yylval.ast_node = new_ast_node("TYPE", TOKEN_WITH_VALUE, "char", yylineno, 0);
     return TYPE;
 }
 {id} {
@@ -195,5 +229,5 @@ char ('[ -~]')|('0[xX][0-9a-fA-F]{1,2}')
 \n { yycolno = 1; }
 [ \t]+ {}
 . { printf("lexical error at line %d col %d: %s\n", yylineno, yycolno, yytext);; return -1; }
-<<EOF>> { fprintf(stdout, "<<EOF>>\n"); return 0; }
+<<EOF>> {return 0;}
 %%

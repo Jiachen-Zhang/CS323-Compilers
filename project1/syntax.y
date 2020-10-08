@@ -51,135 +51,201 @@ ExtDefList: ExtDef ExtDefList {
 }   ;
 ExtDef: Specifier ExtDecList SEMI { 
     DISPLAY_SYNTAX("ExtDef-1");
-    $$ = new_ast_node("ExtDef", 1, NULL, @1.first_line, 3, $1, $2, $3);
+    $$ = new_ast_node("ExtDef", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   | Specifier SEMI { 
     DISPLAY_SYNTAX("ExtDef-2"); 
-    $$ = new_ast_node("ExtDef", 1, NULL, @1.first_line, 2, $1, $2);
+    $$ = new_ast_node("ExtDef", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
 }   | Specifier FunDec CompSt { 
     DISPLAY_SYNTAX("ExtDef-3");
-    $$ = new_ast_node("ExtDef", 1, NULL, @1.first_line, 3, $1, $2, $3);
+    $$ = new_ast_node("ExtDef", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   ;
 ExtDecList: VarDec { 
     DISPLAY_SYNTAX("ExtDecList"); 
-    $$ = new_ast_node("ExtDecList", 1, NULL, @1.first_line, 1, $1);
+    $$ = new_ast_node("ExtDecList", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   | VarDec COMMA ExtDecList { 
     DISPLAY_SYNTAX("ExtDecList");
-    $$ = new_ast_node("ExtDecList", 1, NULL, @1.first_line, 3, $1, $2, $3);
+    $$ = new_ast_node("ExtDecList", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   ;
 /* specifier */
 Specifier: TYPE { 
     DISPLAY_SYNTAX("Specifier");
-    $$ = new_ast_node("Specifier", 1, NULL, @1.first_line, 1, $1);
+    $$ = new_ast_node("Specifier", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   | StructSpecifier { 
     DISPLAY_SYNTAX("Specifier");
-    $$ = new_ast_node("Specifier", 1, NULL, @1.first_line, 1, $1);
+    $$ = new_ast_node("Specifier", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   ;
 StructSpecifier: STRUCT ID LC DefList RC {
     DISPLAY_SYNTAX("StructSpecifier"); 
-    $$ = new_ast_node("StructSpecifier", 1, NULL, @1.first_line, 5, $1, $2, $3, $4, $5);
+    $$ = new_ast_node("StructSpecifier", NONE_TERMINAL, NULL, @1.first_line, 5, $1, $2, $3, $4, $5);
 }   | STRUCT ID { 
     DISPLAY_SYNTAX("StructSpecifier"); 
-    $$ = new_ast_node("StructSpecifier", 1, NULL, @1.first_line, 2, $1, $2);
+    $$ = new_ast_node("StructSpecifier", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
 }   ;
 /* declarator */
 VarDec: ID {
     DISPLAY_SYNTAX("ID"); 
-    $$ = new_ast_node("VarDec", 1, NULL, @1.first_line, 1, $1);
+    $$ = new_ast_node("VarDec", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   | VarDec LB INT RB { 
     DISPLAY_SYNTAX("ID"); 
-    $$ = new_ast_node("VarDec", 1, NULL, @1.first_line, 4, $1, $2, $3, $4);
+    $$ = new_ast_node("VarDec", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
 }   ;
 FunDec: ID LP VarList RP { 
     DISPLAY_SYNTAX("FunDec");
-    $$ = new_ast_node("FunDec", 1, NULL, @1.first_line, 4, $1, $2, $3, $4);
+    $$ = new_ast_node("FunDec", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
 }   | ID LP RP { 
     DISPLAY_SYNTAX("FunDec");
-    $$ = new_ast_node("FunDec", 1, NULL, @1.first_line, 3, $1, $2, $3);
+    $$ = new_ast_node("FunDec", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   ;
 VarList: ParamDec COMMA VarList {
     DISPLAY_SYNTAX("VarList");
-    $$ = new_ast_node("VarList", 1, NULL, @1.first_line, 3, $1, $2, $3);
+    $$ = new_ast_node("VarList", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   | ParamDec { 
     DISPLAY_SYNTAX("VarList"); 
-    $$ = new_ast_node("VarList", 1, NULL, @1.first_line, 1, $1);
+    $$ = new_ast_node("VarList", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   ;
 ParamDec: Specifier VarDec { 
     DISPLAY_SYNTAX("ParamDec");
-    $$ = new_ast_node("ParamDec", 1, NULL, @1.first_line, 2, $1, $2);
+    $$ = new_ast_node("ParamDec", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
 }   ;
 /* statement */
 CompSt: LC DefList StmtList RC { 
     DISPLAY_SYNTAX("CompSt"); 
-    $$ = new_ast_node("CompSt", 1, NULL, @1.first_line, 4, $1, $2, $3, $4);
+    $$ = new_ast_node("CompSt", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
 }   ;
 StmtList: Stmt StmtList { 
     DISPLAY_SYNTAX("StmtList"); 
-    $$ = new_ast_node("StmtList", 1, NULL, @1.first_line, 2, $1, $2);
+    $$ = new_ast_node("StmtList", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
 }   | %empty { 
     DISPLAY_SYNTAX("StmtList"); 
-    $$ = new_ast_node("StmtList", 1, NULL, yylineno, 0); 
+    $$ = new_ast_node("StmtList", NONE_TERMINAL, NULL, yylineno, 0); 
 }   ;
 Stmt: Exp SEMI { 
     DISPLAY_SYNTAX("Stmt");
-    $$ = new_ast_node("Stmt", 1, NULL, @1.first_line, 2, $1, $2);
+    $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
 }   | CompSt { 
     DISPLAY_SYNTAX("Stmt");
-    $$ = new_ast_node("Stmt", 1, NULL, @1.first_line, 1, $1);
+    $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   | RETURN Exp SEMI { 
     DISPLAY_SYNTAX("Stmt"); 
-    $$ = new_ast_node("Stmt", 1, NULL, @1.first_line, 3, $1, $2, $3);
+    $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   | IF LP Exp RP Stmt { 
     DISPLAY_SYNTAX("Stmt");
-    $$ = new_ast_node("Stmt", 1, NULL, @1.first_line, 5, $1, $2, $3, $4, $5);
+    $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 5, $1, $2, $3, $4, $5);
 }   | IF LP Exp RP Stmt ELSE Stmt { 
     DISPLAY_SYNTAX("Stmt");
-    $$ = new_ast_node("Stmt", 1, NULL, @1.first_line, 7, $1, $2, $3, $4, $5, $6, $7);
+    $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 7, $1, $2, $3, $4, $5, $6, $7);
 }   | WHILE LP Exp RP Stmt { 
     DISPLAY_SYNTAX("Stmt");
-    $$ = new_ast_node("Stmt", 1, NULL, @1.first_line, 5, $1, $2, $3, $4, $5);
+    $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 5, $1, $2, $3, $4, $5);
 }   ;
 /* local definition */
-DefList: Def DefList { DISPLAY_SYNTAX("DefList"); }
-    | %empty { DISPLAY_SYNTAX("DefList"); }
-    ;
-Def: Specifier DecList SEMI { DISPLAY_SYNTAX("Def"); }
-    ;
-DecList: Dec { DISPLAY_SYNTAX("DecList"); }
-    | Dec COMMA DecList { DISPLAY_SYNTAX("DecList"); }
-    ;
-Dec: VarDec { DISPLAY_SYNTAX("Dec"); }
-    | VarDec ASSIGN Exp { DISPLAY_SYNTAX("Dec"); }
-    ;
+DefList: Def DefList {
+    DISPLAY_SYNTAX("DefList");
+    $$ = new_ast_node("DefList", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
+}   | %empty {
+    DISPLAY_SYNTAX("DefList");
+    $$ = new_ast_node("DefList", NONE_TERMINAL, NULL, yylineno, 0);
+}   ;
+Def: Specifier DecList SEMI {
+    DISPLAY_SYNTAX("Def");
+    $$ = new_ast_node("Def", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   ;
+DecList: Dec {
+    DISPLAY_SYNTAX("DecList");
+    $$ = new_ast_node("DecList", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | Dec COMMA DecList {
+    DISPLAY_SYNTAX("DecList");
+    $$ = new_ast_node("DecList", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   ;
+Dec: VarDec {
+    DISPLAY_SYNTAX("Dec");
+    $$ = new_ast_node("Dec", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | VarDec ASSIGN Exp {
+    DISPLAY_SYNTAX("Dec");
+    $$ = new_ast_node("Dec", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   ;
 
 /* Expression */
-Exp: Exp ASSIGN Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp AND Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp OR Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp LT Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp LE Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp GT Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp GE Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp NE Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp EQ Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp PLUS Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp MINUS Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp MUL Exp { DISPLAY_SYNTAX("Exp"); }
-    | Exp DIV Exp { DISPLAY_SYNTAX("Exp"); }
-    | LP Exp RP { DISPLAY_SYNTAX("Exp"); }
-    | MINUS Exp { DISPLAY_SYNTAX("Exp"); }
-    | NOT Exp { DISPLAY_SYNTAX("Exp"); }
-    | ID LP Args RP { DISPLAY_SYNTAX("Exp"); }
-    | ID LP RP { DISPLAY_SYNTAX("Exp"); }
-    | Exp LB Exp RB { DISPLAY_SYNTAX("Exp"); }
-    | Exp DOT ID { DISPLAY_SYNTAX("Exp"); }
-    | ID { DISPLAY_SYNTAX("Exp"); }
-    | INT { DISPLAY_SYNTAX("Exp"); }
-    | FLOAT { DISPLAY_SYNTAX("Exp"); }
-    | CHAR { DISPLAY_SYNTAX("Exp"); }
-    ;
-Args: Exp COMMA Args { DISPLAY_SYNTAX("Args"); }
-    | Exp { DISPLAY_SYNTAX("Args"); }
-    ;
+Exp: Exp ASSIGN Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp AND Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp OR Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp LT Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp LE Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp GT Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp GE Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp NE Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp EQ Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp PLUS Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp MINUS Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp MUL Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp DIV Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | LP Exp RP {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | MINUS Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
+}   | NOT Exp {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
+}   | ID LP Args RP {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
+}   | ID LP RP {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp LB Exp RB {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
+}   | Exp DOT ID {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | ID {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | INT {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | FLOAT {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | CHAR {
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   ;
+Args: Exp COMMA Args {
+    DISPLAY_SYNTAX("Args");
+    $$ = new_ast_node("Args", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Exp {
+    DISPLAY_SYNTAX("Args");
+    $$ = new_ast_node("Args", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   ;
 
 %%
 void init() {
@@ -204,12 +270,8 @@ int main(int argc, char **argv) {
         return EXIT_FAIL;
     }
     init();
-    // yylex();
     yyparse();
     assert(root != NULL);
-    fprintf(stdout, "============================\n");
-    fprintf(stdout, "FINISH PARSING\n");
-    fprintf(stdout, "============================\n");
     print_ast_node(root, 0);
     return EXIT_OK;
 }
