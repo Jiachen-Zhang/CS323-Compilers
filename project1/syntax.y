@@ -119,6 +119,7 @@ void yyerror(const char *s) {
 }
 
 int main(void) {
+    fprintf(stdout, " 1: ");
     yyparse();
     return 0;
 }

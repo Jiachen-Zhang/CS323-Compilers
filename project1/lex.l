@@ -1,7 +1,7 @@
 %{
     #include"syntax.tab.h"
     // just let you know you have macros!
-    #define DISPLAY_TOKEN(token) fprintf(stdout, "%s (%d, %d) ", token, yylineno, yycolno);
+    #define DISPLAY_TOKEN(token) fprintf(stdout, "%s(%d) ", token, yycolno);
     #define EXIT_OK 0
     #define EXIT_FAIL 1
     #define YY_USER_ACTION \
@@ -51,7 +51,7 @@ type (int)|(fload)|(char)
 "]" { DISPLAY_TOKEN("RB"); }
 "{" { DISPLAY_TOKEN("LC"); }
 "}" { DISPLAY_TOKEN("RC"); }
-\n { yycolno = 1; fprintf(stdout, "\n"); }
+\n { yycolno = 1; fprintf(stdout, "\n%2d: ", yylineno); }
 . { ; }
-<<EOF>> { fprintf(stdout, "END\n"); return 0; }
+<<EOF>> { fprintf(stdout, "<<EOF>>\n"); return 0; }
 %%
