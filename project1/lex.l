@@ -24,8 +24,8 @@
 %}
 %option yylineno
 decimal_int 0|(-?[1-9][0-9]*)
-int {decimal_int}|(0[xX][0-9a-fA-F]{1,6})
-float {decimal_int}\.[0-9]+
+int {decimal_int}|(-?0[xX][1-9a-fA-F][0-9a-fA-F]{0,5})|(0[xX]0)
+float -?(0|([1-9][0-9]*))\.[0-9]+
 letter [a-zA-Z_]
 id [a-zA-Z_][0-9a-zA-Z_]*
 char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
