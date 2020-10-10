@@ -4,6 +4,7 @@
     void yyerror(const char *s);
     int line_num = 1;
     ASTNode *root;
+    int syntax_error = 0;
     // int yydebug=1;
 %}
 %locations
@@ -15,7 +16,7 @@
     char *str;
 }
 
-%token ERROE_INT ERROR_FLOAT
+%token ERROE_INT ERROR_FLOAT ERROR_LEXEME
 %token <ast_node> INT CHAR FLOAT
 %token <ast_node> WHILE IF ELSE
 %token <ast_node> ID TYPE 
@@ -125,6 +126,10 @@ Stmt: Exp SEMI {
 }   | CompSt { 
     DISPLAY_SYNTAX("Stmt");
     $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | RETURN Exp error { 
+    DISPLAY_SYNTAX("Stmt"); 
+    ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
+    syntax_error = 1;
 }   | RETURN Exp SEMI { 
     DISPLAY_SYNTAX("Stmt"); 
     $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
@@ -238,7 +243,9 @@ Exp: Exp ASSIGN Exp {
 }   | CHAR {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
-}   ;
+}   | ERROR_LEXEME {
+    ERROR_TYPE_A();
+};
 Args: Exp COMMA Args {
     DISPLAY_SYNTAX("Args");
     $$ = new_ast_node("Args", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
@@ -253,7 +260,7 @@ void init() {
 }
 
 void yyerror(const char *s) {
-  fprintf(stderr, "ERROR line %d: %s\n", yylloc.first_line, s);
+  SYNTAX_ERROR();
 }
 int main(int argc, char **argv) {
     char *file_path;
@@ -271,7 +278,9 @@ int main(int argc, char **argv) {
     }
     init();
     yyparse();
-    assert(root != NULL);
-    print_ast_node(root, 0);
+    if (!syntax_error) {
+        assert(root != NULL);
+        print_ast_node(root, 0);
+    }
     return EXIT_OK;
 }

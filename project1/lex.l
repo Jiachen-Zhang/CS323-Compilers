@@ -5,14 +5,16 @@
     // just let you know you have macros!
     #define EXIT_OK 0
     #define EXIT_FAIL 1
-    #define __DEBUG 0
-    #if __DEBUG
-        #define DISPLAY_SYNTAX(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
-        #define DISPLAY_TOKEN(token) fprintf(stdout, "    %s[%d](%s)\n", token, yycolno, yytext);
-    #else
-        #define DISPLAY_SYNTAX(syntax) 
-        #define DISPLAY_TOKEN(token) 
-    #endif
+    #define __DEBUG 1
+    #define DEBUG(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
+
+    #define ERROR_TYPE_A() fprintf(stdout, "Error type A at Line %d: unknown lexeme %s\n", yylineno, yytext);
+    #define ERROR_TYPE_B(lineno, reason) fprintf(stdout, "Error type B at Line %d: %s\n", lineno, reason);
+
+    #define DISPLAY_SYNTAX(syntax) // fprintf(stdout, "%s(%d)\n", syntax, yylineno);
+    #define DISPLAY_TOKEN(token) // fprintf(stdout, "    %s[%d](%s)\n", token, yycolno, yytext);
+    #define LEXEME_ERROR() // fprintf(stderr, "Error lexeme %s at Line %d\n", yytext, yylineno); 
+    #define SYNTAX_ERROR() // fprintf(stderr, "ERROR line %d: %s\n", yylloc.first_line, s);
     #define YY_USER_ACTION \
         yylloc.first_line = yylineno; \
         yylloc.first_column = yycolno; \
@@ -228,6 +230,9 @@ char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
 }
 \n { yycolno = 1; }
 [ \t]+ {}
-. { printf("lexical error at line %d col %d: %s\n", yylineno, yycolno, yytext);; return -1; }
+. { 
+    LEXEME_ERROR();
+    return ERROR_LEXEME; 
+}
 <<EOF>> {return 0;}
 %%
