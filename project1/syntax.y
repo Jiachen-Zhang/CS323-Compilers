@@ -161,6 +161,8 @@ Def: Specifier DecList SEMI {
 }   | Specifier DecList error {
     DISPLAY_SYNTAX("Def");
     ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
+}   | DecList error {
+    ERROR_TYPE_B(yylineno, "Missing specifier");
 }   ;
 DecList: Dec {
     DISPLAY_SYNTAX("DecList");
