@@ -8,8 +8,8 @@
     #define __DEBUG 1
     #define DEBUG(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
 
-    #define ERROR_TYPE_A() fprintf(stdout, "Error type A at Line %d: unknown lexeme %s\n", yylineno, yytext);
-    #define ERROR_TYPE_B(lineno, reason) fprintf(stdout, "Error type B at Line %d: %s\n", lineno, reason);
+    #define ERROR_TYPE_A() fprintf(stdout, "Error type A at Line %d: unknown lexeme %s\n", yylineno, yytext); syntax_error = 1;
+    #define ERROR_TYPE_B(lineno, reason) fprintf(stdout, "Error type B at Line %d: %s\n", lineno, reason); syntax_error = 1;
 
     #define DISPLAY_SYNTAX(syntax) // fprintf(stdout, "%s(%d)\n", syntax, yylineno);
     #define DISPLAY_TOKEN(token) // fprintf(stdout, "    %s[%d](%s)\n", token, yycolno, yytext);

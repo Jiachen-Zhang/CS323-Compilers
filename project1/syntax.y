@@ -90,9 +90,15 @@ VarDec: ID {
     DISPLAY_SYNTAX("ID"); 
     $$ = new_ast_node("VarDec", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
 }   ;
-FunDec: ID LP VarList RP { 
+FunDec: ID LP VarList error {
+    DISPLAY_SYNTAX("FunDec");
+    ERROR_TYPE_B(@1.last_line, "Missing closing parenthesis ')'");
+}   | ID LP VarList RP { 
     DISPLAY_SYNTAX("FunDec");
     $$ = new_ast_node("FunDec", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
+}   | ID LP error {
+    DISPLAY_SYNTAX("FunDec");
+    ERROR_TYPE_B(@1.last_line, "Missing closing parenthesis ')'");
 }   | ID LP RP { 
     DISPLAY_SYNTAX("FunDec");
     $$ = new_ast_node("FunDec", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
@@ -129,7 +135,6 @@ Stmt: Exp SEMI {
 }   | RETURN Exp error { 
     DISPLAY_SYNTAX("Stmt"); 
     ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
-    syntax_error = 1;
 }   | RETURN Exp SEMI { 
     DISPLAY_SYNTAX("Stmt"); 
     $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
@@ -219,9 +224,15 @@ Exp: Exp ASSIGN Exp {
 }   | NOT Exp {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
+}   | ID LP Args error {
+    DISPLAY_SYNTAX("Exp");
+    ERROR_TYPE_B(@1.last_line, "Missing closing parenthesis ')'");
 }   | ID LP Args RP {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
+}   | ID LP error {
+    DISPLAY_SYNTAX("Exp");
+    ERROR_TYPE_B(@1.last_line, "Missing closing parenthesis ')'");
 }   | ID LP RP {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
