@@ -23,6 +23,7 @@
         yycolno += yyleng; 
     // and global variables
     int yycolno = 1; 
+    int syntax_error = 0;
 %}
 %option yylineno
 decimal_int 0|(-?[1-9][0-9]*)
@@ -30,6 +31,7 @@ int {decimal_int}|(-?0[xX][1-9a-fA-F][0-9a-fA-F]{0,5})|(0[xX]0)
 float -?(0|([1-9][0-9]*))\.[0-9]+
 letter [a-zA-Z_]
 id [a-zA-Z_][0-9a-zA-Z_]*
+wrong_id [0-9]{id}
 char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
 %%
 (0[0-9]+)|(0[xX])|(0[xX][0-9a-fA-F]{6}[0-9a-fA-F]+) { DISPLAY_TOKEN("ERROR_INT"); return ERROE_INT; }
@@ -104,6 +106,10 @@ char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
     DISPLAY_TOKEN("TYPE");
     yylval.ast_node = new_ast_node("TYPE", TOKEN_WITH_VALUE, "char", yylineno, 0);
     return TYPE;
+}
+{wrong_id} {
+    ERROR_TYPE_A();
+    return ID; 
 }
 {id} {
     /* should be after type */

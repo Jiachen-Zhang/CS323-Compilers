@@ -4,7 +4,6 @@
     void yyerror(const char *s);
     int line_num = 1;
     ASTNode *root;
-    int syntax_error = 0;
     // int yydebug=1;
 %}
 %locations
