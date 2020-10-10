@@ -158,6 +158,9 @@ DefList: Def DefList {
 Def: Specifier DecList SEMI {
     DISPLAY_SYNTAX("Def");
     $$ = new_ast_node("Def", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
+}   | Specifier DecList error {
+    DISPLAY_SYNTAX("Def");
+    ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
 }   ;
 DecList: Dec {
     DISPLAY_SYNTAX("DecList");
