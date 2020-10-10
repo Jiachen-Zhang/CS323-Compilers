@@ -117,7 +117,9 @@ ParamDec: Specifier VarDec {
 CompSt: LC DefList StmtList RC { 
     DISPLAY_SYNTAX("CompSt"); 
     $$ = new_ast_node("CompSt", NONE_TERMINAL, NULL, @1.first_line, 4, $1, $2, $3, $4);
-}   ;
+}   | LC DefList StmtList DefList error {
+    ERROR_TYPE_B(@3.last_line, "Missing specifier");
+};
 StmtList: Stmt StmtList { 
     DISPLAY_SYNTAX("StmtList"); 
     $$ = new_ast_node("StmtList", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
@@ -161,8 +163,6 @@ Def: Specifier DecList SEMI {
 }   | Specifier DecList error {
     DISPLAY_SYNTAX("Def");
     ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
-}   | DecList error {
-    ERROR_TYPE_B(yylineno, "Missing specifier");
 }   ;
 DecList: Dec {
     DISPLAY_SYNTAX("DecList");
