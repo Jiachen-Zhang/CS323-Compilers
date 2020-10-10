@@ -237,7 +237,7 @@ char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
 \n { yycolno = 1; }
 [ \t]+ {}
 . { 
-    LEXEME_ERROR();
+    ERROR_TYPE_A();
     return ERROR_LEXEME; 
 }
 <<EOF>> {return 0;}

@@ -178,7 +178,8 @@ Dec: VarDec {
 Exp: Exp ASSIGN Exp {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
-}   | Exp AND Exp {
+}   | Exp ERROR_LEXEME Exp
+    | Exp AND Exp {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 3, $1, $2, $3);
 }   | Exp OR Exp {
@@ -254,7 +255,6 @@ Exp: Exp ASSIGN Exp {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
 }   | ERROR_LEXEME {
-    ERROR_TYPE_A();
 };
 Args: Exp COMMA Args {
     DISPLAY_SYNTAX("Args");
