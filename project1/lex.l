@@ -25,6 +25,7 @@
     int syntax_error = 0;
 %}
 %option yylineno
+%x C_COMMENT
 decimal_int 0|(-?[1-9][0-9]*)
 int {decimal_int}|(-?0[xX][1-9a-fA-F][0-9a-fA-F]{0,7})|(0[xX]0)
 float -?(0|([1-9][0-9]*))\.[0-9]+
@@ -34,6 +35,14 @@ wrong_id [0-9]{id}
 char ('[ -~]')|('\\[xX][0-9a-fA-F]{1,2}')
 wrong_char ('.+')
 %%
+
+"/*"            { BEGIN(C_COMMENT); }
+<C_COMMENT>"*/" { BEGIN(INITIAL); }
+<C_COMMENT>.    { }
+<C_COMMENT>\n   { yycolno = 1; }
+
+"//".*[\n\r] { yycolno = 1; }
+
 (0[0-9]+)|(0[xX])|(0[xX][0-9a-fA-F]{8}[0-9a-fA-F]+) { DISPLAY_TOKEN("ERROR_INT"); return ERROE_INT; }
 (0\.) { DISPLAY_TOKEN("ERROR_FLOAT"); return ERROR_FLOAT; }
 {float} {
