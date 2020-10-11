@@ -1,0 +1,6 @@
+int test_1_r16(int a)
+{
+  while(a<10){
+      a=a - 1;
+  }
+}

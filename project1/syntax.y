@@ -35,6 +35,9 @@
 %type <ast_node> DefList Def DecList Dec
 %type <ast_node> Exp
 %type <ast_node> Args
+%left PLUS MINUS
+%left MUL DIV
+%left UMINUS
 %%
 Program: ExtDefList { 
     DISPLAY_SYNTAX("Program"); 
@@ -226,6 +229,9 @@ Exp: Exp ASSIGN Exp {
 }   | MINUS Exp {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
+}   | MINUS Exp %prec UMINUS { 
+    DISPLAY_SYNTAX("Exp");
+    $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2); 
 }   | NOT Exp {
     DISPLAY_SYNTAX("Exp");
     $$ = new_ast_node("Exp", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
