@@ -62,8 +62,10 @@ wrong_char ('.+')
     /* single character (printable or hex-form) */
     DISPLAY_TOKEN("CHAR");
     // remove the "'" on the both side
-    char *value = malloc(strlen(yytext-2));
-    strncpy(value, yytext+1, strlen(yytext)-2);
+    // char *value = malloc(strlen(yytext-2));
+    // strncpy(value, yytext+1, strlen(yytext)-2);
+    char *value = malloc(strlen(yytext));
+    strcpy(value, yytext);
     yylval.ast_node = new_ast_node("CHAR", TOKEN_WITH_VALUE, value, yylineno, 0);
     return CHAR; 
 }
