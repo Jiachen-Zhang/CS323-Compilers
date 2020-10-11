@@ -26,8 +26,9 @@
 %}
 %option yylineno
 %x C_COMMENT
-decimal_int 0|(-?[1-9][0-9]*)
+decimal_int 0|(-?[1-9][0-9]{0,9})
 int {decimal_int}|(-?0[xX][1-9a-fA-F][0-9a-fA-F]{0,7})|(0[xX]0)
+wrong_int (-?[1-9][0-9]{9}[0-9]+)
 float -?(0|([1-9][0-9]*))\.[0-9]+
 letter [a-zA-Z_]
 id [a-zA-Z_][0-9a-zA-Z_]*
@@ -52,6 +53,10 @@ wrong_char ('.+')
     strcpy(value, yytext);
     yylval.ast_node = new_ast_node("FLOAT", TOKEN_WITH_VALUE, value, yylineno, 0);
     return FLOAT;
+}
+{wrong_int} {
+    ERROR_TYPE_A();
+    return INT;
 }
 {int} {
     /* integer in 32-bits (decimal or hexadecimal) */

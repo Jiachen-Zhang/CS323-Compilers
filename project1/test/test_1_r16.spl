@@ -1,0 +1,4 @@
+int test_1_r16()
+{
+  int dec_int = 323; // inline comment
+}

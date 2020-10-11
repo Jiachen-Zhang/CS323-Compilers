@@ -1,0 +1,5 @@
+int test_1_r17(
+{
+  dec_int = 323
+  int a = 0xG;
+}

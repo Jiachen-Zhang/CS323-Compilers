@@ -130,6 +130,8 @@ StmtList: Stmt StmtList {
 Stmt: Exp SEMI { 
     DISPLAY_SYNTAX("Stmt");
     $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 2, $1, $2);
+}   | Exp error{
+    ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
 }   | CompSt { 
     DISPLAY_SYNTAX("Stmt");
     $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
