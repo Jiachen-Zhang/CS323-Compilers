@@ -136,6 +136,9 @@ Stmt: Exp SEMI {
 }   | CompSt { 
     DISPLAY_SYNTAX("Stmt");
     $$ = new_ast_node("Stmt", NONE_TERMINAL, NULL, @1.first_line, 1, $1);
+}   | RETURN SEMI error { 
+    DISPLAY_SYNTAX("Stmt"); 
+    ERROR_TYPE_B(@1.last_line, "Missing expression");
 }   | RETURN Exp error { 
     DISPLAY_SYNTAX("Stmt"); 
     ERROR_TYPE_B(@1.last_line, "Missing semicolon ';'");
