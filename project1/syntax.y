@@ -11,8 +11,6 @@
 %error-verbose
 %union{
     struct ASTNode *ast_node;
-    float fval;
-    char *str;
 }
 
 %token ERROE_INT ERROR_FLOAT ERROR_LEXEME
