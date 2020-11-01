@@ -4,30 +4,26 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef enum CategoryEnum {
-    OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, VNULL
-} CategoryEnum;
+enum Category {_OBJECT, _ARRAY, _STRING, _NUMBER, _BOOLEAN, _VNULL} Category;
 
-typedef union JsonValue {
-        struct ObjectMember *member;
-        struct ArrayValue *values;
+typedef struct Json {
+    enum Category category;
+    union Value {
+        struct Member *member;
+        struct Array *values;
         char *string;
         double number;
         bool boolean;
-} JsonValue;
+    } value;
+} Json;
 
-typedef struct JsonObject {
-    enum CategoryEnum category;
-    union JsonValue jsonValue;
-} JsonObject;
-
-typedef struct ObjectMember {
+typedef struct Member {
     char *key;
-    struct JsonObject *value;
-    struct ObjectMember *next;
-} ObjectMember;
+    struct Json *json;
+    struct Member *next;
+} Member;
 
-typedef struct ArrayObject {
-    struct JsonObject *value;
-    struct ArrayObject *next;
-} ArrayObject;
+typedef struct Array {
+    struct Json *json;
+    struct Array *next;
+} Array;

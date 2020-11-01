@@ -25,12 +25,12 @@ empty [ \n\r\t]
 ":" { return COLON; }
 "," { return COMMA; }
 
-"true" { return TRUE; }
-"false" { return FALSE; }
-"null" { return VNULL; }
+"true" { JsonObject *jsonObject = newJsonObject(CategoryEnum.BOOLEAN, true); yylval.jsonObject = jsonObject; return TRUE; }
+"false" { JsonObject *jsonObject = newJsonObject(CategoryEnum.BOOLEAN, false); yylval.jsonObject = jsonObject; return FALSE; }
+"null" { JsonObject *jsonObject = newJsonObject(CategoryEnum.VNULL, NULL); yylval.jsonObject = jsonObject; return VNULL; }
 
-{string} { return STRING; }
-{number} { return NUMBER; }
+{string} { yylval.string = yytext; return STRING; }
+{number} { yylval.number = atof(yytext); return NUMBER; }
 
 {empty} {}
 

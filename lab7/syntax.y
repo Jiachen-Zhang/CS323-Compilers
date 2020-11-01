@@ -1,81 +1,70 @@
 %{
-    #include"json_define.h"
     #include"lex.yy.c"
+    struct Json* json;
     void yyerror(const char*);
 %}
 
+%union{
+    struct Json* json;
+    struct Member* member;
+    struct Array* array;
+    char *string;
+    double number;
+    int boolean;
+}
+
 %token LC RC LB RB COLON COMMA
-%token STRING NUMBER
-%token TRUE FALSE VNULL
+%token <string> STRING
+%token <number> NUMBER
+%token <boolean> TRUE FALSE 
+%token <json> VNULL
+
+%type <json> Json Value
+%type <member> Object Members Member
+%type <array> Array Values
 %%
 
 Json:
-      Value
+      Value {json = $1}
     | Value COMMA error { puts("Comma after the close, recovered"); }
     ;
 Value:
-      Object {
-        union JsonValue *value = newJsonValue();
-        value->member = $1;
-        $$ = value;
-    }
-    | Array {
-        union JsonValue *value = newJsonValue();
-        value->values = $1;
-        $$ = value;
-    }
-    | STRING {   
-        union JsonValue *value = newJsonValue();
-        value->string = yyval();
-        $$ = value;
-    }
-    | NUMBER {   
-        union JsonValue *value = newJsonValue();
-        value->number = yyval();
-        $$ = value;
-    }
-    | TRUE  {   
-        union JsonValue *value = newJsonValue();
-        value->boolean = true;
-        $$ = value;
-    }
-    | FALSE {   
-        union JsonValue *value = newJsonValue();
-        value->boolean = false;
-        $$ = value;
-    }
-    | VNULL { 
-        $$ = NULL; 
-    }
+      Object { $$ = newJson(); $$->value = $1; $$->category = _OBJECT; }
+    | Array { $$ = newJson(); $$->value = $1; $$->category = _ARRAY; }
+    | STRING { $$ = newJson(); $$->value = $1; $$->category = _STRING; }
+    | NUMBER { $$ = newJson(); $$->value = $1; $$->category = _NUMBER; }
+    | TRUE  { $$ = newJson(); $$->value = $1; $$->category = _BOOLEAN; }
+    | FALSE { $$ = newJson(); $$->value = $1; $$->category = _BOOLEAN; }
+    | VNULL { $$ = newJson(); $$->category = _VNULL; }
     ;
 Object:
-      LC RC
-    | LC Members RC
+      LC RC { $$ = newMember(); }
+    | LC Members RC { $$ = $2; }
     | LC Members RC Value error { puts("Extra value after close, recovered"); }
     ;
 Members:
-      Member
-    | Member COMMA Members
+      Member {$$ = $1; }
+    | Member COMMA Members { $$ = $1; $1->next = $3; }
     | Member COLON Members error {puts("Colon instead of comma, recovered");}
     ;
 Member:
-      STRING COLON Value
+      STRING COLON Value { $$ = newMember(); $$->key = $1; $$->json = $3; }
     | STRING COLON Value COMMA error { puts("Comma instead if closing brace, recovered"); }
     | STRING COMMA Value error { puts("Comma instead of colon, recovered"); }
     | STRING COLON COLON Value error { puts("Double colon, recovered"); }
     | STRING Value error { puts("Missing colon, recovered"); }
     ;
 Array:
-      LB RB
-    | LB Values RB
+      LB RB { $$ = newArray(); }
+    | LB Values RB { $$ = newArray(); $$->json = $2; }
     | LB Values RB RB error { puts("Extra close, recovered"); }
     | LB Values RC error { puts("mismatch, recovered"); }
     | LB Values error { puts("Unclosed array, recovered"); }
     | LB COMMA error { puts("<-- missing value, recovered");}
     ;
 Values:
-      Value
-    | Value COMMA Values
+      Value { $$ = newArray(); $$->json = $1;}
+    | Value COMMA Values {  $$ = newArray(); $$->json = $1; $$->next = $3; }
     | Value COLON Values error  { puts("Colon instead of comma, recovered"); }
     | Value COMMA error  { puts("extra comma, recovered"); }
     | Value COMMA COMMA error  { puts("double extra comma, recovered"); }
