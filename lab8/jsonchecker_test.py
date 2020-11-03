@@ -27,7 +27,7 @@ def check_jsonchecker_error():
         out = jsonchecker_output(casefile)
         answer = f'duplicate key: "{casefile.name[5:6]}"' 
         print(f'For {casefile.name}:', end=' ')
-        assert out == answer
+        assert out == answer, "\n{}\n{}".format(out, answer)
         print('CORRECT')
         print('-'*80)
     else:
