@@ -51,13 +51,15 @@ Object:
             $$ = $2;
             Object* object = $2;
             int table[26];
-            // fprintf(stdout, "a = %d\n", (int)'a');
+            // 这里必须初始化，否则第二次遍历会引用之前的值
+            for (int i = 0; i < 26; i++) {
+                table[i] = 0;
+            }
             while (object != NULL) {
                 int key = (object->string)[1] - 97;
                 // fprintf(stdout, ">%s< <%d>\n", object->string, key);
                 if (table[key] == 0) {
                     table[key] = 1;
-
                 } else {
                     is_valid = 0;
                     char buf[200];
