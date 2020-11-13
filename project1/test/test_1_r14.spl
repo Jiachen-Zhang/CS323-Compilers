@@ -1,0 +1,5 @@
+int test_1_r13()
+{
+  /* comment */
+  int dec_int = 323;
+}

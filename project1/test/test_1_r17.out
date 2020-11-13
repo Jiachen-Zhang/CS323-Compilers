@@ -1,0 +1,4 @@
+Error type B at Line 1: Missing closing parenthesis ')'
+Error type B at Line 3: Missing semicolon ';'
+Error type A at Line 4: unknown lexeme 0xG
+Error type B at Line 4: Missing specifier

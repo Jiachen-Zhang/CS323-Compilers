@@ -1,0 +1,4 @@
+int test_1_r19()
+{
+  int a = -0x0a;
+}
