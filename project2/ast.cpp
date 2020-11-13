@@ -19,6 +19,7 @@ AST::AST(string type_name, SymbolType symbol_type, string value, int lineno, int
 }
 
 void AST::print(int tabnum){
+    // fprintf(stdout, "start print AST %s, %s\n", type_name.c_str(), value.c_str());
     switch (symbol_type) {
         case SymbolType::NONTERMINAL:
             if (!child.empty()){
@@ -33,6 +34,7 @@ void AST::print(int tabnum){
         case SymbolType::TOKEN:
             indent(tabnum);
             fprintf(stdout, "%s\n", type_name.c_str());
+            break;
         default:
             throw 20;
     }

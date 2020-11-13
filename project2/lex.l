@@ -11,7 +11,7 @@
     #define ERROR_TYPE_B(lineno, reason) fprintf(stdout, "Error type B at Line %d: %s\n", lineno, reason); syntax_error = 1;
 
     #define DISPLAY_SYNTAX(syntax) // fprintf(stdout, "%s(%d)\n", syntax, yylineno);
-    #define DISPLAY_TOKEN(token) // fprintf(stdout, "    %s[%d](%s)\n", token, yycolno, yytext);
+    #define DISPLAY_TOKEN(token) // fprintf(stdout, "%s[%d](%s)\n", token, yycolno, yytext);
     #define LEXEME_ERROR() // fprintf(stderr, "Error lexeme %s at Line %d\n", yytext, yylineno); 
     #define SYNTAX_ERROR() // fprintf(stderr, "ERROR line %d: %s\n", yylloc.first_line, s);
     #define YY_USER_ACTION \
@@ -88,27 +88,27 @@ wrong_char ('.+')
 }
 "struct" {   
     DISPLAY_TOKEN("STRUCT"); 
-    yylval.ast_node=new AST("STRUCT", SymbolType::TOKEN, NULL, yylineno, 0); 
+    yylval.ast_node=new AST("STRUCT", SymbolType::TOKEN, "", yylineno, 0); 
     return STRUCT; 
 }
 "if" { 
     DISPLAY_TOKEN("IF"); 
-    yylval.ast_node=new AST("IF", SymbolType::TOKEN, NULL, yylineno, 0); 
+    yylval.ast_node=new AST("IF", SymbolType::TOKEN, "", yylineno, 0); 
     return IF; 
 }
 "else" { 
     DISPLAY_TOKEN("ELSE"); 
-    yylval.ast_node= new AST("ELSE", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node= new AST("ELSE", SymbolType::TOKEN, "", yylineno, 0);
     return ELSE; 
 }
 "while" {   
     DISPLAY_TOKEN("WHILE"); 
-    yylval.ast_node= new AST("WHILE", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node= new AST("WHILE", SymbolType::TOKEN, "", yylineno, 0);
     return WHILE; 
 }
 "return" { 
     DISPLAY_TOKEN("RETURN");
-    yylval.ast_node = new AST("RETURN", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("RETURN", SymbolType::TOKEN, "", yylineno, 0);
     return RETURN;
 }
 "int" {
@@ -133,125 +133,125 @@ wrong_char ('.+')
 {id} {
     /* should be after type */
     DISPLAY_TOKEN("ID");
-    stringstream ss; 
-    ss.str(yytext); 
+    stringstream ss;
+    ss.str(yytext);
     string value = ss.str();
     yylval.ast_node = new AST("ID", SymbolType::TOKEN_VALUE, value, yylineno, 0);
     return ID;
 }
 "." { 
     DISPLAY_TOKEN("DOT");
-    yylval.ast_node = new AST("DOT", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("DOT", SymbolType::TOKEN, "", yylineno, 0);
     return DOT;
 }
 ";" { 
     DISPLAY_TOKEN("SEMI");
-    yylval.ast_node = new AST("SEMI", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("SEMI", SymbolType::TOKEN, "", yylineno, 0);
     return SEMI; 
 }
 "," { 
     DISPLAY_TOKEN("COMMA"); 
-    yylval.ast_node = new AST("COMMA", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("COMMA", SymbolType::TOKEN, "", yylineno, 0);
     return COMMA;
 }
 "=" {
     DISPLAY_TOKEN("ASSIGN");
-    yylval.ast_node = new AST("ASSIGN", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("ASSIGN", SymbolType::TOKEN, "", yylineno, 0);
     return ASSIGN;
 }
 "<" {
     DISPLAY_TOKEN("LT");
-    yylval.ast_node = new AST("LT", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("LT", SymbolType::TOKEN, "", yylineno, 0);
     return LT;
 }
 "<=" {
     DISPLAY_TOKEN("LE");
-    yylval.ast_node = new AST("LE", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("LE", SymbolType::TOKEN, "", yylineno, 0);
     return LE; 
 }
 ">" {
     DISPLAY_TOKEN("GT");
-    yylval.ast_node = new AST("GT", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("GT", SymbolType::TOKEN, "", yylineno, 0);
     return GT;
 }
 ">=" {
     DISPLAY_TOKEN("GE");
-    yylval.ast_node = new AST("GE", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("GE", SymbolType::TOKEN, "", yylineno, 0);
     return GE;
 }
 "!=" {
     DISPLAY_TOKEN("NE");
-    yylval.ast_node = new AST("NE", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("NE", SymbolType::TOKEN, "", yylineno, 0);
     return NE;
 }
 "==" {
     DISPLAY_TOKEN("EQ");
-    yylval.ast_node = new AST("EQ", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("EQ", SymbolType::TOKEN, "", yylineno, 0);
     return EQ; 
 }
 "+" {
     DISPLAY_TOKEN("PLUS");
-    yylval.ast_node = new AST("PLUS", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("PLUS", SymbolType::TOKEN, "", yylineno, 0);
     return PLUS;
 }
 "-" {
     DISPLAY_TOKEN("MINUS");
-    yylval.ast_node = new AST("MINUS", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("MINUS", SymbolType::TOKEN, "", yylineno, 0);
     return MINUS;
 }
 "*" {
     DISPLAY_TOKEN("MUL");
-    yylval.ast_node = new AST("MUL", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("MUL", SymbolType::TOKEN, "", yylineno, 0);
     return MUL;
 }
 "/" {
     DISPLAY_TOKEN("DIV");
-    yylval.ast_node = new AST("DIV", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("DIV", SymbolType::TOKEN, "", yylineno, 0);
     return DIV;
 }
 "&&" {
     DISPLAY_TOKEN("AND");
-    yylval.ast_node = new AST("AND", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("AND", SymbolType::TOKEN, "", yylineno, 0);
     return AND;
 }
 "||" { 
     DISPLAY_TOKEN("OR");
-    yylval.ast_node = new AST("OR", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("OR", SymbolType::TOKEN, "", yylineno, 0);
     return OR; 
 }
 "!" { 
     DISPLAY_TOKEN("NOT");
-    yylval.ast_node = new AST("NOT", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("NOT", SymbolType::TOKEN, "", yylineno, 0);
     return NOT;
 }
 "(" {
     DISPLAY_TOKEN("LP");
-    yylval.ast_node = new AST("LP", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("LP", SymbolType::TOKEN, "", yylineno, 0);
     return LP;
 }
 ")" {
     DISPLAY_TOKEN("RP");
-    yylval.ast_node = new AST("RP", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("RP", SymbolType::TOKEN, "", yylineno, 0);
     return RP;
 }
 "[" { 
     DISPLAY_TOKEN("LB");
-    yylval.ast_node = new AST("LB", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("LB", SymbolType::TOKEN, "", yylineno, 0);
     return LB; 
 }
 "]" { 
     DISPLAY_TOKEN("RB"); 
-    yylval.ast_node = new AST("RB", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("RB", SymbolType::TOKEN, "", yylineno, 0);
     return RB; 
 }
 "{" {
     DISPLAY_TOKEN("LC");
-    yylval.ast_node = new AST("LC", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("LC", SymbolType::TOKEN, "", yylineno, 0);
     return LC;
 }
 "}" {
     DISPLAY_TOKEN("RC");
-    yylval.ast_node = new AST("RC", SymbolType::TOKEN, NULL, yylineno, 0);
+    yylval.ast_node = new AST("RC", SymbolType::TOKEN, "", yylineno, 0);
     return RC;
 }
 \n { yycolno = 1; }

@@ -1560,7 +1560,7 @@ yyreduce:
 #line 42 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Program"); 
-    root = new AST("Program", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node)); 
+    root = new AST("Program", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node)); 
 }
 #line 1566 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1569,7 +1569,7 @@ yyreduce:
 #line 46 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDefList-1");
-    (yyval.ast_node) = new AST("ExtDefList", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ExtDefList", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1575 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1578,7 +1578,7 @@ yyreduce:
 #line 49 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDefList-2");
-    (yyval.ast_node) = new AST("ExtDefList", SymbolType::NONTERMINAL, NULL, yylineno, 0);
+    (yyval.ast_node) = new AST("ExtDefList", SymbolType::NONTERMINAL, "", yylineno, 0);
 }
 #line 1584 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1587,7 +1587,7 @@ yyreduce:
 #line 53 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDef-1");
-    (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1593 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1596,7 +1596,7 @@ yyreduce:
 #line 56 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDef-2"); 
-    (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1602 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1605,7 +1605,7 @@ yyreduce:
 #line 59 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDef-3");
-    (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1611 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1614,7 +1614,7 @@ yyreduce:
 #line 63 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDecList"); 
-    (yyval.ast_node) = new AST("ExtDecList", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ExtDecList", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1620 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1623,7 +1623,7 @@ yyreduce:
 #line 66 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDecList");
-    (yyval.ast_node) = new AST("ExtDecList", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ExtDecList", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1629 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1632,7 +1632,7 @@ yyreduce:
 #line 71 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Specifier");
-    (yyval.ast_node) = new AST("Specifier", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Specifier", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1638 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1641,7 +1641,7 @@ yyreduce:
 #line 74 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Specifier");
-    (yyval.ast_node) = new AST("Specifier", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Specifier", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1647 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1650,7 +1650,7 @@ yyreduce:
 #line 78 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("StructSpecifier"); 
-    (yyval.ast_node) = new AST("StructSpecifier", SymbolType::NONTERMINAL, NULL, (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("StructSpecifier", SymbolType::NONTERMINAL, "", (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1656 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1659,7 +1659,7 @@ yyreduce:
 #line 81 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("StructSpecifier"); 
-    (yyval.ast_node) = new AST("StructSpecifier", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("StructSpecifier", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1665 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1668,7 +1668,7 @@ yyreduce:
 #line 86 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("ID"); 
-    (yyval.ast_node) = new AST("VarDec", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("VarDec", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1674 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1677,7 +1677,7 @@ yyreduce:
 #line 89 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ID"); 
-    (yyval.ast_node) = new AST("VarDec", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("VarDec", SymbolType::NONTERMINAL, "", (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1683 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1695,7 +1695,7 @@ yyreduce:
 #line 96 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("FunDec");
-    (yyval.ast_node) = new AST("FunDec", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("FunDec", SymbolType::NONTERMINAL, "", (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1701 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1713,7 +1713,7 @@ yyreduce:
 #line 102 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("FunDec");
-    (yyval.ast_node) = new AST("FunDec", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("FunDec", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1719 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1722,7 +1722,7 @@ yyreduce:
 #line 106 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("VarList");
-    (yyval.ast_node) = new AST("VarList", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("VarList", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1728 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1731,7 +1731,7 @@ yyreduce:
 #line 109 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("VarList"); 
-    (yyval.ast_node) = new AST("VarList", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("VarList", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1737 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1740,7 +1740,7 @@ yyreduce:
 #line 113 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ParamDec");
-    (yyval.ast_node) = new AST("ParamDec", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("ParamDec", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1746 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1749,7 +1749,7 @@ yyreduce:
 #line 118 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("CompSt"); 
-    (yyval.ast_node) = new AST("CompSt", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("CompSt", SymbolType::NONTERMINAL, "", (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1755 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1766,7 +1766,7 @@ yyreduce:
 #line 124 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("StmtList"); 
-    (yyval.ast_node) = new AST("StmtList", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("StmtList", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1772 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1775,7 +1775,7 @@ yyreduce:
 #line 127 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("StmtList"); 
-    (yyval.ast_node) = new AST("StmtList", SymbolType::NONTERMINAL, NULL, yylineno, 0); 
+    (yyval.ast_node) = new AST("StmtList", SymbolType::NONTERMINAL, "", yylineno, 0); 
 }
 #line 1781 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1784,7 +1784,7 @@ yyreduce:
 #line 131 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
-    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1790 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1801,7 +1801,7 @@ yyreduce:
 #line 136 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
-    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1807 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1828,7 +1828,7 @@ yyreduce:
 #line 145 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt"); 
-    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1834 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1837,7 +1837,7 @@ yyreduce:
 #line 148 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
-    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, "", (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1843 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1846,7 +1846,7 @@ yyreduce:
 #line 151 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
-    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-6]).first_line, 7, (yyvsp[-6].ast_node), (yyvsp[-5].ast_node), (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, "", (yylsp[-6]).first_line, 7, (yyvsp[-6].ast_node), (yyvsp[-5].ast_node), (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1852 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1855,7 +1855,7 @@ yyreduce:
 #line 154 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
-    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, "", (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1861 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1864,7 +1864,7 @@ yyreduce:
 #line 159 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DefList");
-    (yyval.ast_node) = new AST("DefList", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("DefList", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1870 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1873,7 +1873,7 @@ yyreduce:
 #line 162 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DefList");
-    (yyval.ast_node) = new AST("DefList", SymbolType::NONTERMINAL, NULL, yylineno, 0);
+    (yyval.ast_node) = new AST("DefList", SymbolType::NONTERMINAL, "", yylineno, 0);
 }
 #line 1879 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1882,7 +1882,7 @@ yyreduce:
 #line 166 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Def");
-    (yyval.ast_node) = new AST("Def", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Def", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1888 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1900,7 +1900,7 @@ yyreduce:
 #line 173 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DecList");
-    (yyval.ast_node) = new AST("DecList", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("DecList", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1906 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1909,7 +1909,7 @@ yyreduce:
 #line 176 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DecList");
-    (yyval.ast_node) = new AST("DecList", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("DecList", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1915 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1918,7 +1918,7 @@ yyreduce:
 #line 180 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Dec");
-    (yyval.ast_node) = new AST("Dec", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Dec", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 1924 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1927,7 +1927,7 @@ yyreduce:
 #line 183 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Dec");
-    (yyval.ast_node) = new AST("Dec", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Dec", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1933 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1936,7 +1936,7 @@ yyreduce:
 #line 189 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1942 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1945,7 +1945,7 @@ yyreduce:
 #line 193 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1951 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1954,7 +1954,7 @@ yyreduce:
 #line 196 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1960 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1963,7 +1963,7 @@ yyreduce:
 #line 199 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1969 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1972,7 +1972,7 @@ yyreduce:
 #line 202 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1978 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1981,7 +1981,7 @@ yyreduce:
 #line 205 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1987 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1990,7 +1990,7 @@ yyreduce:
 #line 208 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 1996 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1999,7 +1999,7 @@ yyreduce:
 #line 211 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2005 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2008,7 +2008,7 @@ yyreduce:
 #line 214 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2014 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2017,7 +2017,7 @@ yyreduce:
 #line 217 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2023 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2026,7 +2026,7 @@ yyreduce:
 #line 220 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2032 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2035,7 +2035,7 @@ yyreduce:
 #line 223 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2041 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2044,7 +2044,7 @@ yyreduce:
 #line 226 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2050 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2053,7 +2053,7 @@ yyreduce:
 #line 229 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2059 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2062,7 +2062,7 @@ yyreduce:
 #line 232 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2068 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2071,7 +2071,7 @@ yyreduce:
 #line 235 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node)); 
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node)); 
 }
 #line 2077 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2080,7 +2080,7 @@ yyreduce:
 #line 238 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2086 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2098,7 +2098,7 @@ yyreduce:
 #line 244 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2104 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2116,7 +2116,7 @@ yyreduce:
 #line 250 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2122 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2125,7 +2125,7 @@ yyreduce:
 #line 253 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2131 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2134,7 +2134,7 @@ yyreduce:
 #line 256 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2140 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2143,7 +2143,7 @@ yyreduce:
 #line 259 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 2149 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2152,7 +2152,7 @@ yyreduce:
 #line 262 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 2158 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2161,7 +2161,7 @@ yyreduce:
 #line 265 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 2167 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2170,7 +2170,7 @@ yyreduce:
 #line 268 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
-    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 2176 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2186,7 +2186,7 @@ yyreduce:
 #line 273 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Args");
-    (yyval.ast_node) = new AST("Args", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Args", SymbolType::NONTERMINAL, "", (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
 #line 2192 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -2195,7 +2195,7 @@ yyreduce:
 #line 276 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Args");
-    (yyval.ast_node) = new AST("Args", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
+    (yyval.ast_node) = new AST("Args", SymbolType::NONTERMINAL, "", (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
 #line 2201 "y.tab.c" /* yacc.c:1646  */
     break;
