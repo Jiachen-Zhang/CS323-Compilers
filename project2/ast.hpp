@@ -3,23 +3,23 @@
 using namespace std;
 #define INDENT_NUM 2
 
-enum class symbolType {
+enum class SymbolType {
     NONTERMINAL = 1,
     TOKEN_VALUE = 2,
     TOKEN = 3
 };
 
-class ast
+class AST
 {
     public:
         string type_name;
-        symbolType symbol_type;
+        SymbolType symbol_type;
         string value;
         int child_num;
         int lineno;
-        vector<ast *> child;
+        vector<AST *> child;
 
-        ast(string type_name, symbolType symbol_type, string value, int lineno, int child_num, ...);
+        AST(string type_name, SymbolType symbol_type, string value, int lineno, int child_num, ...);
         void print(int tabnum);
 };
 
