@@ -1,7 +1,6 @@
 %{
+    extern "C" int yylex(void);
     #include"lex.yy.c"
-    extern "C"
-    {   int yylex(void);    }
     void yyerror(const char *s);
     int line_num = 1;
     AST *root;

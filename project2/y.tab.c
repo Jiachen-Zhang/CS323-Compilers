@@ -64,15 +64,14 @@
 /* Copy the first part of user declarations.  */
 #line 1 "syntax.y" /* yacc.c:339  */
 
+    extern "C" int yylex(void);
     #include"lex.yy.c"
-    extern "C"
-    {   int yylex(void);    }
     void yyerror(const char *s);
     int line_num = 1;
     AST *root;
     // int yydebug=1;
 
-#line 76 "y.tab.c" /* yacc.c:339  */
+#line 75 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -198,11 +197,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 13 "syntax.y" /* yacc.c:355  */
+#line 12 "syntax.y" /* yacc.c:355  */
 
     class AST *ast_node;
 
-#line 206 "y.tab.c" /* yacc.c:355  */
+#line 205 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -233,7 +232,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 237 "y.tab.c" /* yacc.c:358  */
+#line 236 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -536,14 +535,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    43,    43,    47,    50,    54,    57,    60,    64,    67,
-      72,    75,    79,    82,    87,    90,    94,    97,   100,   103,
-     107,   110,   114,   119,   122,   125,   128,   132,   135,   137,
-     140,   143,   146,   149,   152,   155,   160,   163,   167,   170,
-     174,   177,   181,   184,   190,   193,   194,   197,   200,   203,
-     206,   209,   212,   215,   218,   221,   224,   227,   230,   233,
-     236,   239,   242,   245,   248,   251,   254,   257,   260,   263,
-     266,   269,   272,   274,   277
+       0,    42,    42,    46,    49,    53,    56,    59,    63,    66,
+      71,    74,    78,    81,    86,    89,    93,    96,    99,   102,
+     106,   109,   113,   118,   121,   124,   127,   131,   134,   136,
+     139,   142,   145,   148,   151,   154,   159,   162,   166,   169,
+     173,   176,   180,   183,   189,   192,   193,   196,   199,   202,
+     205,   208,   211,   214,   217,   220,   223,   226,   229,   232,
+     235,   238,   241,   244,   247,   250,   253,   256,   259,   262,
+     265,   268,   271,   273,   276
 };
 #endif
 
@@ -1558,651 +1557,651 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 43 "syntax.y" /* yacc.c:1646  */
+#line 42 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Program"); 
     root = new AST("Program", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node)); 
 }
-#line 1567 "y.tab.c" /* yacc.c:1646  */
+#line 1566 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 47 "syntax.y" /* yacc.c:1646  */
+#line 46 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDefList-1");
     (yyval.ast_node) = new AST("ExtDefList", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1576 "y.tab.c" /* yacc.c:1646  */
+#line 1575 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 50 "syntax.y" /* yacc.c:1646  */
+#line 49 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDefList-2");
     (yyval.ast_node) = new AST("ExtDefList", SymbolType::NONTERMINAL, NULL, yylineno, 0);
 }
-#line 1585 "y.tab.c" /* yacc.c:1646  */
+#line 1584 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 54 "syntax.y" /* yacc.c:1646  */
+#line 53 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDef-1");
     (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1594 "y.tab.c" /* yacc.c:1646  */
+#line 1593 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 57 "syntax.y" /* yacc.c:1646  */
+#line 56 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDef-2"); 
     (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1603 "y.tab.c" /* yacc.c:1646  */
+#line 1602 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 60 "syntax.y" /* yacc.c:1646  */
+#line 59 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDef-3");
     (yyval.ast_node) = new AST("ExtDef", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1612 "y.tab.c" /* yacc.c:1646  */
+#line 1611 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 64 "syntax.y" /* yacc.c:1646  */
+#line 63 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDecList"); 
     (yyval.ast_node) = new AST("ExtDecList", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1621 "y.tab.c" /* yacc.c:1646  */
+#line 1620 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 67 "syntax.y" /* yacc.c:1646  */
+#line 66 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ExtDecList");
     (yyval.ast_node) = new AST("ExtDecList", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1630 "y.tab.c" /* yacc.c:1646  */
+#line 1629 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 72 "syntax.y" /* yacc.c:1646  */
+#line 71 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Specifier");
     (yyval.ast_node) = new AST("Specifier", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1639 "y.tab.c" /* yacc.c:1646  */
+#line 1638 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 75 "syntax.y" /* yacc.c:1646  */
+#line 74 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Specifier");
     (yyval.ast_node) = new AST("Specifier", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1648 "y.tab.c" /* yacc.c:1646  */
+#line 1647 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 79 "syntax.y" /* yacc.c:1646  */
+#line 78 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("StructSpecifier"); 
     (yyval.ast_node) = new AST("StructSpecifier", SymbolType::NONTERMINAL, NULL, (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1657 "y.tab.c" /* yacc.c:1646  */
+#line 1656 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 82 "syntax.y" /* yacc.c:1646  */
+#line 81 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("StructSpecifier"); 
     (yyval.ast_node) = new AST("StructSpecifier", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1666 "y.tab.c" /* yacc.c:1646  */
+#line 1665 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 87 "syntax.y" /* yacc.c:1646  */
+#line 86 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("ID"); 
     (yyval.ast_node) = new AST("VarDec", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1675 "y.tab.c" /* yacc.c:1646  */
+#line 1674 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 90 "syntax.y" /* yacc.c:1646  */
+#line 89 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ID"); 
     (yyval.ast_node) = new AST("VarDec", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1684 "y.tab.c" /* yacc.c:1646  */
+#line 1683 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 94 "syntax.y" /* yacc.c:1646  */
+#line 93 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("FunDec");
     ERROR_TYPE_B((yylsp[-3]).last_line, "Missing closing parenthesis ')'");
 }
-#line 1693 "y.tab.c" /* yacc.c:1646  */
+#line 1692 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 97 "syntax.y" /* yacc.c:1646  */
+#line 96 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("FunDec");
     (yyval.ast_node) = new AST("FunDec", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1702 "y.tab.c" /* yacc.c:1646  */
+#line 1701 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 100 "syntax.y" /* yacc.c:1646  */
+#line 99 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("FunDec");
     ERROR_TYPE_B((yylsp[-2]).last_line, "Missing closing parenthesis ')'");
 }
-#line 1711 "y.tab.c" /* yacc.c:1646  */
+#line 1710 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 103 "syntax.y" /* yacc.c:1646  */
+#line 102 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("FunDec");
     (yyval.ast_node) = new AST("FunDec", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1720 "y.tab.c" /* yacc.c:1646  */
+#line 1719 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 107 "syntax.y" /* yacc.c:1646  */
+#line 106 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("VarList");
     (yyval.ast_node) = new AST("VarList", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1729 "y.tab.c" /* yacc.c:1646  */
+#line 1728 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 110 "syntax.y" /* yacc.c:1646  */
+#line 109 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("VarList"); 
     (yyval.ast_node) = new AST("VarList", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1738 "y.tab.c" /* yacc.c:1646  */
+#line 1737 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 114 "syntax.y" /* yacc.c:1646  */
+#line 113 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("ParamDec");
     (yyval.ast_node) = new AST("ParamDec", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1747 "y.tab.c" /* yacc.c:1646  */
+#line 1746 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 119 "syntax.y" /* yacc.c:1646  */
+#line 118 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("CompSt"); 
     (yyval.ast_node) = new AST("CompSt", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1756 "y.tab.c" /* yacc.c:1646  */
+#line 1755 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 122 "syntax.y" /* yacc.c:1646  */
+#line 121 "syntax.y" /* yacc.c:1646  */
     {
     ERROR_TYPE_B((yylsp[-2]).last_line, "Missing specifier");
 }
-#line 1764 "y.tab.c" /* yacc.c:1646  */
+#line 1763 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 125 "syntax.y" /* yacc.c:1646  */
+#line 124 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("StmtList"); 
     (yyval.ast_node) = new AST("StmtList", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1773 "y.tab.c" /* yacc.c:1646  */
+#line 1772 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 128 "syntax.y" /* yacc.c:1646  */
+#line 127 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("StmtList"); 
     (yyval.ast_node) = new AST("StmtList", SymbolType::NONTERMINAL, NULL, yylineno, 0); 
 }
-#line 1782 "y.tab.c" /* yacc.c:1646  */
+#line 1781 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 132 "syntax.y" /* yacc.c:1646  */
+#line 131 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
     (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1791 "y.tab.c" /* yacc.c:1646  */
+#line 1790 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 135 "syntax.y" /* yacc.c:1646  */
+#line 134 "syntax.y" /* yacc.c:1646  */
     {
     ERROR_TYPE_B((yylsp[-1]).last_line, "Missing semicolon ';'");
 }
-#line 1799 "y.tab.c" /* yacc.c:1646  */
+#line 1798 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 137 "syntax.y" /* yacc.c:1646  */
+#line 136 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
     (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1808 "y.tab.c" /* yacc.c:1646  */
+#line 1807 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 140 "syntax.y" /* yacc.c:1646  */
+#line 139 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt"); 
     ERROR_TYPE_B((yylsp[-2]).last_line, "Missing expression");
 }
-#line 1817 "y.tab.c" /* yacc.c:1646  */
+#line 1816 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 143 "syntax.y" /* yacc.c:1646  */
+#line 142 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt"); 
     ERROR_TYPE_B((yylsp[-2]).last_line, "Missing semicolon ';'");
 }
-#line 1826 "y.tab.c" /* yacc.c:1646  */
+#line 1825 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 146 "syntax.y" /* yacc.c:1646  */
+#line 145 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt"); 
     (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1835 "y.tab.c" /* yacc.c:1646  */
+#line 1834 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 149 "syntax.y" /* yacc.c:1646  */
+#line 148 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
     (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1844 "y.tab.c" /* yacc.c:1646  */
+#line 1843 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 152 "syntax.y" /* yacc.c:1646  */
+#line 151 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
     (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-6]).first_line, 7, (yyvsp[-6].ast_node), (yyvsp[-5].ast_node), (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1853 "y.tab.c" /* yacc.c:1646  */
+#line 1852 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 155 "syntax.y" /* yacc.c:1646  */
+#line 154 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Stmt");
     (yyval.ast_node) = new AST("Stmt", SymbolType::NONTERMINAL, NULL, (yylsp[-4]).first_line, 5, (yyvsp[-4].ast_node), (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1862 "y.tab.c" /* yacc.c:1646  */
+#line 1861 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 160 "syntax.y" /* yacc.c:1646  */
+#line 159 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DefList");
     (yyval.ast_node) = new AST("DefList", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1871 "y.tab.c" /* yacc.c:1646  */
+#line 1870 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 163 "syntax.y" /* yacc.c:1646  */
+#line 162 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DefList");
     (yyval.ast_node) = new AST("DefList", SymbolType::NONTERMINAL, NULL, yylineno, 0);
 }
-#line 1880 "y.tab.c" /* yacc.c:1646  */
+#line 1879 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 167 "syntax.y" /* yacc.c:1646  */
+#line 166 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Def");
     (yyval.ast_node) = new AST("Def", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1889 "y.tab.c" /* yacc.c:1646  */
+#line 1888 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 170 "syntax.y" /* yacc.c:1646  */
+#line 169 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Def");
     ERROR_TYPE_B((yylsp[-2]).last_line, "Missing semicolon ';'");
 }
-#line 1898 "y.tab.c" /* yacc.c:1646  */
+#line 1897 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 174 "syntax.y" /* yacc.c:1646  */
+#line 173 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DecList");
     (yyval.ast_node) = new AST("DecList", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1907 "y.tab.c" /* yacc.c:1646  */
+#line 1906 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 177 "syntax.y" /* yacc.c:1646  */
+#line 176 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("DecList");
     (yyval.ast_node) = new AST("DecList", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1916 "y.tab.c" /* yacc.c:1646  */
+#line 1915 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 181 "syntax.y" /* yacc.c:1646  */
+#line 180 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Dec");
     (yyval.ast_node) = new AST("Dec", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 1925 "y.tab.c" /* yacc.c:1646  */
+#line 1924 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 184 "syntax.y" /* yacc.c:1646  */
+#line 183 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Dec");
     (yyval.ast_node) = new AST("Dec", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1934 "y.tab.c" /* yacc.c:1646  */
+#line 1933 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 190 "syntax.y" /* yacc.c:1646  */
+#line 189 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1943 "y.tab.c" /* yacc.c:1646  */
+#line 1942 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 194 "syntax.y" /* yacc.c:1646  */
+#line 193 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1952 "y.tab.c" /* yacc.c:1646  */
+#line 1951 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 197 "syntax.y" /* yacc.c:1646  */
+#line 196 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1961 "y.tab.c" /* yacc.c:1646  */
+#line 1960 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 200 "syntax.y" /* yacc.c:1646  */
+#line 199 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1970 "y.tab.c" /* yacc.c:1646  */
+#line 1969 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 203 "syntax.y" /* yacc.c:1646  */
+#line 202 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1979 "y.tab.c" /* yacc.c:1646  */
+#line 1978 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 206 "syntax.y" /* yacc.c:1646  */
+#line 205 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1988 "y.tab.c" /* yacc.c:1646  */
+#line 1987 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 209 "syntax.y" /* yacc.c:1646  */
+#line 208 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 1997 "y.tab.c" /* yacc.c:1646  */
+#line 1996 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 212 "syntax.y" /* yacc.c:1646  */
+#line 211 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2006 "y.tab.c" /* yacc.c:1646  */
+#line 2005 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 215 "syntax.y" /* yacc.c:1646  */
+#line 214 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2015 "y.tab.c" /* yacc.c:1646  */
+#line 2014 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 218 "syntax.y" /* yacc.c:1646  */
+#line 217 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2024 "y.tab.c" /* yacc.c:1646  */
+#line 2023 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 221 "syntax.y" /* yacc.c:1646  */
+#line 220 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2033 "y.tab.c" /* yacc.c:1646  */
+#line 2032 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 224 "syntax.y" /* yacc.c:1646  */
+#line 223 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2042 "y.tab.c" /* yacc.c:1646  */
+#line 2041 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 227 "syntax.y" /* yacc.c:1646  */
+#line 226 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2051 "y.tab.c" /* yacc.c:1646  */
+#line 2050 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 230 "syntax.y" /* yacc.c:1646  */
+#line 229 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2060 "y.tab.c" /* yacc.c:1646  */
+#line 2059 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 233 "syntax.y" /* yacc.c:1646  */
+#line 232 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2069 "y.tab.c" /* yacc.c:1646  */
+#line 2068 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 236 "syntax.y" /* yacc.c:1646  */
+#line 235 "syntax.y" /* yacc.c:1646  */
     { 
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node)); 
 }
-#line 2078 "y.tab.c" /* yacc.c:1646  */
+#line 2077 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 239 "syntax.y" /* yacc.c:1646  */
+#line 238 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-1]).first_line, 2, (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2087 "y.tab.c" /* yacc.c:1646  */
+#line 2086 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 242 "syntax.y" /* yacc.c:1646  */
+#line 241 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     ERROR_TYPE_B((yylsp[-3]).last_line, "Missing closing parenthesis ')'");
 }
-#line 2096 "y.tab.c" /* yacc.c:1646  */
+#line 2095 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 245 "syntax.y" /* yacc.c:1646  */
+#line 244 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2105 "y.tab.c" /* yacc.c:1646  */
+#line 2104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 248 "syntax.y" /* yacc.c:1646  */
+#line 247 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     ERROR_TYPE_B((yylsp[-2]).last_line, "Missing closing parenthesis ')'");
 }
-#line 2114 "y.tab.c" /* yacc.c:1646  */
+#line 2113 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 251 "syntax.y" /* yacc.c:1646  */
+#line 250 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2123 "y.tab.c" /* yacc.c:1646  */
+#line 2122 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 254 "syntax.y" /* yacc.c:1646  */
+#line 253 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-3]).first_line, 4, (yyvsp[-3].ast_node), (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2132 "y.tab.c" /* yacc.c:1646  */
+#line 2131 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 257 "syntax.y" /* yacc.c:1646  */
+#line 256 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2141 "y.tab.c" /* yacc.c:1646  */
+#line 2140 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 260 "syntax.y" /* yacc.c:1646  */
+#line 259 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 2150 "y.tab.c" /* yacc.c:1646  */
+#line 2149 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 263 "syntax.y" /* yacc.c:1646  */
+#line 262 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 2159 "y.tab.c" /* yacc.c:1646  */
+#line 2158 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 266 "syntax.y" /* yacc.c:1646  */
+#line 265 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 2168 "y.tab.c" /* yacc.c:1646  */
+#line 2167 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 269 "syntax.y" /* yacc.c:1646  */
+#line 268 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Exp");
     (yyval.ast_node) = new AST("Exp", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 2177 "y.tab.c" /* yacc.c:1646  */
+#line 2176 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 272 "syntax.y" /* yacc.c:1646  */
+#line 271 "syntax.y" /* yacc.c:1646  */
     {
 }
-#line 2184 "y.tab.c" /* yacc.c:1646  */
+#line 2183 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 274 "syntax.y" /* yacc.c:1646  */
+#line 273 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Args");
     (yyval.ast_node) = new AST("Args", SymbolType::NONTERMINAL, NULL, (yylsp[-2]).first_line, 3, (yyvsp[-2].ast_node), (yyvsp[-1].ast_node), (yyvsp[0].ast_node));
 }
-#line 2193 "y.tab.c" /* yacc.c:1646  */
+#line 2192 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 277 "syntax.y" /* yacc.c:1646  */
+#line 276 "syntax.y" /* yacc.c:1646  */
     {
     DISPLAY_SYNTAX("Args");
     (yyval.ast_node) = new AST("Args", SymbolType::NONTERMINAL, NULL, (yylsp[0]).first_line, 1, (yyvsp[0].ast_node));
 }
-#line 2202 "y.tab.c" /* yacc.c:1646  */
+#line 2201 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2206 "y.tab.c" /* yacc.c:1646  */
+#line 2205 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2437,7 +2436,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 282 "syntax.y" /* yacc.c:1906  */
+#line 281 "syntax.y" /* yacc.c:1906  */
 
 void init() {
     root = NULL;

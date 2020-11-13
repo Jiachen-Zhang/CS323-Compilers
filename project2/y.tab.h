@@ -136,7 +136,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 13 "syntax.y" /* yacc.c:1909  */
+#line 12 "syntax.y" /* yacc.c:1909  */
 
     class AST *ast_node;
 
