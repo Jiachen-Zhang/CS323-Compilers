@@ -5,18 +5,17 @@
 
 multimap<string, Variable_Type*> var_map = multimap<string, Variable_Type*>();
 multimap<string, Structure_Type*> type_map = multimap<string, Structure_Type*>();
-multimap<string, Variable_Type*> *container = &var_map;
 void checkExtDefList(AST *node);
 void checkExtDef(AST *node);
 Type *checkSpecifier(AST *node);
 Primitive_Type *checkType(AST *node);
-Structure_Type *checkSructSpecifier(AST *node);
+Type *checkSructSpecifier(AST *node);
 Variable_Type *checkFunc(AST *node, Type *type);
 string checkID(AST *node);
 void checkCompSt(AST *node, Type *type);
-void checkDefList(AST *node);
-void checkDef(AST *node);
-void checkDecList(AST *node, Type *type);
+vector<Variable_Type *> checkDefList(AST *node);
+vector<Variable_Type*> checkDef(AST *node);
+vector<Variable_Type*> checkDecList(AST *node, Type *type);
 void checkStmt(AST *node, Type *type);
 void checkStmtList(AST *node, Type *type);
 Variable_Type *checkDec(AST *node, Type *type);
@@ -56,6 +55,33 @@ void updateVariable(Variable_Type *variable) {
     }
 }
 
+Structure_Type *getStructure(string identifier) {
+    auto it = type_map.find(identifier);
+    int count = type_map.count(identifier);
+    if (count == 0) {
+        return NULL;
+    }
+    assert(count == 1);
+    for (int i = 0, len = type_map.count(identifier);i < len; ++i,++it) {
+		return it->second;
+	}
+    return NULL;
+}
+
+void updateStructure(Structure_Type *structure) {
+    printf("updateStructure %s with fields:", structure->name.c_str());
+    for (auto i: structure->field) {
+        printf(" %s,", i->name.c_str());
+    }
+    printf("\n");
+    Variable_Type *var = getVariable(structure->name);
+    if (!var) {
+        type_map.insert(make_pair(structure->name, structure));
+    } else {
+        assert(false && "updateStructure");
+    }
+}
+
 void report_semantic_error(const char *s,...) {
     va_list args;
     va_start(args, s);
@@ -88,6 +114,9 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
             break;
         case SemanticErrorType::ASSIGN_TO_RAW_VALUE:
             fprintf(stdout, "Error type 6 at Line %d: left side in assignment is rvalue", line_num);
+            break;
+        case SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE:
+            fprintf(stdout, "Error type 7 at Line %d: binary operation on non-number variables", line_num);
             break;
         default:
             assert(false);
@@ -145,7 +174,7 @@ void checkExtDef(AST *node) {
     }
     if (node->child[1]->type_name.compare("SEMI") == 0) {
         // ExtDef: Specifier SEMI
-        assert(false && "ExtDef: Specifier SEMI");
+        return;
     }
     if (node->child[1]->type_name.compare("FunDec") == 0) {
         // ExtDef: Specifier FunDec CompSt
@@ -187,8 +216,28 @@ Primitive_Type *checkType(AST *node) {
     assert(false && "checkType Failed");
 }
 
-Structure_Type *checkSructSpecifier(AST *node) {
+/**
+ * StructSpecifier: STRUCT ID LC DefList RC
+ * StructSpecifier: STRUCT ID
+ */
+Type *checkSructSpecifier(AST *node) {
     DEBUG("checkSructSpecifier", node);
+    assert(node->child[0]->type_name.compare("STRUCT") == 0);
+    assert(node->child[1]->type_name.compare("ID") == 0);
+    string identifier = checkID(node->child[1]);
+    if (node->child_num == 2) {
+        Type *struct_type = getStructure(identifier);
+        assert(struct_type && "struct_type must has defined");
+        return struct_type;
+    } else if (node->child_num == 5) {
+        assert(node->child[2]->type_name.compare("LC") == 0);
+        assert(node->child[3]->type_name.compare("DefList") == 0);
+        assert(node->child[4]->type_name.compare("RC") == 0);
+        vector<Variable_Type*> variables = checkDefList(node->child[3]);
+        Structure_Type *struct_type = new Structure_Type(identifier, variables, node->lineno);
+        updateStructure(struct_type);
+        return struct_type;
+    }
     assert(false && "checkSructSpecifier Failed");
 }
 
@@ -239,42 +288,46 @@ void checkCompSt(AST *node, Type *type) {
  * DefList: Def DefList
  * DefList: %empty
  */
-void checkDefList(AST *node) {
+vector<Variable_Type*> checkDefList(AST *node) {
     DEBUG("checkDefList", node);
     if (node->child_num == 0) {
         // DefList: %empty
         // assert(false && "checkDefList Failed");
-        return;
+        return vector<Variable_Type*>();
     }
     assert(node->child[0]->type_name.compare("Def") == 0);
     assert(node->child[1]->type_name.compare("DefList") == 0);
-    checkDef(node->child[0]);
-    checkDefList(node->child[1]);
+    vector<Variable_Type*> vari_left = checkDef(node->child[0]);
+    vector<Variable_Type*> vari_right = checkDefList(node->child[1]);
+    vari_left.insert(vari_left.end(), vari_right.begin(), vari_right.end());
+    return vari_left;
 }
 
 /**
  * Specifier DecList SEMI
  */
-void checkDef(AST *node) {
+vector<Variable_Type*> checkDef(AST *node) {
     DEBUG("checkDef", node);
     assert(node->child[0]->type_name.compare("Specifier") == 0);
     assert(node->child[1]->type_name.compare("DecList") == 0);
     assert(node->child[2]->type_name.compare("SEMI") == 0);
     Type *type = checkSpecifier(node->child[0]);
-    checkDecList(node->child[1], type);
-    return;
+    vector<Variable_Type*> variables = checkDecList(node->child[1], type);
+    return variables;
 }
 
 /**
  * DecList: Dec
  * DecList: Dec COMMA DecList
  */
-void checkDecList(AST *node, Type *type) {
+vector<Variable_Type*> checkDecList(AST *node, Type *type) {
     DEBUG("checkDecList", node);
     assert(node->child[0]->type_name.compare("Dec") == 0);
+    vector<Variable_Type*> variables = vector<Variable_Type*>();
     if (node->child_num == 1) {
         Variable_Type *variable = checkDec(node->child[0], type);
-        return;
+        variables.push_back(variable);
+        return variables;
     } else if (node->child_num == 3) {
 
     }
@@ -389,12 +442,31 @@ Type *checkExp(AST *node, bool single) {
             assert(node->child[0]->type_name.compare("Exp") == 0);
             Type *expType1 = checkExp(node->child[0]);
             Type *expType2 = checkExp(node->child[2]);
-            assert(typecheck(expType1, expType2, true));
+            if (!typecheck(expType1, expType2, true)) {
+                semantic_error(SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE, node->child[1]->lineno);
+            }
             return expType1;
+        }
+        // Exp DOT ID
+        if (node->child[1]->type_name.compare("DOT") == 0) {
+            assert(node->child[0]->type_name.compare("Exp") == 0);
+            assert(node->child[2]->type_name.compare("ID") == 0);
+            Type *expType1 = checkExp(node->child[0]);
+            string identifier = checkID(node->child[2]);
+            if (Structure_Type* struct_type = dynamic_cast<Structure_Type*>(expType1)) {
+                for (auto i: struct_type->field) {
+                    if (i->name.compare(identifier) == 0) {
+                        return i->type;
+                    }
+                }
+                assert(false && "checkExp Failed");
+            } else {
+                assert(false && "none struct variable use dot");
+            }
+            
         }
         // LP Exp RP
         // ID LP RP
-        // Exp DOT ID
         assert(false && "checkExp Failed");
     } else if (node->child_num == 4) {
         if (node->child[0]->type_name.compare("ID") == 0) {

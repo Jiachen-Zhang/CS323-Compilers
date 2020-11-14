@@ -151,7 +151,6 @@ extern Variable_Type *EMPTYVAR;
 
 extern multimap<string, Variable_Type*> var_map;
 extern multimap<string, Structure_Type*> type_map;
-extern multimap<string, Variable_Type*> *container;
 extern void report_semantic_error(const char *s,...);
 void checkProgram(AST *root);
 enum class SemanticErrorType {
@@ -161,5 +160,6 @@ enum class SemanticErrorType {
     REDEFINED_FUNCTION = 4,
     UNMATCHING_TYPE_OF_ASSIGNMENT = 5,
     ASSIGN_TO_RAW_VALUE = 6,
+    BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE = 7,
 };
 extern void semantic_error(SemanticErrorType error_type, int line_num,...);
