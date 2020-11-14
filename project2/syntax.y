@@ -305,7 +305,7 @@ int main(int argc, char **argv) {
     if (!syntax_error) {
         assert(root != NULL);
         // root->print();
-        check_program(root);
+        checkProgram(root);
     }
     return EXIT_OK;
 }

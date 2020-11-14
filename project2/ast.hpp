@@ -21,6 +21,7 @@ class AST
 
         AST(string type_name, SymbolType symbol_type, string value, int lineno, int child_num, ...);
         void print();
+        void print_self();
     private:
         void print(int tabnum);
 };

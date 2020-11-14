@@ -148,4 +148,8 @@ public:
 extern Type *EMPTYTYPE;
 extern Variable_Type *EMPTYVAR;
 
-void check_program(AST *root);
+extern multimap<string, Variable_Type*> var_map;
+extern multimap<string, Structure_Type*> type_map;
+extern multimap<string, Variable_Type*> *container;
+
+void checkProgram(AST *root);

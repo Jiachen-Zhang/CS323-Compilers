@@ -47,6 +47,22 @@ void AST::print(int tabnum){
     }
 }
 
+void AST::print_self() {
+    switch (symbol_type) {
+        case SymbolType::NONTERMINAL:
+            fprintf(stdout, "%s (%d)\n", type_name.c_str(), lineno);
+            break;
+        case SymbolType::TOKEN_VALUE:
+            fprintf(stdout, "%s: %s\n", type_name.c_str(), value.c_str());
+            break;
+        case SymbolType::TOKEN:
+            fprintf(stdout, "%s\n", type_name.c_str());
+            break;
+        default:
+            throw -1;
+    }
+}
+
 void indent(int tabnum){
     while (tabnum--)
         fprintf(stdout, " ");
