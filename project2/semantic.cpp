@@ -24,8 +24,11 @@ Variable_Type *checkVarDec(AST *node, Type *type);
 Type *checkExp(AST *node, bool single=false);
 void updateVariable(Variable_Type *variable);
 Variable_Type* getVariable(string name);
+vector<Variable_Type*> checkVarList(AST *node);
+Variable_Type * checkParamDec(AST *node);
 
 Variable_Type* getVariable(string identifier) {
+    printf("getVariable %s\n", identifier.c_str());
     auto it = var_map.find(identifier);
     int count = var_map.count(identifier);
     if (count == 0) {
@@ -57,7 +60,11 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
             fprintf(stdout, "Error type 1 at Line %d: undefined variable: ", line_num);
             vfprintf(stdout, "%s", args);
             break;
-         default:
+        case SemanticErrorType::UNDEFINED_FUNCTION:
+            fprintf(stdout, "Error type 2 at Line %d: undefined function: ", line_num);
+            vfprintf(stdout, "%s", args);
+            break;
+        default:
             assert(false);
             break;
     }
@@ -119,6 +126,7 @@ void checkExtDef(AST *node) {
         // ExtDef: Specifier FunDec CompSt
         Variable_Type *func_variable = checkFunc(node->child[1], type);
         checkCompSt(node->child[2], type);
+        updateVariable(func_variable);
         return;
     }
     assert(false && "checkExtDef Failed");
@@ -169,7 +177,8 @@ Variable_Type *checkFunc(AST *node, Type *type) {
     assert(node->child[1]->type_name.compare("LP") == 0);
     string identifier = checkID(node->child[0]);
     if (node->child[2]->type_name.compare("VarList") == 0) {
-        
+        vector<Variable_Type *> variables = checkVarList(node->child[2]);
+        return new Variable_Type(identifier, type, variables, true, node->lineno);
     }
     if (node->child[2]->type_name.compare("RP") == 0) {
         return new Variable_Type(identifier, type, vector<Variable_Type*>(), true, node->lineno);
@@ -330,6 +339,27 @@ Type *checkExp(AST *node, bool single) {
         // ID LP RP
         // Exp DOT ID
         assert(false && "checkExp Failed");
+    } else if (node->child_num == 4) {
+        if (node->child[0]->type_name.compare("ID") == 0) {
+            // ID LP Args RP
+            assert(node->child[1]->type_name.compare("LP") == 0);
+            assert(node->child[2]->type_name.compare("Args") == 0);
+            assert(node->child[3]->type_name.compare("RP") == 0);
+            string identifier = checkID(node->child[0]);
+            Variable_Type *func_variable = getVariable(identifier);
+            if (!func_variable) {
+                semantic_error(SemanticErrorType::UNDEFINED_FUNCTION, node->lineno);
+                return EMPTYTYPE;
+            }
+            assert(func_variable->isfunction == true);
+            assert(false && "checkExp Failed");
+        } else if (node->child[0]->type_name.compare("Exp") == 0) {
+            // Exp LB Exp RB
+            assert(false && "checkExp Failed");
+        }
+        assert(false && "checkExp Failed");
+
+        
     }
     assert(false && "checkExp Failed");
 }
@@ -372,6 +402,38 @@ void checkStmt(AST *node, Type *type) {
         }
         return;
     }
-
     assert(false && "checkStmt Failed");
+}
+
+/**
+ * VarList: ParamDec COMMA VarList
+ * VarList: ParamDec
+ */
+vector<Variable_Type*> checkVarList(AST *node) {
+    DEBUG("checkStmt", node);
+    assert(node->child[0]->type_name.compare("ParamDec") == 0);
+    vector<Variable_Type*> variables = vector<Variable_Type*>();
+    if (node->child_num == 1) {
+        Variable_Type *variable = checkParamDec(node->child[0]);
+        variables.push_back(variable);
+        return variables;
+    } else if (node->child_num == 3) {
+        assert(node->child[1]->type_name.compare("COMMA") == 0);
+        assert(node->child[2]->type_name.compare("VarList") == 0);
+        assert(false && "checkStmt Failed");
+    }
+    assert(false && "checkStmt Failed");
+}
+
+/**
+ * ParamDec: Specifier VarDec
+ */
+Variable_Type *checkParamDec(AST *node) {
+    DEBUG("checkParamDec", node);
+    assert(node->child[0]->type_name.compare("Specifier") == 0);
+    assert(node->child[1]->type_name.compare("VarDec") == 0);
+    Type *type = checkSpecifier(node->child[0]);
+    Variable_Type *variable = checkVarDec(node->child[1], type);
+    updateVariable(variable);
+    return variable;
 }
