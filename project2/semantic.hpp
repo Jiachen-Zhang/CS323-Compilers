@@ -161,5 +161,6 @@ enum class SemanticErrorType {
     UNMATCHING_TYPE_OF_ASSIGNMENT = 5,
     ASSIGN_TO_RAW_VALUE = 6,
     BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE = 7,
+    RETURN_VALUE_MISMATCH = 8,
 };
 extern void semantic_error(SemanticErrorType error_type, int line_num,...);

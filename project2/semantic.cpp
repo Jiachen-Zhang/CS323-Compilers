@@ -118,6 +118,9 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
         case SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE:
             fprintf(stdout, "Error type 7 at Line %d: binary operation on non-number variables", line_num);
             break;
+        case SemanticErrorType::RETURN_VALUE_MISMATCH:
+            fprintf(stdout, "Error type 8 at Line %d: incompatiable return type", line_num);
+            break;
         default:
             assert(false);
             break;
@@ -544,8 +547,8 @@ void checkStmt(AST *node, Type *type) {
         assert(node->child[1]->type_name.compare("Exp") == 0);
         assert(node->child[2]->type_name.compare("SEMI") == 0);
         Type *returnType = checkExp(node->child[1]);
-        if (!typecheck(returnType, type, true)){
-            report_semantic_error("Error type 8 at line %d: the function’s return value type mismatches the declared type", node->child[0]->lineno);
+        if (!typecheck(returnType, type, false)){
+            semantic_error(SemanticErrorType::RETURN_VALUE_MISMATCH, node->child[0]->lineno);
         }
         return;
     } else if (node->child_num == 5) {
