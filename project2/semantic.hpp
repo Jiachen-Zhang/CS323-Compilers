@@ -78,13 +78,14 @@ public:
     vector<Variable_Type *> args;
     int lineno;
     bool isfunction;
-    Variable_Type(string name, Type *type, vector<Variable_Type *> ls = {}, int isfunction=0, int lineno = 1): name(name), type(type)
+    Variable_Type(string name, Type *type, vector<Variable_Type *> ls = {}, bool isfunction=true, int lineno = 1): name(name), type(type)
     {
         this->isfunction = isfunction;
         this->lineno = lineno;
         for (auto it = ls.begin(); it != ls.end(); ++it){
             this->args.push_back(*it);
         }
+
     }
     bool MatchArgs(vector<Type*> ls, bool weak=false){
         if (args.size()!=ls.size())
