@@ -26,6 +26,7 @@ void updateVariable(Variable_Type *variable);
 Variable_Type* getVariable(string name);
 vector<Variable_Type*> checkVarList(AST *node);
 Variable_Type * checkParamDec(AST *node);
+vector<Type*> checkArgs(AST *node);
 
 Variable_Type* getVariable(string identifier) {
     auto it = var_map.find(identifier);
@@ -41,11 +42,17 @@ Variable_Type* getVariable(string identifier) {
 }
 
 void updateVariable(Variable_Type *variable) {
+    printf("updateVariable %s\n", variable->name.c_str());
     Variable_Type *var = getVariable(variable->name);
     if (!var) {
         var_map.insert(make_pair(variable->name, variable));
     } else {
-        semantic_error(SemanticErrorType::REDEFINED_VARIABLE, variable->lineno, variable->name.c_str());
+        if (var->isfunction == true) {
+            semantic_error(SemanticErrorType::REDEFINED_FUNCTION, variable->lineno, variable->name.c_str());
+        } else {
+            semantic_error(SemanticErrorType::REDEFINED_VARIABLE, variable->lineno, variable->name.c_str());
+        }
+        
     }
 }
 
@@ -70,6 +77,10 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
             break;
         case SemanticErrorType::REDEFINED_VARIABLE:
             fprintf(stdout, "Error type 3 at Line %d: redefine variable: ", line_num);
+            vfprintf(stdout, "%s", args);
+            break;
+        case SemanticErrorType::REDEFINED_FUNCTION:
+            fprintf(stdout, "Error type 4 at Line %d: redefine function: ", line_num);
             vfprintf(stdout, "%s", args);
             break;
         default:
@@ -186,6 +197,11 @@ Variable_Type *checkFunc(AST *node, Type *type) {
     string identifier = checkID(node->child[0]);
     if (node->child[2]->type_name.compare("VarList") == 0) {
         vector<Variable_Type *> variables = checkVarList(node->child[2]);
+        // printf("function %s has", node->value.c_str());
+        // for (auto i : variables) {
+        //     printf(" %s,", i->name.c_str());
+        // }
+        // printf("\n");
         return new Variable_Type(identifier, type, variables, true, node->lineno);
     }
     if (node->child[2]->type_name.compare("RP") == 0) {
@@ -325,6 +341,16 @@ Type *checkExp(AST *node, bool single) {
             return variable->type;
             assert(false && "checkExp Failed");
         }
+    } else if (node->child_num == 2) {
+        // MINUS Exp
+        // NOT Exp
+        assert(node->child[1]->type_name.compare("Exp") == 0);
+        if (node->child[0]->type_name.compare("MINUS") == 0) {
+            Type *returnType = checkExp(node->child[1]);
+            return returnType;
+        } else if (node->child[0]->type_name.compare("NOT") == 0) {
+            assert(false && "checkExp Failed");
+        } 
     } else if (node->child_num == 3) {
         // Exp ASSIGN Exp
         // Exp AND Exp
@@ -363,7 +389,12 @@ Type *checkExp(AST *node, bool single) {
                 return EMPTYTYPE;
             }
             assert(func_variable->isfunction == true);
-            assert(false && "checkExp Failed");
+            vector<Type*> args_types = checkArgs(node->child[2]);
+            assert(args_types.size() == func_variable->args.size());
+            for (int i = 0; i < args_types.size(); i++) {
+                assert(typecheck(args_types[i], func_variable->args[i]->type));
+            }
+            return func_variable->type;
         } else if (node->child[0]->type_name.compare("Exp") == 0) {
             // Exp LB Exp RB
             assert(false && "checkExp Failed");
@@ -372,6 +403,7 @@ Type *checkExp(AST *node, bool single) {
 
         
     }
+    printf("node->child_num = %d\n", node->child_num);
     assert(false && "checkExp Failed");
 }
 
@@ -403,7 +435,13 @@ void checkStmtList(AST *node, Type *type) {
  */
 void checkStmt(AST *node, Type *type) {
     DEBUG("checkStmt", node);
-    if (node->child_num == 3) {
+    if (node->child_num == 1) {
+        // CompSt
+        assert(node->child[0]->type_name.compare("CompSt") == 0);
+        checkCompSt(node->child[0], type);
+        return;
+    } else if (node->child_num == 3) {
+        // RETURN Exp SEMI
         assert(node->child[0]->type_name.compare("RETURN") == 0);
         assert(node->child[1]->type_name.compare("Exp") == 0);
         assert(node->child[2]->type_name.compare("SEMI") == 0);
@@ -412,7 +450,38 @@ void checkStmt(AST *node, Type *type) {
             report_semantic_error("Error type 8 at line %d: the function’s return value type mismatches the declared type", node->child[0]->lineno);
         }
         return;
+    } else if (node->child_num == 5) {
+        // IF LP Exp RP Stmt
+        if (node->child[0]->type_name.compare("IF") == 0) {
+            assert(node->child[0]->type_name.compare("IF") == 0);
+            assert(node->child[1]->type_name.compare("LP") == 0);
+            assert(node->child[2]->type_name.compare("Exp") == 0);
+            assert(node->child[3]->type_name.compare("RP") == 0);
+            assert(node->child[4]->type_name.compare("Stmt") == 0);
+            Type *returnType = checkExp(node->child[2]);
+            assert(typecheck(returnType, new Primitive_Type(TokenType::INT_T)) == true);
+            checkStmt(node->child[4], type);
+            return;
+        } else if (node->child[0]->type_name.compare("WHILE") == 0) {
+            assert(false && "checkStmt Failed");
+        }
+        assert(false && "checkStmt Failed");
+    } else if (node->child_num == 7) {
+        // IF LP Exp RP Stmt ELSE Stmt
+        assert(node->child[0]->type_name.compare("IF") == 0);
+        assert(node->child[1]->type_name.compare("LP") == 0);
+        assert(node->child[2]->type_name.compare("Exp") == 0);
+        assert(node->child[3]->type_name.compare("RP") == 0);
+        assert(node->child[4]->type_name.compare("Stmt") == 0);
+        assert(node->child[5]->type_name.compare("ELSE") == 0);
+        assert(node->child[6]->type_name.compare("Stmt") == 0);
+        Type *returnType = checkExp(node->child[2]);
+        assert(typecheck(returnType, new Primitive_Type(TokenType::INT_T)) == true);
+        checkStmt(node->child[4], type);
+        checkStmt(node->child[6], type);
+        return;
     }
+    printf("node->child_num == %d\n", node->child_num);
     assert(false && "checkStmt Failed");
 }
 
@@ -424,14 +493,17 @@ vector<Variable_Type*> checkVarList(AST *node) {
     DEBUG("checkStmt", node);
     assert(node->child[0]->type_name.compare("ParamDec") == 0);
     vector<Variable_Type*> variables = vector<Variable_Type*>();
+    Variable_Type *variable = checkParamDec(node->child[0]);
+    variables.push_back(variable);
     if (node->child_num == 1) {
-        Variable_Type *variable = checkParamDec(node->child[0]);
-        variables.push_back(variable);
         return variables;
     } else if (node->child_num == 3) {
         assert(node->child[1]->type_name.compare("COMMA") == 0);
         assert(node->child[2]->type_name.compare("VarList") == 0);
-        assert(false && "checkStmt Failed");
+        vector<Variable_Type*> next_variables = checkVarList(node->child[2]);
+        // merge variables
+        variables.insert(variables.end(), next_variables.begin(), next_variables.end());
+        return variables;
     }
     assert(false && "checkStmt Failed");
 }
@@ -447,4 +519,27 @@ Variable_Type *checkParamDec(AST *node) {
     Variable_Type *variable = checkVarDec(node->child[1], type);
     updateVariable(variable);
     return variable;
+}
+
+/**
+ * Args: Exp COMMA Args
+ * Args: Exp
+ */
+vector<Type*> checkArgs(AST *node) {
+    DEBUG("checkArgs", node);
+    assert(node->child[0]->type_name.compare("Exp") == 0);
+    vector<Type*> types = vector<Type*>();
+    Type *type = checkExp(node->child[0]);
+    types.push_back(type);
+    if (node->child_num == 1) {
+        return types;
+    } else if (node->child_num == 3) {
+        assert(node->child[1]->type_name.compare("COMMA") == 0);
+        assert(node->child[2]->type_name.compare("Args") == 0);
+        vector<Type*> next_types = checkArgs(node->child[2]);
+        // merge variables
+        types.insert(types.end(), next_types.begin(), next_types.end());
+        return types;
+    }
+    assert(false && "checkArgs Failed");
 }
