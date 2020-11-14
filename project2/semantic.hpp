@@ -160,5 +160,6 @@ enum class SemanticErrorType {
     REDEFINED_VARIABLE = 3,
     REDEFINED_FUNCTION = 4,
     UNMATCHING_TYPE_OF_ASSIGNMENT = 5,
+    ASSIGN_TO_RAW_VALUE = 6,
 };
 extern void semantic_error(SemanticErrorType error_type, int line_num,...);

@@ -86,6 +86,9 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
         case SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT:
             fprintf(stdout, "Error type 5 at Line %d: unmatching type on both sides of assignment", line_num);
             break;
+        case SemanticErrorType::ASSIGN_TO_RAW_VALUE:
+            fprintf(stdout, "Error type 6 at Line %d: left side in assignment is rvalue", line_num);
+            break;
         default:
             assert(false);
             break;
@@ -327,11 +330,14 @@ Type *checkExp(AST *node, bool single) {
     DEBUG("checkVarDec", node);
     if (node->child_num == 1) {
         // ID | INT | FLOAT | CHAR
-        if (node->child[0]->type_name.compare("INT") == 0) {
+        if (node->child[0]->type_name.compare("INT") == 0 && !single) {
             return new Primitive_Type(TokenType::INT_T, node->lineno);
         }
-        if (node->child[0]->type_name.compare("FLOAT") == 0) {
+        if (node->child[0]->type_name.compare("FLOAT") == 0 && !single) {
             return new Primitive_Type(TokenType::FLOAT_T, node->lineno);
+        }
+        if (node->child[0]->type_name.compare("CHAR") == 0 && !single) {
+            return new Primitive_Type(TokenType::CHAT_T, node->lineno);
         }
         if (node->child[0]->type_name.compare("ID") == 0) {
             string identifier = checkID(node->child[0]);
@@ -342,8 +348,9 @@ Type *checkExp(AST *node, bool single) {
             }
             assert(variable && "checkExp Failed");
             return variable->type;
-            assert(false && "checkExp Failed");
         }
+        semantic_error(SemanticErrorType::ASSIGN_TO_RAW_VALUE, node->child[0]->lineno);
+        return EMPTYTYPE;
     } else if (node->child_num == 2) {
         // MINUS Exp
         // NOT Exp
@@ -359,7 +366,7 @@ Type *checkExp(AST *node, bool single) {
         if (node->child[1]->type_name.compare("ASSIGN") == 0) {
             assert(node->child[0]->type_name.compare("Exp") == 0);
             assert(node->child[2]->type_name.compare("Exp") == 0);
-            Type *targetType = checkExp(node->child[0]);
+            Type *targetType = checkExp(node->child[0], true);
             Type *returnType = checkExp(node->child[2]);
             if (!typecheck(targetType, returnType)) {
                 semantic_error(SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT, node->child[1]->lineno);
