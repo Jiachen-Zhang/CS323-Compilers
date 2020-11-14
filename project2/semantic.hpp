@@ -85,7 +85,7 @@ public:
         for (auto it = ls.begin(); it != ls.end(); ++it){
             this->args.push_back(*it);
         }
-
+        // printf("new variable with name %s\n", name.c_str());
     }
     bool MatchArgs(vector<Type*> ls, bool weak=false){
         if (args.size()!=ls.size())
@@ -152,5 +152,9 @@ extern Variable_Type *EMPTYVAR;
 extern multimap<string, Variable_Type*> var_map;
 extern multimap<string, Structure_Type*> type_map;
 extern multimap<string, Variable_Type*> *container;
-
+extern void report_semantic_error(const char *s,...);
 void checkProgram(AST *root);
+enum class SemanticErrorType {
+    UNDEFINED_VARIABLE = 1,
+};
+extern void semantic_error(SemanticErrorType error_type, int line_num, const char *s,...);

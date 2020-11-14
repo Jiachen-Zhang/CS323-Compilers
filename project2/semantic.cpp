@@ -28,7 +28,10 @@ Variable_Type* getVariable(string name);
 Variable_Type* getVariable(string identifier) {
     auto it = var_map.find(identifier);
     int count = var_map.count(identifier);
-    assert(count <= 1);
+    if (count == 0) {
+        return NULL;
+    }
+    assert(count == 1);
     for (int i = 0, len = var_map.count(identifier);i < len; ++i,++it) {
 		return it->second;
 	}
@@ -36,7 +39,6 @@ Variable_Type* getVariable(string identifier) {
 }
 
 void updateVariable(Variable_Type *variable) {
-    fprintf(stdout, "updateVariable\n");
     var_map.insert(make_pair(variable->name, variable));
 }
 
@@ -44,6 +46,21 @@ void report_semantic_error(const char *s,...) {
     va_list args;
     va_start(args, s);
     vfprintf(stdout, s, args);
+    fprintf(stdout, "\n");
+}
+
+void semantic_error(SemanticErrorType error_type, int line_num, ...) {
+    va_list args;
+    va_start(args, line_num);
+    switch (error_type){ 
+        case SemanticErrorType::UNDEFINED_VARIABLE:
+            fprintf(stdout, "Error type 1 at Line %d: undefined variable: ", line_num);
+            vfprintf(stdout, "%s", args);
+            break;
+         default:
+            assert(false);
+            break;
+    }
     fprintf(stdout, "\n");
 }
 
@@ -162,7 +179,7 @@ Variable_Type *checkFunc(AST *node, Type *type) {
 
 string checkID(AST *node) {
     DEBUG("checkID", node);
-    return node->type_name;
+    return node->value;
 }
 
 /**
@@ -280,10 +297,39 @@ Type *checkExp(AST *node, bool single) {
         if (node->child[0]->type_name.compare("ID") == 0) {
             string identifier = checkID(node->child[0]);
             Variable_Type* variable = getVariable(identifier);
+            if (!variable) {
+                semantic_error(SemanticErrorType::UNDEFINED_VARIABLE, node->lineno);
+                return EMPTYTYPE;
+            }
             assert(variable && "checkExp Failed");
             return variable->type;
             assert(false && "checkExp Failed");
         }
+    } else if (node->child_num == 3) {
+        // Exp ASSIGN Exp
+        // Exp AND Exp
+        // Exp OR Exp
+        // Exp LT Exp
+        // Exp LE Exp
+        // Exp GT Exp
+        // Exp GE Exp
+        // Exp NE Exp
+        // Exp EQ Exp
+        // Exp PLUS Exp
+        // Exp MINUS Exp
+        // Exp MUL Exp
+        // Exp DIV Exp
+        if (node->child[2]->type_name.compare("Exp") == 0) {
+            assert(node->child[0]->type_name.compare("Exp") == 0);
+            Type *expType1 = checkExp(node->child[0]);
+            Type *expType2 = checkExp(node->child[2]);
+            assert(typecheck(expType1, expType2, true));
+            return expType1;
+        }
+        // LP Exp RP
+        // ID LP RP
+        // Exp DOT ID
+        assert(false && "checkExp Failed");
     }
     assert(false && "checkExp Failed");
 }
