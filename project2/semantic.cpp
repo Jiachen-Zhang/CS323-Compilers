@@ -121,6 +121,10 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
         case SemanticErrorType::RETURN_VALUE_MISMATCH:
             fprintf(stdout, "Error type 8 at Line %d: incompatiable return type", line_num);
             break;
+        case SemanticErrorType::INVALID_ARGUMENT_NUMBER:
+            fprintf(stdout, "Error type 9 at Line %d: invalid argument number for compare, ", line_num);
+            vfprintf(stdout, "expect %d, got %d", args);
+            break;
         default:
             assert(false);
             break;
@@ -485,9 +489,13 @@ Type *checkExp(AST *node, bool single) {
             }
             assert(func_variable->isfunction == true);
             vector<Type*> args_types = checkArgs(node->child[2]);
-            assert(args_types.size() == func_variable->args.size());
-            for (int i = 0; i < args_types.size(); i++) {
-                assert(typecheck(args_types[i], func_variable->args[i]->type));
+            if (args_types.size() != func_variable->args.size()) {
+                semantic_error(SemanticErrorType::INVALID_ARGUMENT_NUMBER, 
+                node->lineno, func_variable->args.size(), args_types.size());
+            } else {
+                for (int i = 0; i < args_types.size(); i++) {
+                    assert(typecheck(args_types[i], func_variable->args[i]->type));
+                }
             }
             return func_variable->type;
         } else if (node->child[0]->type_name.compare("Exp") == 0) {
