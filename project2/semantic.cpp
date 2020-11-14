@@ -26,6 +26,7 @@ Variable_Type* getVariable(string name);
 vector<Variable_Type*> checkVarList(AST *node);
 Variable_Type * checkParamDec(AST *node);
 vector<Type*> checkArgs(AST *node);
+int checkINT(AST *node);
 
 Variable_Type* getVariable(string identifier) {
     auto it = var_map.find(identifier);
@@ -124,6 +125,9 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
         case SemanticErrorType::INVALID_ARGUMENT_NUMBER:
             fprintf(stdout, "Error type 9 at Line %d: invalid argument number for compare, ", line_num);
             vfprintf(stdout, "expect %d, got %d", args);
+            break;
+        case SemanticErrorType::INDEXING_NONE_ARRAY_VARIABLE:
+            fprintf(stdout, "Error type 10 at Line %d: indexing on non-array variable", line_num);
             break;
         default:
             assert(false);
@@ -382,8 +386,17 @@ Variable_Type *checkVarDec(AST *node, Type *type) {
         assert(node->child[1]->type_name.compare("LB") == 0);
         assert(node->child[2]->type_name.compare("INT") == 0);
         assert(node->child[3]->type_name.compare("RB") == 0);
+        Variable_Type *variable_type = checkVarDec(node->child[0], type);
+        int size = checkINT(node->child[2]);
+        variable_type->type = new Array_Type(variable_type->type, size);
+        return variable_type; 
     }
+    printf("node->child_num = %d\n", node->child_num);
     assert(false && "checkVarDec Failed");
+}
+
+int checkINT(AST *node) {
+    return atoi(node->value.c_str());
 }
 
 Type *checkExp(AST *node, bool single) {
@@ -500,6 +513,18 @@ Type *checkExp(AST *node, bool single) {
             return func_variable->type;
         } else if (node->child[0]->type_name.compare("Exp") == 0) {
             // Exp LB Exp RB
+            assert(node->child[1]->type_name.compare("LB") == 0);
+            assert(node->child[2]->type_name.compare("Exp") == 0);
+            assert(node->child[3]->type_name.compare("RB") == 0);
+            Type *idType = checkExp(node->child[0]);
+            Type *indexType = checkExp(node->child[2]);
+            assert(typecheck(indexType, new Primitive_Type(TokenType::INT_T)) == true);
+            if (Array_Type* array_type = dynamic_cast<Array_Type*>(idType)) {
+                return array_type->base;
+            } else {
+                semantic_error(SemanticErrorType::INDEXING_NONE_ARRAY_VARIABLE, node->child[0]->lineno);
+                return EMPTYTYPE;
+            }
             assert(false && "checkExp Failed");
         }
         assert(false && "checkExp Failed");
@@ -560,19 +585,22 @@ void checkStmt(AST *node, Type *type) {
         }
         return;
     } else if (node->child_num == 5) {
-        // IF LP Exp RP Stmt
+        assert(node->child[1]->type_name.compare("LP") == 0);
+        assert(node->child[2]->type_name.compare("Exp") == 0);
+        assert(node->child[3]->type_name.compare("RP") == 0);
+        assert(node->child[4]->type_name.compare("Stmt") == 0);
         if (node->child[0]->type_name.compare("IF") == 0) {
-            assert(node->child[0]->type_name.compare("IF") == 0);
-            assert(node->child[1]->type_name.compare("LP") == 0);
-            assert(node->child[2]->type_name.compare("Exp") == 0);
-            assert(node->child[3]->type_name.compare("RP") == 0);
-            assert(node->child[4]->type_name.compare("Stmt") == 0);
+            // IF LP Exp RP Stmt
             Type *returnType = checkExp(node->child[2]);
             assert(typecheck(returnType, new Primitive_Type(TokenType::INT_T)) == true);
             checkStmt(node->child[4], type);
             return;
         } else if (node->child[0]->type_name.compare("WHILE") == 0) {
-            assert(false && "checkStmt Failed");
+            // WHILE LP Exp RP Stmt
+            Type *returnType = checkExp(node->child[2]);
+            assert(typecheck(returnType, new Primitive_Type(TokenType::INT_T)) == true);
+            checkStmt(node->child[4], type);
+            return;
         }
         assert(false && "checkStmt Failed");
     } else if (node->child_num == 7) {

@@ -163,5 +163,6 @@ enum class SemanticErrorType {
     BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE = 7,
     RETURN_VALUE_MISMATCH = 8,
     INVALID_ARGUMENT_NUMBER = 9,
+    INDEXING_NONE_ARRAY_VARIABLE = 10,
 };
 extern void semantic_error(SemanticErrorType error_type, int line_num,...);
