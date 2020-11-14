@@ -5,9 +5,9 @@ def compile():
     os.system("make splc")
 
 def generate_SPL_file_path(num: int) -> str:
-    return "test/test_1_r{:02d}.spl".format(num)
+    return "test/test_2_r{:02d}.spl".format(num)
 def generate_cmp_file_name(num: int) -> str:
-    return "test/test_1_r{:02d}.out".format(num)
+    return "test/test_2_r{:02d}.out".format(num)
 
 def run_specific(num: int):
     spl_path = generate_SPL_file_path(num)
@@ -17,7 +17,7 @@ def run_specific(num: int):
     os.system(cmd)
 
 def run_all():
-    TEST_CASE_NUM = 21
+    TEST_CASE_NUM = 10
     for i in range(1, 1+TEST_CASE_NUM, 1):
         run_specific(i)
 

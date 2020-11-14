@@ -1,7 +1,7 @@
 #include "semantic.hpp"
 
-#define DEBUG(s, node) fprintf(stdout, "DEBUG: %20s | ", s); node->print_self();
-#define ERROR(s, node) fprintf(stdout, "ERROR: %20s | ", s); node->print_self();
+#define DEBUG(s, node) //fprintf(stdout, "DEBUG: %20s | ", s); node->print_self();
+#define ERROR(s, node) //fprintf(stdout, "ERROR: %20s | ", s); node->print_self();
 
 multimap<string, Variable_Type*> var_map = multimap<string, Variable_Type*>();
 multimap<string, Structure_Type*> type_map = multimap<string, Structure_Type*>();
@@ -42,7 +42,7 @@ Variable_Type* getVariable(string identifier) {
 }
 
 void updateVariable(Variable_Type *variable) {
-    printf("updateVariable %s\n", variable->name.c_str());
+    // printf("updateVariable %s\n", variable->name.c_str());
     Variable_Type *var = getVariable(variable->name);
     if (!var) {
         var_map.insert(make_pair(variable->name, variable));
@@ -70,11 +70,11 @@ Structure_Type *getStructure(string identifier) {
 }
 
 void updateStructure(Structure_Type *structure) {
-    printf("updateStructure %s with fields:", structure->name.c_str());
-    for (auto i: structure->field) {
-        printf(" %s,", i->name.c_str());
-    }
-    printf("\n");
+    // printf("updateStructure %s with fields:", structure->name.c_str());
+    // for (auto i: structure->field) {
+    //     printf(" %s,", i->name.c_str());
+    // }
+    // printf("\n");
     Variable_Type *var = getVariable(structure->name);
     if (!var) {
         type_map.insert(make_pair(structure->name, structure));
@@ -148,7 +148,7 @@ Type *EMPTYTYPE = new Type();
 Variable_Type *EMPTYVAR = new Variable_Type("$", EMPTYTYPE);
 
 void checkProgram(AST *root) {
-    root->print();
+    // root->print();
     DEBUG("checkProgram", root);
     checkExtDefList(root->child[0]);
 }
