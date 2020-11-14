@@ -156,6 +156,7 @@ extern void report_semantic_error(const char *s,...);
 void checkProgram(AST *root);
 enum class SemanticErrorType {
     UNDEFINED_VARIABLE = 1,
-    UNDEFINED_FUNCTION = 2
+    UNDEFINED_FUNCTION = 2,
+    REDEFINED_VARIABLE = 3,
 };
-extern void semantic_error(SemanticErrorType error_type, int line_num, const char *s,...);
+extern void semantic_error(SemanticErrorType error_type, int line_num,...);

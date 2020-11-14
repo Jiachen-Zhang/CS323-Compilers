@@ -28,7 +28,6 @@ vector<Variable_Type*> checkVarList(AST *node);
 Variable_Type * checkParamDec(AST *node);
 
 Variable_Type* getVariable(string identifier) {
-    printf("getVariable %s\n", identifier.c_str());
     auto it = var_map.find(identifier);
     int count = var_map.count(identifier);
     if (count == 0) {
@@ -42,7 +41,12 @@ Variable_Type* getVariable(string identifier) {
 }
 
 void updateVariable(Variable_Type *variable) {
-    var_map.insert(make_pair(variable->name, variable));
+    Variable_Type *var = getVariable(variable->name);
+    if (!var) {
+        var_map.insert(make_pair(variable->name, variable));
+    } else {
+        semantic_error(SemanticErrorType::REDEFINED_VARIABLE, variable->lineno, variable->name.c_str());
+    }
 }
 
 void report_semantic_error(const char *s,...) {
@@ -62,6 +66,10 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
             break;
         case SemanticErrorType::UNDEFINED_FUNCTION:
             fprintf(stdout, "Error type 2 at Line %d: undefined function: ", line_num);
+            vfprintf(stdout, "%s", args);
+            break;
+        case SemanticErrorType::REDEFINED_VARIABLE:
+            fprintf(stdout, "Error type 3 at Line %d: redefine variable: ", line_num);
             vfprintf(stdout, "%s", args);
             break;
         default:
@@ -303,11 +311,14 @@ Type *checkExp(AST *node, bool single) {
         if (node->child[0]->type_name.compare("INT") == 0) {
             return new Primitive_Type(TokenType::INT_T, node->lineno);
         }
+        if (node->child[0]->type_name.compare("FLOAT") == 0) {
+            return new Primitive_Type(TokenType::FLOAT_T, node->lineno);
+        }
         if (node->child[0]->type_name.compare("ID") == 0) {
             string identifier = checkID(node->child[0]);
             Variable_Type* variable = getVariable(identifier);
             if (!variable) {
-                semantic_error(SemanticErrorType::UNDEFINED_VARIABLE, node->lineno);
+                semantic_error(SemanticErrorType::UNDEFINED_VARIABLE, node->lineno, identifier.c_str());
                 return EMPTYTYPE;
             }
             assert(variable && "checkExp Failed");
@@ -348,7 +359,7 @@ Type *checkExp(AST *node, bool single) {
             string identifier = checkID(node->child[0]);
             Variable_Type *func_variable = getVariable(identifier);
             if (!func_variable) {
-                semantic_error(SemanticErrorType::UNDEFINED_FUNCTION, node->lineno);
+                semantic_error(SemanticErrorType::UNDEFINED_FUNCTION, node->lineno, identifier.c_str());
                 return EMPTYTYPE;
             }
             assert(func_variable->isfunction == true);
