@@ -56,7 +56,7 @@ void AST::print_self() {
             fprintf(stdout, "%s: %s\n", type_name.c_str(), value.c_str());
             break;
         case SymbolType::TOKEN:
-            fprintf(stdout, "%s\n", type_name.c_str());
+            fprintf(stdout, "%s at line %d\n", type_name.c_str(), lineno);
             break;
         default:
             throw -1;

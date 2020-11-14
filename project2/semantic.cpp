@@ -83,6 +83,9 @@ void semantic_error(SemanticErrorType error_type, int line_num, ...) {
             fprintf(stdout, "Error type 4 at Line %d: redefine function: ", line_num);
             vfprintf(stdout, "%s", args);
             break;
+        case SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT:
+            fprintf(stdout, "Error type 5 at Line %d: unmatching type on both sides of assignment", line_num);
+            break;
         default:
             assert(false);
             break;
@@ -285,7 +288,7 @@ Variable_Type *checkDec(AST *node, Type *type) {
     Variable_Type *variable = checkVarDec(node->child[0], type);
     if (node->child_num == 1) {
         // Dec: VarDec
-        assert(false && "checkDec Failed");
+        updateVariable(variable);
     } else if (node->child_num == 3) {
         // Dec: VarDec ASSIGN Exp
         assert(node->child[1]->type_name.compare("ASSIGN") == 0);
@@ -353,6 +356,16 @@ Type *checkExp(AST *node, bool single) {
         } 
     } else if (node->child_num == 3) {
         // Exp ASSIGN Exp
+        if (node->child[1]->type_name.compare("ASSIGN") == 0) {
+            assert(node->child[0]->type_name.compare("Exp") == 0);
+            assert(node->child[2]->type_name.compare("Exp") == 0);
+            Type *targetType = checkExp(node->child[0]);
+            Type *returnType = checkExp(node->child[2]);
+            if (!typecheck(targetType, returnType)) {
+                semantic_error(SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT, node->child[1]->lineno);
+            }
+            return EMPTYTYPE;
+        }
         // Exp AND Exp
         // Exp OR Exp
         // Exp LT Exp
@@ -439,6 +452,12 @@ void checkStmt(AST *node, Type *type) {
         // CompSt
         assert(node->child[0]->type_name.compare("CompSt") == 0);
         checkCompSt(node->child[0], type);
+        return;
+    } else if (node->child_num == 2) {
+        // Exp SEMI
+        assert(node->child[0]->type_name.compare("Exp") == 0);
+        assert(node->child[1]->type_name.compare("SEMI") == 0);
+        checkExp(node->child[0]);
         return;
     } else if (node->child_num == 3) {
         // RETURN Exp SEMI
