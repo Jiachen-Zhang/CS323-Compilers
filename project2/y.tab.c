@@ -2463,7 +2463,8 @@ int main(int argc, char **argv) {
     yyparse();
     if (!syntax_error) {
         assert(root != NULL);
-        root->print(0);
+        // root->print();
+        check_program(root);
     }
     return EXIT_OK;
 }

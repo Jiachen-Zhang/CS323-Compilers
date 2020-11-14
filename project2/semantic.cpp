@@ -10,3 +10,7 @@ bool typecheck(Type *left, Type*right, bool weak) {
 }
 Type *EMPTYTYPE = new Type();
 Variable_Type *EMPTYVAR = new Variable_Type("$", EMPTYTYPE);
+
+void check_program(AST *root) {
+    root->print();
+}

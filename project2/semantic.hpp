@@ -147,3 +147,5 @@ public:
 
 extern Type *EMPTYTYPE;
 extern Variable_Type *EMPTYVAR;
+
+void check_program(AST *root);

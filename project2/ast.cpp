@@ -18,6 +18,10 @@ AST::AST(string type_name, SymbolType symbol_type, string value, int lineno, int
     }
 }
 
+void AST::print() {
+    print(0);
+}
+
 void AST::print(int tabnum){
     // fprintf(stdout, "start print AST %s, %s\n", type_name.c_str(), value.c_str());
     switch (symbol_type) {
