@@ -102,8 +102,7 @@ void checkExtDef(AST *node) {
         // ExtDef: Specifier FunDec CompSt
         Variable_Type *func_variable = checkFunc(node->child[1], type);
         checkCompSt(node->child[2], type);
-        assert(false && "ExtDef: Specifier FunDec CompSt");
-
+        return;
     }
     assert(false && "checkExtDef Failed");
 }
@@ -177,7 +176,7 @@ void checkCompSt(AST *node, Type *type) {
     assert(node->child[3]->type_name.compare("RC") == 0);
     checkDefList(node->child[1]);
     checkStmtList(node->child[2], type);
-    assert(false && "checkCompSt Failed");
+    return;
 }
 
 /**
@@ -302,7 +301,7 @@ void checkStmtList(AST *node, Type *type) {
         assert(node->child[1]->type_name.compare("StmtList") == 0);
         checkStmt(node->child[0], type);
         checkStmtList(node->child[1], type);
-        assert(false && "checkStmtList Failed");
+        return;
     }
     assert(false && "checkStmtList Failed");
 }
