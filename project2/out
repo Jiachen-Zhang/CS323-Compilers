@@ -1,2 +1,2 @@
-Error type 12 at Line 15: indexing by non-integer
-Error type 5 at Line 15: unmatching type on both sides of assignment
+Error type 13 at Line 19: accessing with non-struct variable
+Error type 13 at Line 19: accessing with non-struct variable

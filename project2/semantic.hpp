@@ -166,5 +166,6 @@ enum class SemanticErrorType {
     INDEXING_NONE_ARRAY_VARIABLE = 10,
     INVOKING_NONE_FUNCTION_VARIABLE = 11,
     INVALID_INDEXING = 12,
+    ACCESS_NONE_STRUCT_VARIABLE = 13,
 };
 extern void semantic_error(SemanticErrorType error_type, ...);

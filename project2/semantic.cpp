@@ -95,46 +95,48 @@ void semantic_error(SemanticErrorType error_type, ...) {
     va_start(args, error_type);
     switch (error_type){ 
         case SemanticErrorType::UNDEFINED_VARIABLE:
-            vfprintf(stdout, "Error type 1 at Line %d: undefined variable: %s", args);
+            vfprintf(stdout, "Error type 1 at Line %d: undefined variable: %s\n", args);
             break;
         case SemanticErrorType::UNDEFINED_FUNCTION:
-            vfprintf(stdout, "Error type 2 at Line %d: undefined function: %s", args);
+            vfprintf(stdout, "Error type 2 at Line %d: undefined function: %s\n", args);
             break;
         case SemanticErrorType::REDEFINED_VARIABLE:
-            vfprintf(stdout, "Error type 3 at Line %d: redefine variable: %s", args);
+            vfprintf(stdout, "Error type 3 at Line %d: redefine variable: %s\n", args);
             break;
         case SemanticErrorType::REDEFINED_FUNCTION:
-            vfprintf(stdout, "Error type 4 at Line %d: redefine function: %s", args);
+            vfprintf(stdout, "Error type 4 at Line %d: redefine function: %s\n", args);
             break;
         case SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT:
-            vfprintf(stdout, "Error type 5 at Line %d: unmatching type on both sides of assignment", args);
+            vfprintf(stdout, "Error type 5 at Line %d: unmatching type on both sides of assignment\n", args);
             break;
         case SemanticErrorType::ASSIGN_TO_RAW_VALUE:
-            vfprintf(stdout, "Error type 6 at Line %d: left side in assignment is rvalue", args);
+            vfprintf(stdout, "Error type 6 at Line %d: left side in assignment is rvalue\n", args);
             break;
         case SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE:
-            vfprintf(stdout, "Error type 7 at Line %d: binary operation on non-number variables", args);
+            vfprintf(stdout, "Error type 7 at Line %d: binary operation on non-number variables\n", args);
             break;
         case SemanticErrorType::RETURN_VALUE_MISMATCH:
-            vfprintf(stdout, "Error type 8 at Line %d: incompatiable return type", args);
+            vfprintf(stdout, "Error type 8 at Line %d: incompatiable return type\n", args);
             break;
         case SemanticErrorType::INVALID_ARGUMENT_NUMBER:
-            vfprintf(stdout, "Error type 9 at Line %d: invalid argument number for compare, expect %d, got %d", args);
+            vfprintf(stdout, "Error type 9 at Line %d: invalid argument number for compare, expect %d, got %d\n", args);
             break;
         case SemanticErrorType::INDEXING_NONE_ARRAY_VARIABLE:
-            vfprintf(stdout, "Error type 10 at Line %d: indexing on non-array variable", args);
+            vfprintf(stdout, "Error type 10 at Line %d: indexing on non-array variable\n", args);
             break;
         case SemanticErrorType::INVOKING_NONE_FUNCTION_VARIABLE:
-            vfprintf(stdout, "Error type 11 at Line %d: invoking non-function variable: %s", args);
+            vfprintf(stdout, "Error type 11 at Line %d: invoking non-function variable: %s\n", args);
             break;
         case SemanticErrorType::INVALID_INDEXING:
-            vfprintf(stdout, "Error type 12 at Line %d: indexing by non-integer", args);
+            vfprintf(stdout, "Error type 12 at Line %d: indexing by non-integer\n", args);
+            break;
+        case SemanticErrorType::ACCESS_NONE_STRUCT_VARIABLE:
+            vfprintf(stdout, "Error type 13 at Line %d: accessing with non-struct variable\n", args);
             break;
         default:
             assert(false);
             break;
     }
-    fprintf(stdout, "\n");
 }
 
 bool typecheck(Type *left, Type*right, bool weak, bool allow_empty) {
@@ -485,7 +487,8 @@ Type *checkExp(AST *node, bool single) {
                 }
                 assert(false && "checkExp Failed");
             } else {
-                assert(false && "none struct variable use dot");
+                semantic_error(SemanticErrorType::ACCESS_NONE_STRUCT_VARIABLE, node->child[1]->lineno);
+                return EMPTYTYPE;
             }
             
         }
