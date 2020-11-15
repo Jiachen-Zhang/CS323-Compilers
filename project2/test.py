@@ -30,7 +30,7 @@ def run_all():
     TEST_CASE_NUM = 15
     for i in range(1, 1+TEST_CASE_NUM, 1):
         run_specific(i)
-    TEST_CASE_NUM_UDF = 1
+    TEST_CASE_NUM_UDF = 2
     for i in range(1, 1+TEST_CASE_NUM_UDF, 1):
         run_UDF_specific(i)
 
