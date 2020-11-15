@@ -474,7 +474,7 @@ Type *checkExp(AST *node, bool single) {
             assert(node->child[0]->type_name.compare("Exp") == 0);
             Type *expType1 = checkExp(node->child[0]);
             Type *expType2 = checkExp(node->child[2]);
-            if (!typecheck(expType1, expType2, true)) {
+            if (!typecheck(expType1, expType2, false, false)) {
                 semantic_error(SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE, node->child[1]->lineno);
                 return EMPTYTYPE;
             }
