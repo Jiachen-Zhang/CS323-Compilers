@@ -133,6 +133,9 @@ void semantic_error(SemanticErrorType error_type, ...) {
         case SemanticErrorType::ACCESS_NONE_STRUCT_VARIABLE:
             vfprintf(stdout, "Error type 13 at Line %d: accessing with non-struct variable\n", args);
             break;
+        case SemanticErrorType::ACCESS_NONE_EXIST_MEMBER:
+            vfprintf(stdout, "Error type 14 at Line %d: no such member: %s\n", args);
+            break;
         default:
             assert(false);
             break;
@@ -485,7 +488,8 @@ Type *checkExp(AST *node, bool single) {
                         return i->type;
                     }
                 }
-                assert(false && "checkExp Failed");
+                semantic_error(SemanticErrorType::ACCESS_NONE_EXIST_MEMBER, node->child[1]->lineno, identifier.c_str());
+                return EMPTYTYPE;
             } else {
                 semantic_error(SemanticErrorType::ACCESS_NONE_STRUCT_VARIABLE, node->child[1]->lineno);
                 return EMPTYTYPE;
