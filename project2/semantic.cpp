@@ -476,6 +476,7 @@ Type *checkExp(AST *node, bool single) {
             Type *expType2 = checkExp(node->child[2]);
             if (!typecheck(expType1, expType2, true)) {
                 semantic_error(SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE, node->child[1]->lineno);
+                return EMPTYTYPE;
             }
             return expType1;
         }
