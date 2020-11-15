@@ -125,7 +125,10 @@ void semantic_error(SemanticErrorType error_type, ...) {
             vfprintf(stdout, "Error type 10 at Line %d: indexing on non-array variable", args);
             break;
         case SemanticErrorType::INVOKING_NONE_FUNCTION_VARIABLE:
-            vfprintf(stdout, "Error type 11 at Line %d: invoking non-function variable: compare2", args);
+            vfprintf(stdout, "Error type 11 at Line %d: invoking non-function variable: %s", args);
+            break;
+        case SemanticErrorType::INVALID_INDEXING:
+            vfprintf(stdout, "Error type 12 at Line %d: indexing by non-integer", args);
             break;
         default:
             assert(false);
@@ -134,8 +137,8 @@ void semantic_error(SemanticErrorType error_type, ...) {
     fprintf(stdout, "\n");
 }
 
-bool typecheck(Type *left, Type*right, bool weak) {
-    if (*left==*EMPTYTYPE || *right==*EMPTYTYPE)
+bool typecheck(Type *left, Type*right, bool weak, bool allow_empty) {
+    if (allow_empty&&(*left==*EMPTYTYPE || *right==*EMPTYTYPE))
         return true;
     else if (weak && typeid(*left) == typeid(Primitive_Type) && typeid(*right) == typeid(Primitive_Type))
         return true;
@@ -400,16 +403,7 @@ int checkINT(AST *node) {
 Type *checkExp(AST *node, bool single) {
     DEBUG("checkVarDec", node);
     if (node->child_num == 1) {
-        // ID | INT | FLOAT | CHAR
-        if (node->child[0]->type_name.compare("INT") == 0 && !single) {
-            return new Primitive_Type(TokenType::INT_T, node->lineno);
-        }
-        if (node->child[0]->type_name.compare("FLOAT") == 0 && !single) {
-            return new Primitive_Type(TokenType::FLOAT_T, node->lineno);
-        }
-        if (node->child[0]->type_name.compare("CHAR") == 0 && !single) {
-            return new Primitive_Type(TokenType::CHAT_T, node->lineno);
-        }
+        // CHAR
         if (node->child[0]->type_name.compare("ID") == 0) {
             string identifier = checkID(node->child[0]);
             Variable_Type* variable = getVariable(identifier);
@@ -420,8 +414,20 @@ Type *checkExp(AST *node, bool single) {
             assert(variable && "checkExp Failed");
             return variable->type;
         }
-        semantic_error(SemanticErrorType::ASSIGN_TO_RAW_VALUE, node->child[0]->lineno);
-        return EMPTYTYPE;
+        // ID | INT | FLOAT
+        if (single) {
+            semantic_error(SemanticErrorType::ASSIGN_TO_RAW_VALUE, node->child[0]->lineno);
+        }
+        if (node->child[0]->type_name.compare("INT") == 0) {
+            return new Primitive_Type(TokenType::INT_T, node->lineno);
+        }
+        if (node->child[0]->type_name.compare("FLOAT") == 0) {
+            return new Primitive_Type(TokenType::FLOAT_T, node->lineno);
+        }
+        if (node->child[0]->type_name.compare("CHAR") == 0) {
+            return new Primitive_Type(TokenType::CHAT_T, node->lineno);
+        }
+        assert(false && "checkExp Failed");
     } else if (node->child_num == 2) {
         // MINUS Exp
         // NOT Exp
@@ -439,8 +445,8 @@ Type *checkExp(AST *node, bool single) {
             assert(node->child[2]->type_name.compare("Exp") == 0);
             Type *targetType = checkExp(node->child[0], true);
             Type *returnType = checkExp(node->child[2]);
-            if (!typecheck(targetType, returnType)) {
-                semantic_error(SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT, node->child[1]->lineno);
+            if (!typecheck(targetType, returnType, false, false)) {
+                semantic_error(SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT, node->child[1]->lineno); 
             }
             return EMPTYTYPE;
         }
@@ -519,7 +525,10 @@ Type *checkExp(AST *node, bool single) {
             assert(node->child[3]->type_name.compare("RB") == 0);
             Type *idType = checkExp(node->child[0]);
             Type *indexType = checkExp(node->child[2]);
-            assert(typecheck(indexType, new Primitive_Type(TokenType::INT_T)) == true);
+            if (!typecheck(indexType, new Primitive_Type(TokenType::INT_T))) {
+                semantic_error(SemanticErrorType::INVALID_INDEXING, node->child[0]->lineno);
+                return EMPTYTYPE;
+            }
             if (Array_Type* array_type = dynamic_cast<Array_Type*>(idType)) {
                 return array_type->base;
             } else {

@@ -32,7 +32,7 @@ class Type
         }
 };
 
-extern bool typecheck(Type *left, Type*right, bool weak=false);
+extern bool typecheck(Type *left, Type*right, bool weak=false, bool allow_empty=true);
 
 
 /* 基本数据类型 */
@@ -165,5 +165,6 @@ enum class SemanticErrorType {
     INVALID_ARGUMENT_NUMBER = 9,
     INDEXING_NONE_ARRAY_VARIABLE = 10,
     INVOKING_NONE_FUNCTION_VARIABLE = 11,
+    INVALID_INDEXING = 12,
 };
 extern void semantic_error(SemanticErrorType error_type, ...);
