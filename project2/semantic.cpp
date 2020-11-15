@@ -90,44 +90,42 @@ void report_semantic_error(const char *s,...) {
     fprintf(stdout, "\n");
 }
 
-void semantic_error(SemanticErrorType error_type, int line_num, ...) {
+void semantic_error(SemanticErrorType error_type, ...) {
     va_list args;
-    va_start(args, line_num);
+    va_start(args, error_type);
     switch (error_type){ 
         case SemanticErrorType::UNDEFINED_VARIABLE:
-            fprintf(stdout, "Error type 1 at Line %d: undefined variable: ", line_num);
-            vfprintf(stdout, "%s", args);
+            vfprintf(stdout, "Error type 1 at Line %d: undefined variable: %s", args);
             break;
         case SemanticErrorType::UNDEFINED_FUNCTION:
-            fprintf(stdout, "Error type 2 at Line %d: undefined function: ", line_num);
-            vfprintf(stdout, "%s", args);
+            vfprintf(stdout, "Error type 2 at Line %d: undefined function: %s", args);
             break;
         case SemanticErrorType::REDEFINED_VARIABLE:
-            fprintf(stdout, "Error type 3 at Line %d: redefine variable: ", line_num);
-            vfprintf(stdout, "%s", args);
+            vfprintf(stdout, "Error type 3 at Line %d: redefine variable: %s", args);
             break;
         case SemanticErrorType::REDEFINED_FUNCTION:
-            fprintf(stdout, "Error type 4 at Line %d: redefine function: ", line_num);
-            vfprintf(stdout, "%s", args);
+            vfprintf(stdout, "Error type 4 at Line %d: redefine function: %s", args);
             break;
         case SemanticErrorType::UNMATCHING_TYPE_OF_ASSIGNMENT:
-            fprintf(stdout, "Error type 5 at Line %d: unmatching type on both sides of assignment", line_num);
+            vfprintf(stdout, "Error type 5 at Line %d: unmatching type on both sides of assignment", args);
             break;
         case SemanticErrorType::ASSIGN_TO_RAW_VALUE:
-            fprintf(stdout, "Error type 6 at Line %d: left side in assignment is rvalue", line_num);
+            vfprintf(stdout, "Error type 6 at Line %d: left side in assignment is rvalue", args);
             break;
         case SemanticErrorType::BINARY_OPERATION_ON_NONE_NUMBER_VARIABLE:
-            fprintf(stdout, "Error type 7 at Line %d: binary operation on non-number variables", line_num);
+            vfprintf(stdout, "Error type 7 at Line %d: binary operation on non-number variables", args);
             break;
         case SemanticErrorType::RETURN_VALUE_MISMATCH:
-            fprintf(stdout, "Error type 8 at Line %d: incompatiable return type", line_num);
+            vfprintf(stdout, "Error type 8 at Line %d: incompatiable return type", args);
             break;
         case SemanticErrorType::INVALID_ARGUMENT_NUMBER:
-            fprintf(stdout, "Error type 9 at Line %d: invalid argument number for compare, ", line_num);
-            vfprintf(stdout, "expect %d, got %d", args);
+            vfprintf(stdout, "Error type 9 at Line %d: invalid argument number for compare, expect %d, got %d", args);
             break;
         case SemanticErrorType::INDEXING_NONE_ARRAY_VARIABLE:
-            fprintf(stdout, "Error type 10 at Line %d: indexing on non-array variable", line_num);
+            vfprintf(stdout, "Error type 10 at Line %d: indexing on non-array variable", args);
+            break;
+        case SemanticErrorType::INVOKING_NONE_FUNCTION_VARIABLE:
+            vfprintf(stdout, "Error type 11 at Line %d: invoking non-function variable: compare2", args);
             break;
         default:
             assert(false);
@@ -500,7 +498,10 @@ Type *checkExp(AST *node, bool single) {
                 semantic_error(SemanticErrorType::UNDEFINED_FUNCTION, node->lineno, identifier.c_str());
                 return EMPTYTYPE;
             }
-            assert(func_variable->isfunction == true);
+            if (!func_variable->isfunction) {
+                semantic_error(SemanticErrorType::INVOKING_NONE_FUNCTION_VARIABLE, node->lineno, identifier.c_str());
+                return EMPTYTYPE;
+            }
             vector<Type*> args_types = checkArgs(node->child[2]);
             if (args_types.size() != func_variable->args.size()) {
                 semantic_error(SemanticErrorType::INVALID_ARGUMENT_NUMBER, 

@@ -1,1 +1,1 @@
-Error type 10 at Line 17: indexing on non-array variable
+Error type 11 at Line 16: invoking non-function variable: compare2
