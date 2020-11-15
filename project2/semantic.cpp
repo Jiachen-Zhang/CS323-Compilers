@@ -47,7 +47,7 @@ void updateVariable(Variable_Type *variable) {
     if (!var) {
         var_map.insert(make_pair(variable->name, variable));
     } else {
-        if (var->isfunction == true) {
+        if (variable->isfunction == true) {
             semantic_error(SemanticErrorType::REDEFINED_FUNCTION, variable->lineno, variable->name.c_str());
         } else {
             semantic_error(SemanticErrorType::REDEFINED_VARIABLE, variable->lineno, variable->name.c_str());
