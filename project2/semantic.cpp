@@ -501,7 +501,22 @@ Type *checkExp(AST *node, bool single) {
             
         }
         // LP Exp RP
+        if (node->child[0]->type_name.compare("LP") == 0) {
+            assert(node->child[1]->type_name.compare("Exp") == 0);
+            assert(node->child[2]->type_name.compare("RP") == 0);
+            Type *expType = checkExp(node->child[0]);
+            return expType;
+        }
         // ID LP RP
+        if (node->child[0]->type_name.compare("ID") == 0) {
+            assert(node->child[1]->type_name.compare("LP") == 0);
+            assert(node->child[2]->type_name.compare("RP") == 0);
+            string identifier = checkID(node->child[0]);
+            Variable_Type *func_variable = getVariable(identifier);
+            assert(func_variable && func_variable->isfunction);
+            return func_variable->type;
+            assert(false && "checkExp Failed");
+        }
         assert(false && "checkExp Failed");
     } else if (node->child_num == 4) {
         if (node->child[0]->type_name.compare("ID") == 0) {
