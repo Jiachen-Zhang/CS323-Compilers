@@ -168,5 +168,6 @@ enum class SemanticErrorType {
     INVALID_INDEXING = 12,
     ACCESS_NONE_STRUCT_VARIABLE = 13,
     ACCESS_NONE_EXIST_MEMBER = 14,
+    REDEFINED_STRUCTURE = 15,
 };
 extern void semantic_error(SemanticErrorType error_type, ...);

@@ -17,7 +17,7 @@ def run_specific(num: int):
     os.system(cmd)
 
 def run_all():
-    TEST_CASE_NUM = 14
+    TEST_CASE_NUM = 15
     for i in range(1, 1+TEST_CASE_NUM, 1):
         run_specific(i)
 

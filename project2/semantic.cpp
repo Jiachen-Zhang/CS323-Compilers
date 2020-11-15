@@ -75,11 +75,11 @@ void updateStructure(Structure_Type *structure) {
     //     printf(" %s,", i->name.c_str());
     // }
     // printf("\n");
-    Variable_Type *var = getVariable(structure->name);
-    if (!var) {
+    Structure_Type *stru = getStructure(structure->name);
+    if (!stru) {
         type_map.insert(make_pair(structure->name, structure));
     } else {
-        assert(false && "updateStructure");
+        semantic_error(SemanticErrorType::REDEFINED_STRUCTURE, structure->lineno, structure->name.c_str());
     }
 }
 
@@ -135,6 +135,9 @@ void semantic_error(SemanticErrorType error_type, ...) {
             break;
         case SemanticErrorType::ACCESS_NONE_EXIST_MEMBER:
             vfprintf(stdout, "Error type 14 at Line %d: no such member: %s\n", args);
+            break;
+        case SemanticErrorType::REDEFINED_STRUCTURE:
+            vfprintf(stdout, "Error type 15 at Line %d: redefine struct: %s\n", args);
             break;
         default:
             assert(false);
