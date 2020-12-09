@@ -1,0 +1,9 @@
+struct Apple
+{
+  int weight;
+};
+int test_11713020_5()
+{
+  struct Apple aa;
+  aa.weight = b;
+}

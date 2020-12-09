@@ -1,0 +1,9 @@
+int func()
+{
+  return 1;
+}
+float test()
+{
+  int a = func() + 1;
+  return a;
+}

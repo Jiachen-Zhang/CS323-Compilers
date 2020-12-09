@@ -1,0 +1,6 @@
+int test_1_r22()
+{
+  if (a!=1){
+    return;
+  }
+}

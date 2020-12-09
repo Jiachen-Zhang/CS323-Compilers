@@ -1,0 +1,14 @@
+struct Apple {
+  int size;
+};
+int fun(struct Apple apple) {
+  return 1;
+}
+
+int test_11713020_8()
+{
+  struct Apple apple;
+  fun(apple);
+  fun1(apple);
+  return apple;
+}

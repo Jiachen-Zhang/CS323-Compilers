@@ -1,0 +1,9 @@
+int a()
+{
+  return 0;
+}
+int test_11713020_3()
+{
+  int a;
+  return 0;
+}
