@@ -254,7 +254,7 @@ wrong_char ('.+')
     yylval.ast_node = new AST("RC", SymbolType::TOKEN, "", yylineno, 0);
     return RC;
 }
-\n { yycolno = 1; }
+[\n\r] { yycolno = 1; }
 [ \t]+ {}
 . { 
     ERROR_TYPE_A();
