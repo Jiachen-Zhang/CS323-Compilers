@@ -7,16 +7,7 @@ enum class Operator;
 extern const int INFO_SIZE;
 extern vector<TAC *> tac_vector;
 #define DEBUG(msg) fprintf(stdout, "%s\n", msg);
-
-string addr_to_string(int addr){
-    char buffer[INFO_SIZE];
-    if (addr > 0){
-        sprintf(buffer, "t%d", addr);
-    } else{
-        sprintf(buffer, "#%d", -addr);
-    }
-    return buffer;
-}
+string addr_to_string(int addr);
 
 enum class Operator {
     ADD_OPERATOR,
@@ -31,12 +22,7 @@ enum class Operator {
     EQ_OPERATOR,
 };
 
-string operator_to_string(Operator op) {
-    switch (op) {
-        case Operator::ADD_OPERATOR: return "+";
-        default: exit(-10);
-    }
-}
+string operator_to_string(Operator op);
 
 /* Translator Assembler Complier */
 class TAC {
@@ -334,27 +320,10 @@ void irExtDefList(AST *node);
 void irExtDef(AST *node);
 Type* irSpecifier(AST *node);
 void irExtDecList(AST *node, Type * type);
-float parsePrimitive(string name, string value){
-    if (name.compare("INT") == 0){
-        return atoi(value.c_str());
-    } else if (name.compare("FLOAT") == 0){
-        return atof(value.c_str());
-    } else {
-        return atoi(value.c_str());
-    }
-}
-void putIR(string name, int id){
-    table[name] = id;
-}
-int getIR(string name){
-    return table[name];
-}
-int emit(TAC *tac){
-    int _index = tacs.size();
-    tacs.push_back(tac);
-    DEBUG(tac->to_string().c_str());
-    return _index;
-}
+float parsePrimitive(string name, string value);
+void putIR(string name, int id);
+int getIR(string name);
+int emit(TAC *tac);
 void irFunDec(AST *node, Type *type);
 void irVarList(AST *node);
 void irCompSt(AST *node);
@@ -365,20 +334,8 @@ int irExp(AST *node, bool single=false);
 int *emitlist(int id = tacs.size() + 1);
 void irStmtList(AST *node);
 void irStmt(AST *node);
-void backPatch(int id, int truelist, int falselist){
-    if (tacs[id]->is_swap){
-        swap(truelist, falselist);
-    }
-    *dynamic_cast<IfTAC *>(tacs[id])->label = truelist;
-    *dynamic_cast<GoToTAC *>(tacs[id + 1])->label = falselist;
-}
-void backPatchLoop(vector<int>* sta, int last, int target){
-    while (sta->size()>last){//continue
-        int top = sta->back();
-        sta->pop_back();
-        *dynamic_cast<GoToTAC *>(tacs[top])->label = target;
-    }
-}
+void backPatch(int id, int truelist, int falselist);
+void backPatchLoop(vector<int>* sta, int last, int target);
 int irCondition(AST *node);
 Type *findType(string name);
 Type* irStructSpecifier(AST *node);
@@ -387,3 +344,4 @@ TAC* irVarDec(AST *node, Type* type);
 void irParamDec(AST *node);
 vector<int> irArgs(AST *node);
 void irDec(AST *node, Type *type);
+void irProgram(AST *root);

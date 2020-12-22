@@ -85,7 +85,9 @@ extern int yydebug;
     GT = 295,
     GE = 296,
     EQ = 297,
-    UMINUS = 298
+    WRITE = 298,
+    READ = 299,
+    UMINUS = 300
   };
 #endif
 /* Tokens.  */
@@ -129,7 +131,9 @@ extern int yydebug;
 #define GT 295
 #define GE 296
 #define EQ 297
-#define UMINUS 298
+#define WRITE 298
+#define READ 299
+#define UMINUS 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -140,7 +144,7 @@ union YYSTYPE
 
     class AST *ast_node;
 
-#line 144 "y.tab.h" /* yacc.c:1909  */
+#line 148 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

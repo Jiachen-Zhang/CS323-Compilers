@@ -35,6 +35,7 @@
 %type <ast_node> DefList Def DecList Dec
 %type <ast_node> Exp
 %type <ast_node> Args
+%token <ast_node> WRITE READ
 %left PLUS MINUS
 %left MUL DIV
 %left UMINUS
@@ -154,7 +155,10 @@ Stmt: Exp SEMI {
 }   | WHILE LP Exp RP Stmt { 
     DISPLAY_SYNTAX("Stmt");
     $$ = new AST("Stmt", SymbolType::NONTERMINAL, "", @1.first_line, 5, $1, $2, $3, $4, $5);
-}   ;
+}   | WRITE LP Exp RP SEMI { 
+    DISPLAY_SYNTAX("Stmt");
+    $$ = new AST("Stmt", SymbolType::NONTERMINAL, "", @1.first_line, 5, $1, $2, $3, $4, $5); 
+};
 /* local definition */
 DefList: Def DefList {
     DISPLAY_SYNTAX("DefList");
@@ -268,6 +272,9 @@ Exp: Exp ASSIGN Exp {
 }   | CHAR {
     DISPLAY_SYNTAX("Exp");
     $$ = new AST("Exp", SymbolType::NONTERMINAL, "", @1.first_line, 1, $1);
+}   | READ LP RP { 
+    DISPLAY_SYNTAX("Exp");
+    $$ = new AST("Exp", SymbolType::NONTERMINAL, "", @1.first_line, 3, $1, $2, $3); 
 }   | ERROR_LEXEME {
 };
 Args: Exp COMMA Args {
@@ -306,6 +313,7 @@ int main(int argc, char **argv) {
         assert(root != NULL);
         // root->print();
         checkProgram(root);
+        irProgram(root);
     }
     return EXIT_OK;
 }

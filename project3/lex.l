@@ -1,12 +1,12 @@
 %{
     #include"y.tab.h"
-    #include"semantic.hpp"
+    #include"ir.hpp"
     #include <assert.h>
     // just let you know you have macros!
     #define EXIT_OK 0
     #define EXIT_FAIL 1
 
-    #define DEBUG(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
+//    #define DEBUG(syntax) fprintf(stdout, "%s(%d)\n", syntax, yylineno);
     #define ERROR_TYPE_A() fprintf(stdout, "Error type A at Line %d: unknown lexeme %s\n", yylineno, yytext); syntax_error = 1;
     #define ERROR_TYPE_B(lineno, reason) fprintf(stdout, "Error type B at Line %d: %s\n", lineno, reason); syntax_error = 1;
 
@@ -125,6 +125,14 @@ wrong_char ('.+')
     DISPLAY_TOKEN("TYPE");
     yylval.ast_node = new AST("TYPE", SymbolType::TOKEN_VALUE, "char", yylineno, 0);
     return TYPE;
+}
+"read" {
+    yylval.ast_node=new AST("READ", SymbolType::TOKEN, "", yylineno, 0);
+    return READ;
+}
+"write" {
+    yylval.ast_node=new AST("WRITE", SymbolType::TOKEN, "", yylineno, 0);
+    return WRITE;
 }
 {wrong_id} {
     ERROR_TYPE_A();

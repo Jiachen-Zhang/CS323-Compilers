@@ -160,6 +160,14 @@ Variable_Type *EMPTYVAR = new Variable_Type("$", EMPTYTYPE);
 void checkProgram(AST *root) {
     // root->print();
     DEBUG("checkProgram", root);
+    // add int read(); void write(int);
+    // Variable_Type *read_func = new Variable_Type("read", new Primitive_Type(TokenType::INT_T), vector<Variable_Type*>(), true);
+    
+    // vector<Variable_Type*> args = vector<Variable_Type*>();
+    // new Variable_Type()
+    // args.push(new Primitive_Type(TokenType::INT_T));
+    // Variable_Type *read_func = new Variable_Type("read", EMPTYTYPE, vector<Variable_Type*>(), true);
+
     checkExtDefList(root->child[0]);
 }
 
@@ -518,6 +526,12 @@ Type *checkExp(AST *node, bool single) {
             return func_variable->type;
             assert(false && "checkExp Failed");
         }
+        // READ LP RP
+        if (node->child[0]->type_name.compare("READ") == 0) {
+            assert(node->child[1]->type_name.compare("LP") == 0);
+            assert(node->child[2]->type_name.compare("RP") == 0);
+            return new Primitive_Type(TokenType::INT_T);
+        }
         assert(false && "checkExp Failed");
     } else if (node->child_num == 4) {
         if (node->child[0]->type_name.compare("ID") == 0) {
@@ -596,6 +610,7 @@ void checkStmtList(AST *node, Type *type) {
  * Stmt: RETURN Exp SEMI
  * Stmt: IF LP Exp RP Stmt
  * Stmt: WHILE LP Exp RP Stmt
+ * Stmt: WRITE LP Exp RP SEMI
  * Stmt: IF LP Exp RP Stmt ELSE Stmt
  */
 void checkStmt(AST *node, Type *type) {
@@ -625,18 +640,23 @@ void checkStmt(AST *node, Type *type) {
         assert(node->child[1]->type_name.compare("LP") == 0);
         assert(node->child[2]->type_name.compare("Exp") == 0);
         assert(node->child[3]->type_name.compare("RP") == 0);
-        assert(node->child[4]->type_name.compare("Stmt") == 0);
         if (node->child[0]->type_name.compare("IF") == 0) {
             // IF LP Exp RP Stmt
+            assert(node->child[4]->type_name.compare("Stmt") == 0);
             Type *returnType = checkExp(node->child[2]);
             assert(typecheck(returnType, new Primitive_Type(TokenType::INT_T)) == true);
             checkStmt(node->child[4], type);
             return;
         } else if (node->child[0]->type_name.compare("WHILE") == 0) {
             // WHILE LP Exp RP Stmt
+            assert(node->child[4]->type_name.compare("Stmt") == 0);
             Type *returnType = checkExp(node->child[2]);
             assert(typecheck(returnType, new Primitive_Type(TokenType::INT_T)) == true);
             checkStmt(node->child[4], type);
+            return;
+        } else if (node->child[0]->type_name.compare("WRITE") == 0) {
+            // WRITE LP Exp RP SEMI
+            assert(node->child[4]->type_name.compare("SEMI") == 0);
             return;
         }
         assert(false && "checkStmt Failed");
