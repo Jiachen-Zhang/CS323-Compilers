@@ -100,6 +100,9 @@ public:
         }
         return true;
     }
+    int getSize(){
+        return type->getSize();
+    }
     bool operator!=(const Variable_Type &other) const{
         return !(*this == other);
     }
@@ -124,8 +127,7 @@ public:
     string tostring(){
         return name;
     }
-    Structure_Type(string name, vector<Variable_Type *> field = {}, int lineno=1) : name(name)
-    {
+    Structure_Type(string name, vector<Variable_Type *> field = {}, int lineno=1) : name(name) {
         Type::lineno = lineno;
         this->field = vector<Variable_Type *>();
         for (auto it : field)
@@ -133,13 +135,30 @@ public:
             this->field.push_back(it);
         }
     }
-    Type* TypeOfMember(string a){
+    Type* TypeOfMember(string a) {
         for (auto it: field){
             if (it->name.compare(a)==0){
                 return it->type;
             }
         }
         return NULL;
+    }
+    int getSize(){
+        int sum = 0;
+        for (auto f: field){
+            sum += f->getSize();
+        }
+        return sum;
+    }
+    int getOffset(string name) {
+        int size = 0;
+        for (auto it : field){
+            if (it->name.compare(name)==0){
+                break;
+            }
+            size += it->getSize();
+        }
+        return size;
     }
     bool operator==(const Type &other) const{
         return (typeid(*this)==typeid(other)) && (name.compare(dynamic_cast<const Structure_Type &>(other).name)==0);

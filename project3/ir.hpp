@@ -20,6 +20,15 @@ string addr_to_string(int addr){
 
 enum class Operator {
     ADD_OPERATOR,
+    SUB_OPERATOR,
+    MUL_OPERATOR,
+    DIV_OPERATOR,
+    LE_OPERATOR,
+    LT_OPERATOR,
+    GE_OPERATOR,
+    GT_OPERATOR,
+    NE_OPERATOR,
+    EQ_OPERATOR,
 };
 
 string operator_to_string(Operator op) {
@@ -73,9 +82,8 @@ public:
 };
 
 class AssignTAC: public TAC {
-private:
-    int right_address;
 public:
+    int right_address;
     AssignTAC(int address, int right_address) {
         this->right_address = right_address;
         TAC::address = address;
@@ -137,9 +145,8 @@ public:
 };
 
 class CopyToAddressTAC: public TAC {
-private:
-    int right_address;
 public:
+    int right_address;
     CopyToAddressTAC(int address, int right_address) {
         this->right_address = right_address;
         TAC::address = address;
@@ -152,9 +159,8 @@ public:
 };
 
 class GoToTAC: public TAC {
-private:
-    int* label;
 public:
+    int* label;
     GoToTAC(int address, int* label) {
         TAC::address = address;
         this->label = label;
@@ -171,9 +177,9 @@ private:
     Operator op;
     int left_address;
     int right_address;
-    int *label;
 public:
-    IfTAC(int address, int left_address, Operator op, int right_address, int *label) {
+    int *label;
+    IfTAC(int address, Operator op, int left_address, int right_address, int *label) {
         TAC::address = address;
         this->left_address = left_address;
         this->right_address = right_address;
@@ -208,9 +214,8 @@ public:
 
 
 class DecTAC: public TAC{
-private:
-    vector<int> suffix;
 public:
+    vector<int> suffix;
     vector<int> sizes;
     DecTAC(int address, Type *type, string name, vector<int> sizes){
         TAC::type = type;
@@ -241,8 +246,8 @@ class ParamTAC : public TAC
 {
 private:
     vector<int> sizes;
-    vector<int> suffix;
 public:
+    vector<int> suffix;
     ParamTAC(int address, Type* type, vector<int> sizes) {
         TAC::address = address;
         TAC::type = type;
@@ -350,3 +355,11 @@ int emit(TAC *tac){
 }
 void irFunDec(AST *node, Type *type);
 void irVarList(AST *node);
+void irCompSt(AST *node);
+void irDefList(AST *node);
+void irDef(AST *node);
+void irDecList(AST *node, Type*type);
+int irExp(AST *node, bool single=false);
+int *emitlist(int id = tacs.size() + 1);
+void irStmtList(AST *node);
+void irStmt(AST *node);
