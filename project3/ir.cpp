@@ -3,8 +3,9 @@ const int INFO_SIZE = 100;
 vector<TAC*> tacs;
 map<string, int> table;
 vector<int> con, br;
+vector<TAC *> tac_vector;
 
-void init() {
+void init_ir() {
     tacs.clear();
     table.clear();
     con.clear();
@@ -13,12 +14,12 @@ void init() {
 }
 
 void irProgram(AST *root) {
-    init();
+    init_ir();
     
     irExtDefList(root->child[0]);
 
     for (int i = 1; i < tacs.size(); ++i){
-        sprintf("%s\n", tacs[i]->to_string().c_str());
+        sprintf("%s\n", string(tacs[i]->to_string()).c_str());
     }
 }
 
@@ -58,6 +59,10 @@ void irStmtList(AST *node) {
     }
 }
 
+int irCondition(AST *node) {
+    return irExp(node->child[0]);
+}
+
 void irStmt(AST *node) {
     //Exp
     if (node->child[0]->type_name.compare("Exp") == 0) {
@@ -74,6 +79,7 @@ void irStmt(AST *node) {
     }
     //IF
     else if (node->child[0]->type_name.compare("IF") == 0) {
+        // IF LP Exp RP Stmt
         int expid = irCondition(node->child[2]);
         int truelist = emit(new LabelTAC(tacs.size()));
         irStmt(node->child[4]);
@@ -162,7 +168,7 @@ void irDec(AST *node, Type *type) {
     if (expid) {
         dynamic_cast<AssignTAC *>(tac)->right_address = expid;
     }
-    insertIR(tac->name, tac->emit());
+    putIR(tac->name, tac->emit());
 }
 
 int irExp(AST *node, bool single){
@@ -213,7 +219,7 @@ int irExp(AST *node, bool single){
         if (single) {
             if (!id) {
                 id = tacs.size();
-                insertIR(name, id);
+                putIR(name, id);
             }
             return emit(new AssignTAC(id, 0));
         }
@@ -472,7 +478,7 @@ void irFunDec(AST *node, Type *type) {
     DEBUG("FunDec begin");
     string name = node->child[0]->value;
     int fundec = emit(new FunctionTAC(tacs.size(), name));
-    insertIR(name, fundec);
+    putIR(name, fundec);
     if (node->child[2]->type_name.compare("VarList") == 0) {
         irVarList(node->child[2]);
     }
@@ -493,14 +499,14 @@ void irVarList(AST *node) {
     DEBUG("VarList end");
 }
 
-void irParamDec(AST *node){
+void irParamDec(AST *node) {
     DEBUG("ParamDec begin");
     Type *type = irSpecifier(node->child[0]);
     TAC *tac = irVarDec(node->child[1], type);
     if (typeid(*tac)==typeid(AssignTAC)){
-        insertIR(tac->name, emit(new ParamTAC(tacs.size(), type, {})));
+        putIR(tac->name, emit(new ParamTAC(tacs.size(), type, {})));
     } else {
-        insertIR(tac->name, emit(new ParamTAC(tacs.size(), type, dynamic_cast<DecTAC *>(tac)->sizes)));
+        putIR(tac->name, emit(new ParamTAC(tacs.size(), type, dynamic_cast<DecTAC *>(tac)->sizes)));
     }
     DEBUG("ParamDec end");
 }
@@ -512,7 +518,7 @@ void irExtDecList(AST *node, Type * type) {
         node = node->child[2];
         TAC* tac = irVarDec(node->child[0], type);
     }
-    insertIR(tac->name, tac->emit());
+    putIR(tac->name, tac->emit());
     DEBUG("ExtDecList end");
 }
 
@@ -567,7 +573,7 @@ Type* irStructSpecifier(AST *node) {
     return findType(node->child[1]->value);
 }
 
-Type *findType(string name){
+Type *findType(string name) {
     auto it = global_type_map.find(name);
     int cnt = global_type_map.count(name);
     assert(cnt == 1);
@@ -578,5 +584,3 @@ int* emitlist(int id){
     int *label = new int(id);
     return label;
 }
-
-

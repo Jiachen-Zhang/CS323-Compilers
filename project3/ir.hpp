@@ -328,7 +328,6 @@ public:
 };
 extern map<string, int> table;
 extern vector<TAC*> tacs;
-void init();
 
 void irProgram(AST *root);
 void irExtDefList(AST *node);
@@ -344,8 +343,11 @@ float parsePrimitive(string name, string value){
         return atoi(value.c_str());
     }
 }
-void insertIR(string name, int id){
+void putIR(string name, int id){
     table[name] = id;
+}
+int getIR(string name){
+    return table[name];
 }
 int emit(TAC *tac){
     int _index = tacs.size();
@@ -377,3 +379,11 @@ void backPatchLoop(vector<int>* sta, int last, int target){
         *dynamic_cast<GoToTAC *>(tacs[top])->label = target;
     }
 }
+int irCondition(AST *node);
+Type *findType(string name);
+Type* irStructSpecifier(AST *node);
+Type* irType(AST *node);
+TAC* irVarDec(AST *node, Type* type);
+void irParamDec(AST *node);
+vector<int> irArgs(AST *node);
+void irDec(AST *node, Type *type);
