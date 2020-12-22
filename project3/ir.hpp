@@ -206,3 +206,119 @@ public:
         return buffer;
     }
 };
+
+
+class DecTAC: public TAC{
+private:
+    vector<int> suffix;
+    vector<int> sizes;
+public:
+    DecTAC(int address, Type *type, string name, vector<int> sizes){
+        TAC::type = type;
+        TAC::address = address;
+        TAC::name = name;
+        this->sizes = vector<int>();
+        this->sizes.insert(this->sizes.end(), sizes.begin(), sizes.end());
+        int last = 1;
+        for (int i = sizes.size() - 1; i >= 0; --i)
+        {
+            suffix.push_back(last);
+            last *= sizes[i];
+        }
+    }
+    string to_string(){
+        // DEC x [size] 
+        char buffer[INFO_SIZE];
+        int size = 1;
+        for (auto s: sizes){
+            size *= s;
+        }
+        sprintf(buffer, "DEC t%d %d", TAC::address, TAC::type->getSize() * size);
+        return buffer;
+    }
+};
+
+class ParamTAC : public TAC
+{
+private:
+    vector<int> sizes;
+    vector<int> suffix;
+public:
+    ParamTAC(int address, Type* type, vector<int> sizes) {
+        TAC::address = address;
+        TAC::type = type;
+        this->sizes = vector<int>();
+        this->sizes.insert(this->sizes.end(), sizes.begin(), sizes.end());
+        int last = 1;
+        for (int i = sizes.size() - 1; i >= 0; --i)
+        {
+            suffix.push_back(last);
+            last *= sizes[i];
+        }
+    }
+    string to_string() {
+        // PARAM x
+        char buffer[INFO_SIZE];
+        sprintf(buffer, "PARAM t%d", TAC::address);
+        return buffer;
+    }
+};
+
+class ArgTAC : public TAC
+{
+private:
+    int right_address;
+public:
+    ArgTAC(int address, int right_address) {
+        TAC::address = address;
+        this->right_address = right_address;
+    }
+    string to_string() {
+        // ARG x
+        char buffer[INFO_SIZE];
+        sprintf(buffer, "ARG t%d", right_address);
+        return buffer;
+    }
+};
+
+class CallTAC: public TAC{
+private:
+    string label;
+public:
+    CallTAC(int address, string label) {
+        TAC::address = address;
+        this->label = label;
+    }
+    string to_string() {
+        char buffer[INFO_SIZE];
+        sprintf(buffer, "t%d := CALL %s", TAC::address, label.c_str());
+        return buffer;
+    }
+};
+
+class ReadTAC: public TAC{
+public:
+    ReadTAC(int address) {
+        TAC::address = address;
+    }
+    string to_string() {
+        char buffer[INFO_SIZE];
+        sprintf(buffer, "READ t%d", TAC::address);
+        return buffer;
+    }
+};
+
+class WriteTAC: public TAC{
+private:
+    int right_address;
+public:
+    WriteTAC(int address, int right_address) {
+        TAC::address = address;
+        this->right_address = right_address;
+    }
+    string to_string(){
+        char buffer[INFO_SIZE];
+        sprintf(buffer, "WRITE t%d", right_address);
+        return buffer;
+    }
+};

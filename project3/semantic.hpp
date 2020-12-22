@@ -30,6 +30,9 @@ class Type
         virtual bool operator!=(const Type &other) const {
             return !(*this == other);
         }
+        virtual int getSize(){
+            return 4;
+        }
 };
 
 extern bool typecheck(Type *left, Type*right, bool weak=false, bool allow_empty=true);
