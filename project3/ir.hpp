@@ -363,3 +363,17 @@ int irExp(AST *node, bool single=false);
 int *emitlist(int id = tacs.size() + 1);
 void irStmtList(AST *node);
 void irStmt(AST *node);
+void backPatch(int id, int truelist, int falselist){
+    if (tacs[id]->is_swap){
+        swap(truelist, falselist);
+    }
+    *dynamic_cast<IfTAC *>(tacs[id])->label = truelist;
+    *dynamic_cast<GoToTAC *>(tacs[id + 1])->label = falselist;
+}
+void backPatchLoop(vector<int>* sta, int last, int target){
+    while (sta->size()>last){//continue
+        int top = sta->back();
+        sta->pop_back();
+        *dynamic_cast<GoToTAC *>(tacs[top])->label = target;
+    }
+}

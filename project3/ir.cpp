@@ -106,22 +106,6 @@ void irStmt(AST *node) {
         backPatchLoop(&con, contop, loopstart);
         backPatchLoop(&br, brtop, falselist);
     }
-    //FOR
-    else if (node->child[0]->type_name.compare("FOR") == 0) {
-        int contop = con.size();
-        int brtop = br.size();
-        int fordef = irForDef(node->child[2]);
-        int loopstart = emit(new LabelTAC(tacs.size()));
-        int expid = irForCon(node->child[4]);
-        int truelist = emit(new LabelTAC(tacs.size()));//M1
-        irStmt(node->child[8]);
-        int forinc = irForInc(node->child[6]);
-        int loopback = emit(new GoToTAC(tacs.size(), emitlist(loopstart)));
-        int falselist = emit(new LabelTAC(tacs.size())); //M2
-        backPatch(expid, truelist, falselist);
-        backPatchLoop(&con, contop, loopstart);
-        backPatchLoop(&br, brtop, falselist);
-    }
     //BREAK
     else if (node->child[0]->type_name.compare("BREAK") == 0) {
         int id = emit(new GoToTAC(tacs.size(), emitlist()));
@@ -185,7 +169,7 @@ int irExp(AST *node, bool single){
     DEBUG("Exp begin")
     //READ
     if (node->child[0]->type_name.compare("READ") == 0) {
-        ReadTAC *exp = new ReadTac(tacs.size());
+        ReadTAC *exp = new ReadTAC(tacs.size());
         return emit(exp);
     }
     //INT/CHAR/FLOAT
@@ -243,7 +227,7 @@ int irExp(AST *node, bool single){
     if (node->child[1]->type_name.compare("OR") == 0) {
         int leftid = irExp(node->child[0]);
         //backpatch exp1.falselist=M.inst
-        int id = emit(new LabelTac(tacs.size()));
+        int id = emit(new LabelTAC(tacs.size()));
         int leftIsSwap = tacs[leftid]->is_swap;
         int rightid = irExp(node->child[2]);
         int rightIsSwap = tacs[rightid]->is_swap;
