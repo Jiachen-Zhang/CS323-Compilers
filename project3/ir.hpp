@@ -6,8 +6,7 @@ class TAC;
 enum class Operator;
 extern const int INFO_SIZE;
 extern vector<TAC *> tac_vector;
-
-
+#define DEBUG(msg) fprintf(stdout, "%s\n", msg);
 
 string addr_to_string(int addr){
     char buffer[INFO_SIZE];
@@ -47,7 +46,7 @@ public:
     }
 };
 
-class LabelTAC: TAC {
+class LabelTAC: public TAC {
 public:
     LabelTAC(int address) {
         TAC::address = address;
@@ -59,7 +58,7 @@ public:
     }
 };
 
-class FunctionTAC: TAC {
+class FunctionTAC: public TAC {
 public:
     FunctionTAC(int address, string name) {
         TAC::address = address;
@@ -73,7 +72,7 @@ public:
     }
 };
 
-class AssignTAC: TAC {
+class AssignTAC: public TAC {
 private:
     int right_address;
 public:
@@ -88,7 +87,7 @@ public:
     }
 };
 
-class AssignAddressTAC: TAC {
+class AssignAddressTAC: public TAC {
 private:
     int right_address;
 public:
@@ -103,7 +102,7 @@ public:
     }
 };
 
-class AssignValueTAC: TAC {
+class AssignValueTAC: public TAC {
 private:
     int right_address;
 public:
@@ -118,7 +117,7 @@ public:
     }
 };
 
-class ArithmeticTAC: TAC {
+class ArithmeticTAC: public TAC {
 private:
     Operator op;
     int left_address;
@@ -137,7 +136,7 @@ public:
     }
 };
 
-class CopyToAddressTAC: TAC {
+class CopyToAddressTAC: public TAC {
 private:
     int right_address;
 public:
@@ -152,7 +151,7 @@ public:
     }
 };
 
-class GoToTAC: TAC {
+class GoToTAC: public TAC {
 private:
     int* label;
 public:
@@ -167,7 +166,7 @@ public:
     }
 };
 
-class IfTAC: TAC {
+class IfTAC: public TAC {
 private:
     Operator op;
     int left_address;
@@ -190,7 +189,7 @@ public:
     }
 };
 
-class ReturnTAC: TAC {
+class ReturnTAC: public TAC {
 private:
     int right_address;
 public:
@@ -211,8 +210,8 @@ public:
 class DecTAC: public TAC{
 private:
     vector<int> suffix;
-    vector<int> sizes;
 public:
+    vector<int> sizes;
     DecTAC(int address, Type *type, string name, vector<int> sizes){
         TAC::type = type;
         TAC::address = address;
@@ -322,3 +321,32 @@ public:
         return buffer;
     }
 };
+extern map<string, int> table;
+extern vector<TAC*> tacs;
+void init();
+
+void irProgram(AST *root);
+void irExtDefList(AST *node);
+void irExtDef(AST *node);
+Type* irSpecifier(AST *node);
+void irExtDecList(AST *node, Type * type);
+float parsePrimitive(string name, string value){
+    if (name.compare("INT") == 0){
+        return atoi(value.c_str());
+    } else if (name.compare("FLOAT") == 0){
+        return atof(value.c_str());
+    } else {
+        return atoi(value.c_str());
+    }
+}
+void insertIR(string name, int id){
+    table[name] = id;
+}
+int emit(TAC *tac){
+    int _index = tacs.size();
+    tacs.push_back(tac);
+    DEBUG(tac->to_string().c_str());
+    return _index;
+}
+void irFunDec(AST *node, Type *type);
+void irVarList(AST *node);

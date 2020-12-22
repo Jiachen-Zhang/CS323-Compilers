@@ -154,6 +154,7 @@ extern Variable_Type *EMPTYVAR;
 
 extern multimap<string, Variable_Type*> var_map;
 extern multimap<string, Structure_Type*> type_map;
+extern multimap<string, Structure_Type*> global_type_map;
 extern void report_semantic_error(const char *s,...);
 void checkProgram(AST *root);
 enum class SemanticErrorType {
@@ -174,3 +175,5 @@ enum class SemanticErrorType {
     REDEFINED_STRUCTURE = 15,
 };
 extern void semantic_error(SemanticErrorType error_type, ...);
+
+Primitive_Type *checkType(AST *node);

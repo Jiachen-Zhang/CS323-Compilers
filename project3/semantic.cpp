@@ -5,10 +5,10 @@
 
 multimap<string, Variable_Type*> var_map = multimap<string, Variable_Type*>();
 multimap<string, Structure_Type*> type_map = multimap<string, Structure_Type*>();
+multimap<string, Structure_Type*> global_type_map = multimap<string, Structure_Type*>();;
 void checkExtDefList(AST *node);
 void checkExtDef(AST *node);
 Type *checkSpecifier(AST *node);
-Primitive_Type *checkType(AST *node);
 Type *checkSructSpecifier(AST *node);
 Variable_Type *checkFunc(AST *node, Type *type);
 string checkID(AST *node);
@@ -78,6 +78,7 @@ void updateStructure(Structure_Type *structure) {
     Structure_Type *stru = getStructure(structure->name);
     if (!stru) {
         type_map.insert(make_pair(structure->name, structure));
+        global_type_map.insert(make_pair(structure->name, structure));
     } else {
         semantic_error(SemanticErrorType::REDEFINED_STRUCTURE, structure->lineno, structure->name.c_str());
     }
