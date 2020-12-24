@@ -113,16 +113,6 @@ void irStmt(AST *node) {
         backPatchLoop(&con, contop, loopstart);
         backPatchLoop(&br, brtop, falselist);
     }
-    //BREAK
-    else if (node->child[0]->type_name.compare("BREAK") == 0) {
-        int id = emit(new GoToTAC(tacs.size(), emitlist()));
-        br.push_back(id);
-    }
-    //CONTINUE
-    else if (node->child[0]->type_name.compare("CONTINUE") == 0) {
-        int id = emit(new GoToTAC(tacs.size(), emitlist()));
-        con.push_back(id);
-    }
     //WRITE
     else if (node->child[0]->type_name.compare("WRITE") == 0) {
         DEBUG("Stmt begin > WRITE")
@@ -174,8 +164,8 @@ void irDec(AST *node, Type *type) {
 
 int irExp(AST *node, bool single){
     DEBUG("Exp begin")
-    fprintf(stdout, "type_name = %s, value = %s, lineno = %d\n", 
-        node->type_name.c_str(), node->value.c_str(), node->lineno);
+    // fprintf(stdout, "type_name = %s, value = %s, lineno = %d\n", 
+    //     node->type_name.c_str(), node->value.c_str(), node->lineno);
     //READ
     if (node->child[0]->type_name.compare("READ") == 0) {
         DEBUG("Exp begin > READ")
@@ -191,11 +181,11 @@ int irExp(AST *node, bool single){
         int id = emit(exp);
         return id;
     }
-    //SUB Exp
-    if (node->child[0]->type_name.compare("SUB") == 0) {
-        DEBUG("Exp begin > SUB Exp")
+    //MINUS Exp
+    if (node->child[0]->type_name.compare("MINUS") == 0) {
+        DEBUG("Exp begin > MINUS Exp")
         int cid = irExp(node->child[1]);
-        ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::SUB_OPERATOR, 0, cid);
+        ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::MINUS_OPERATOR, 0, cid);
         int id = emit(exp);
         return id;
     }
@@ -367,18 +357,18 @@ int irExp(AST *node, bool single){
         }
         return rightid;
     }
-    //Exp Arith Exp
-    if (node->child[1]->type_name.compare("ADD") == 0) {
+    //Exp [{PLUS}|{MINUS}|{MUL}|{DIV}] Exp
+    if (node->child[1]->type_name.compare("PLUS") == 0) {
         int leftid = irExp(node->child[0]);
         int rightid = irExp(node->child[2]);
-        ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::ADD_OPERATOR, leftid, rightid);
+        ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::PLUS_OPERATOR, leftid, rightid);
         int id=emit(exp);
         return id;
     }
-    if (node->child[1]->type_name.compare("SUB") == 0) {
+    if (node->child[1]->type_name.compare("MINUS") == 0) {
         int leftid = irExp(node->child[0]);
         int rightid = irExp(node->child[2]);
-        ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::SUB_OPERATOR, leftid, rightid);
+        ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::MINUS_OPERATOR, leftid, rightid);
         int id=emit(exp);
         return id;
     }
@@ -419,7 +409,7 @@ int irExp(AST *node, bool single){
                     _stack.pop_back();
                     int offset = irExp(p->child[2]);
                     offset = emit(new ArithmeticTAC(tacs.size(), Operator::MUL_OPERATOR, offset, -(*suffix)[_index] * typeSize));
-                    head = emit(new ArithmeticTAC(tacs.size(), Operator::ADD_OPERATOR, head, offset));
+                    head = emit(new ArithmeticTAC(tacs.size(), Operator::PLUS_OPERATOR, head, offset));
                 }
             } else {
                 _stack.push_back(top->child[0]);
@@ -452,7 +442,7 @@ int irExp(AST *node, bool single){
                     _stack.pop_back();
                     string name = p->child[2]->value;
                     int offset = dynamic_cast<Structure_Type *>(type)->getOffset(name);
-                    head = emit(new ArithmeticTAC(tacs.size(), Operator::ADD_OPERATOR, head, -offset));
+                    head = emit(new ArithmeticTAC(tacs.size(), Operator::PLUS_OPERATOR, head, -offset));
                 }
             }
             else {
@@ -642,7 +632,7 @@ float parsePrimitive(string name, string value){
 }
 string operator_to_string(Operator op) {
     switch (op) {
-        case Operator::ADD_OPERATOR: return "+";
+        case Operator::PLUS_OPERATOR: return "+";
         default: exit(-10);
     }
 }

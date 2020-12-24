@@ -10,8 +10,8 @@ extern vector<TAC *> tac_vector;
 string addr_to_string(int addr);
 
 enum class Operator {
-    ADD_OPERATOR,
-    SUB_OPERATOR,
+    PLUS_OPERATOR,
+    MINUS_OPERATOR,
     MUL_OPERATOR,
     DIV_OPERATOR,
     LE_OPERATOR,
