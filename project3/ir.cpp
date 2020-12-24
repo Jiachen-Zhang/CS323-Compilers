@@ -3,7 +3,7 @@ const int INFO_SIZE = 100;
 vector<TAC*> tacs;
 map<string, int> table;
 vector<int> con, br;
-vector<TAC *> tac_vector;
+vector<TAC*> tac_vector;
 
 void init_ir() {
     tacs.clear();
@@ -15,12 +15,12 @@ void init_ir() {
 
 void irProgram(AST *root) {
     init_ir();
-    
     irExtDefList(root->child[0]);
-
+    DEBUG("PRINT START")
     for (int i = 1; i < tacs.size(); ++i){
         fprintf(stdout, "%s\n", string(tacs[i]->to_string()).c_str());
     }
+    DEBUG("PRINT END")
 }
 
 void irExtDefList(AST *node) {
@@ -59,29 +59,25 @@ void irStmtList(AST *node) {
     }
 }
 
-int irCondition(AST *node) {
-    return irExp(node->child[0]);
-}
-
 void irStmt(AST *node) {
     DEBUG("Stmt begin")
-    //Exp
+    // Exp
     if (node->child[0]->type_name.compare("Exp") == 0) {
         irExp(node->child[0]);
     }
-    //CompSt
+    // CompSt
     else if (node->child[0]->type_name.compare("CompSt") == 0) {
         irCompSt(node->child[0]);
     }
-    //RETURN
+    // RETURN
     else if (node->child[0]->type_name.compare("RETURN") == 0) {
         int expid = irExp(node->child[1]);
         emit(new ReturnTAC(tacs.size(), expid));
     }
-    //IF
+    // IF
     else if (node->child[0]->type_name.compare("IF") == 0) {
         // IF LP Exp RP Stmt
-        int expid = irCondition(node->child[2]);
+        int expid = irExp(node->child[2]);
         int truelist = emit(new LabelTAC(tacs.size()));
         irStmt(node->child[4]);
         int jumpid;
@@ -90,7 +86,9 @@ void irStmt(AST *node) {
         }
         int falselist = emit(new LabelTAC(tacs.size()));
         //back patch
+        DEBUG("IF back patch begin")
         backPatch(expid, truelist, falselist);
+        DEBUG("IF back patch end")
         if (node->child_num > 5)
         {
             irStmt(node->child[6]);
@@ -98,12 +96,12 @@ void irStmt(AST *node) {
             *dynamic_cast<GoToTAC *>(tacs[jumpid])->label = jumpto;
         }
     }
-    //WHILE
+    // WHILE
     else if (node->child[0]->type_name.compare("WHILE") == 0) {
         int contop = con.size();
         int brtop = br.size();
         int loopstart = emit(new LabelTAC(tacs.size()));
-        int expid = irCondition(node->child[2]);
+        int expid = irExp(node->child[2]);
         int truelist = emit(new LabelTAC(tacs.size()));//M1
         irStmt(node->child[4]);
         int loopback = emit(new GoToTAC(tacs.size(), emitlist(loopstart)));
@@ -113,7 +111,7 @@ void irStmt(AST *node) {
         backPatchLoop(&con, contop, loopstart);
         backPatchLoop(&br, brtop, falselist);
     }
-    //WRITE
+    // WRITE
     else if (node->child[0]->type_name.compare("WRITE") == 0) {
         DEBUG("Stmt begin > WRITE")
         int id = irExp(node->child[2]);
@@ -164,8 +162,6 @@ void irDec(AST *node, Type *type) {
 
 int irExp(AST *node, bool single){
     DEBUG("Exp begin")
-    // fprintf(stdout, "type_name = %s, value = %s, lineno = %d\n", 
-    //     node->type_name.c_str(), node->value.c_str(), node->lineno);
     //READ
     if (node->child[0]->type_name.compare("READ") == 0) {
         DEBUG("Exp begin > READ")
@@ -458,6 +454,7 @@ int irExp(AST *node, bool single){
     assert(NULL);
 }
 
+// Args: Exp COMMA Args | Exp
 vector<int> irArgs(AST *node) {
     vector<int> args = vector<int>();
     int expid = irExp(node->child[0]);
@@ -577,8 +574,7 @@ Type* irStructSpecifier(AST *node) {
 
 Type *findType(string name) {
     auto it = global_type_map.find(name);
-    int cnt = global_type_map.count(name);
-    assert(cnt == 1);
+    assert(global_type_map.count(name) == 1);
     Type *res = it->second;
     return res;
 }
@@ -599,6 +595,12 @@ void backPatch(int id, int truelist, int falselist){
     if (tacs[id]->is_swap){
         swap(truelist, falselist);
     }
+    IfTAC *if_tac = dynamic_cast<IfTAC *>(tacs[id]);
+    fprintf(stdout, "id = %d, typenam = %s truelist = %d\n", id, typeid(tacs[id]).name(), truelist);
+    fprintf(stdout, "%s\n", typeid(if_tac).name());
+    fprintf(stdout, "%s\n", if_tac->name.c_str());
+    fprintf(stdout, "%d\n", (*if_tac).address);
+    fprintf(stdout, "tacs[id])->label = %d\n", *(dynamic_cast<IfTAC *>(tacs[id])->label));
     *dynamic_cast<IfTAC *>(tacs[id])->label = truelist;
     *dynamic_cast<GoToTAC *>(tacs[id + 1])->label = falselist;
 }

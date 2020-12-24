@@ -82,9 +82,8 @@ public:
 };
 
 class AssignAddressTAC: public TAC {
-private:
-    int right_address;
 public:
+    int right_address;
     AssignAddressTAC(int address, int right_address) {
         this->right_address = right_address;
         TAC::address = address;
@@ -97,9 +96,8 @@ public:
 };
 
 class AssignValueTAC: public TAC {
-private:
-    int right_address;
 public:
+    int right_address;
     AssignValueTAC(int address, int right_address) {
         this->right_address = right_address;
         TAC::address = address;
@@ -112,11 +110,10 @@ public:
 };
 
 class ArithmeticTAC: public TAC {
-private:
+public:
     Operator op;
     int left_address;
     int right_address;
-public:
     ArithmeticTAC(int address, Operator op, int left_address, int right_address) {
         TAC::address = address;
         this->op = op;
@@ -159,12 +156,11 @@ public:
 };
 
 class IfTAC: public TAC {
-private:
+public:
+    int *label;
     Operator op;
     int left_address;
     int right_address;
-public:
-    int *label;
     IfTAC(int address, Operator op, int left_address, int right_address, int *label) {
         TAC::address = address;
         this->left_address = left_address;
@@ -172,7 +168,6 @@ public:
         this->op = op;
         this->label = label;
     }
-    
     string to_string() {
         // IF v1 > t2 GOTO label1
         char buffer[INFO_SIZE];
@@ -182,9 +177,8 @@ public:
 };
 
 class ReturnTAC: public TAC {
-private:
-    int right_address;
 public:
+    int right_address;
     ReturnTAC(int address, int right_address) {
         TAC::address = address;
         this->right_address = right_address;
@@ -230,9 +224,8 @@ public:
 
 class ParamTAC : public TAC
 {
-private:
-    vector<int> sizes;
 public:
+    vector<int> sizes;
     vector<int> suffix;
     ParamTAC(int address, Type* type, vector<int> sizes) {
         TAC::address = address;
@@ -256,9 +249,8 @@ public:
 
 class ArgTAC : public TAC
 {
-private:
-    int right_address;
 public:
+    int right_address;
     ArgTAC(int address, int right_address) {
         TAC::address = address;
         this->right_address = right_address;
@@ -272,9 +264,8 @@ public:
 };
 
 class CallTAC: public TAC{
-private:
-    string label;
 public:
+    string label;
     CallTAC(int address, string label) {
         TAC::address = address;
         this->label = label;
@@ -299,9 +290,8 @@ public:
 };
 
 class WriteTAC: public TAC{
-private:
-    int right_address;
 public:
+    int right_address;
     WriteTAC(int address, int right_address) {
         TAC::address = address;
         this->right_address = right_address;
@@ -336,7 +326,6 @@ void irStmtList(AST *node);
 void irStmt(AST *node);
 void backPatch(int id, int truelist, int falselist);
 void backPatchLoop(vector<int>* sta, int last, int target);
-int irCondition(AST *node);
 Type *findType(string name);
 Type* irStructSpecifier(AST *node);
 Type* irType(AST *node);
