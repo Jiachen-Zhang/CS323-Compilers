@@ -13,6 +13,7 @@ void init_ir() {
     tacs.push_back(new TAC());
 }
 
+// Program: ExtDefList
 void irProgram(AST *root) {
     init_ir();
     irExtDefList(root->child[0]);
@@ -23,6 +24,7 @@ void irProgram(AST *root) {
     DEBUG("PRINT END")
 }
 
+// ExtDefList: ExtDef ExtDefList | %empty
 void irExtDefList(AST *node) {
     DEBUG("ExtDefList begin");
     while (node->child_num) {
@@ -32,6 +34,9 @@ void irExtDefList(AST *node) {
     DEBUG("ExtDefList end");
 }
 
+// ExtDef: Specifier ExtDecList SEMI
+//       | Specifier SEMI
+//       | Specifier FunDec CompSt
 void irExtDef(AST *node) {
     DEBUG("ExtDef begin");
     Type *type = irSpecifier(node->child[0]);
@@ -45,6 +50,7 @@ void irExtDef(AST *node) {
     DEBUG("ExtDef end");
 }
 
+// CompSt: LC DefList StmtList RC
 void irCompSt(AST *node) {
     DEBUG("CompSt begin");
     irDefList(node->child[1]);
@@ -52,6 +58,7 @@ void irCompSt(AST *node) {
     DEBUG("CompSt end");
 }
 
+// StmtList: Stmt StmtList
 void irStmtList(AST *node) {
     while (node->child_num) {
         irStmt(node->child[0]);
@@ -59,9 +66,16 @@ void irStmtList(AST *node) {
     }
 }
 
+// Stmt: Exp SEMI
+//     | CompSt
+//     | RETURN Exp SEMI
+//     | IF LP Exp RP Stmt
+//     | IF LP Exp RP Stmt ELSE Stmt
+//     | WHILE LP Exp RP Stmt
+//     | WRITE LP Exp RP SEMI
 void irStmt(AST *node) {
     DEBUG("Stmt begin")
-    // Exp
+    // Exp SEMI
     if (node->child[0]->type_name.compare("Exp") == 0) {
         irExp(node->child[0]);
     }
@@ -69,7 +83,7 @@ void irStmt(AST *node) {
     else if (node->child[0]->type_name.compare("CompSt") == 0) {
         irCompSt(node->child[0]);
     }
-    // RETURN
+    // RETURN Exp SEMI
     else if (node->child[0]->type_name.compare("RETURN") == 0) {
         int expid = irExp(node->child[1]);
         emit(new ReturnTAC(tacs.size(), expid));
@@ -96,7 +110,7 @@ void irStmt(AST *node) {
             *dynamic_cast<GoToTAC *>(tacs[jumpid])->label = jumpto;
         }
     }
-    // WHILE
+    // WHILE LP Exp RP Stmt
     else if (node->child[0]->type_name.compare("WHILE") == 0) {
         int contop = con.size();
         int brtop = br.size();
@@ -111,7 +125,7 @@ void irStmt(AST *node) {
         backPatchLoop(&con, contop, loopstart);
         backPatchLoop(&br, brtop, falselist);
     }
-    // WRITE
+    // WRITE LP Exp RP SEMI
     else if (node->child[0]->type_name.compare("WRITE") == 0) {
         DEBUG("Stmt begin > WRITE")
         int id = irExp(node->child[2]);
@@ -122,6 +136,7 @@ void irStmt(AST *node) {
     DEBUG("Stmt end")
 }
 
+// DefList: Def DefList | %empty
 void irDefList(AST *node) {
     DEBUG("CompSt begin");
     while (node->child_num){
@@ -131,6 +146,7 @@ void irDefList(AST *node) {
     DEBUG("CompSt end");
 }
 
+// Def: Specifier DecList SEMI
 void irDef(AST *node) {
     DEBUG("CompSt begin");
     Type * type = irSpecifier(node->child[0]);
@@ -138,6 +154,7 @@ void irDef(AST *node) {
     DEBUG("CompSt end");
 }
 
+// DecList: Dec | Dec COMMA DecList
 void irDecList(AST *node, Type*type) {
     DEBUG("CompSt begin");
     irDec(node->child[0], type);
@@ -148,6 +165,7 @@ void irDecList(AST *node, Type*type) {
     DEBUG("CompSt end");
 }
 
+// Dec: VarDec | VarDec ASSIGN Exp
 void irDec(AST *node, Type *type) {
     int expid = 0;
     if (node->child_num>1){
@@ -160,12 +178,26 @@ void irDec(AST *node, Type *type) {
     putIR(tac->name, tac->emit());
 }
 
+// Exp: Exp ASSIGN Exp
+//    | Exp [{AND}|{OR}] Exp 
+//    | Exp [{LT}|{LE}|{GT}|{GE}|{NE}|{EQ}] Exp
+//    | Exp [{PLUS}|{MINUS}|{MUL}|{DIV}] Exp
+//    | LP Exp RP
+//    | MINUS Exp | MINUS Exp %prec UMINUS
+//    | NOT Exp
+//    | ID LP Args RP
+//    | ID LP RP
+//    | ID
+//    | Exp LB Exp RB
+//    | Exp DOT ID
+//    | INT | FLOAT | CHAR
+//    | READ LP RP
 int irExp(AST *node, bool single){
-    DEBUG("Exp begin")
     //READ
     if (node->child[0]->type_name.compare("READ") == 0) {
         DEBUG("Exp begin > READ")
         ReadTAC *exp = new ReadTAC(tacs.size());
+        DEBUG("Exp end > READ")
         return emit(exp);
     }
     //INT/CHAR/FLOAT
@@ -175,6 +207,7 @@ int irExp(AST *node, bool single){
         DEBUG("Exp begin > INT/CHAR/FLOAT")
         AssignTAC *exp = new AssignTAC(tacs.size(), -parsePrimitive(node->child[0]->type_name, node->child[0]->value));
         int id = emit(exp);
+        DEBUG("Exp end > INT/CHAR/FLOAT")
         return id;
     }
     //MINUS Exp
@@ -183,6 +216,7 @@ int irExp(AST *node, bool single){
         int cid = irExp(node->child[1]);
         ArithmeticTAC *exp = new ArithmeticTAC(tacs.size(), Operator::MINUS_OPERATOR, 0, cid);
         int id = emit(exp);
+        DEBUG("Exp end > MINUS Exp")
         return id;
     }
     //NOT Exp
@@ -191,6 +225,7 @@ int irExp(AST *node, bool single){
         int cid = irExp(node->child[1]);
         // swap truelist - falselist | must be pointer
         tacs[cid]->is_swap ^= 1;
+        DEBUG("Exp end > NOT Exp")
         return cid;
     }
     //ID(...)
@@ -204,6 +239,7 @@ int irExp(AST *node, bool single){
             }
         }
         int id = emit(new CallTAC(tacs.size(), name));
+        DEBUG("Exp end > ID(...)")
         return id;
     }
     //ID
@@ -211,18 +247,21 @@ int irExp(AST *node, bool single){
         DEBUG("Exp begin > ID")
         string name = node->child[0]->value;
         int id = getIR(name);
+        int res = 0;
         if (single) {
             if (!id) {
                 id = tacs.size();
                 putIR(name, id);
             }
-            return emit(new AssignTAC(id, 0));
+            res = emit(new AssignTAC(id, 0));
         }
         else if (!id){ //on the right but never show up before
-            return emit(new AssignTAC(tacs.size(), 0));
+            res = emit(new AssignTAC(tacs.size(), 0));
         }else{
-            return id;
+            res = id;
         }
+        DEBUG("Exp end > ID")
+        return res;
     }
     // Exp OR Exp
     if (node->child[1]->type_name.compare("OR") == 0) {
@@ -254,6 +293,7 @@ int irExp(AST *node, bool single){
             }
         }
         //Exp.falselist=exp2.falselist
+        DEBUG("Exp end > Exp OR Exp")
         return rightid;
     }
     // Exp AND Exp
@@ -284,25 +324,30 @@ int irExp(AST *node, bool single){
             }
         }
         //Exp.truelist=Exp2.truelist
+        DEBUG("Exp end > Exp AND Exp")
         return rightid;
     }
     //Exp LE/LT/GE/GT/NE/EQ Exp
     if (node->child[1]->type_name.compare("LE") == 0) {
+        DEBUG("Exp begin > Exp LE")
         int leftid = irExp(node->child[0]);
         int rightid = irExp(node->child[2]);
         IfTAC *if_tac = new IfTAC(tacs.size(), Operator::LE_OPERATOR, leftid, rightid, emitlist()); //back
         int ifid = emit(if_tac);
         TAC *goinst = new GoToTAC(tacs.size(), emitlist());//back
         int goid = emit(goinst);
+        DEBUG("Exp end > Exp LE")
         return ifid;
     }
     if (node->child[1]->type_name.compare("LT") == 0) {
+        DEBUG("Exp begin > Exp LT")
         int leftid = irExp(node->child[0]);
         int rightid = irExp(node->child[2]);
         IfTAC *if_tac = new IfTAC(tacs.size(), Operator::LT_OPERATOR, leftid, rightid, emitlist()); //back
         int ifid = emit(if_tac);
         TAC *goinst = new GoToTAC(tacs.size(), emitlist());//back
         int goid = emit(goinst);
+        DEBUG("Exp end > Exp LT")
         return ifid;
     }
     if (node->child[1]->type_name.compare("GE") == 0) {
@@ -315,12 +360,21 @@ int irExp(AST *node, bool single){
         return ifid;
     }
     if (node->child[1]->type_name.compare("GT") == 0) {
+        DEBUG("Exp begin > Exp GT")
+        DEBUG("$1")
         int leftid = irExp(node->child[0]);
+        DEBUG("$2")
         int rightid = irExp(node->child[2]);
+        DEBUG("$3")
         IfTAC *if_tac = new IfTAC(tacs.size(), Operator::GT_OPERATOR, leftid, rightid, emitlist()); //back
+        fprintf(stdout, "%s\n", operator_to_string(Operator::GT_OPERATOR).c_str());
+        fprintf(stdout, "%s\n", if_tac->to_string().c_str());
         int ifid = emit(if_tac);
+        DEBUG("$4")
         TAC *goinst = new GoToTAC(tacs.size(), emitlist());//back
         int goid = emit(goinst);
+        DEBUG("$5")
+        DEBUG("Exp end > Exp GT")
         return ifid;
     }
     if (node->child[1]->type_name.compare("NE") == 0) {
@@ -595,12 +649,6 @@ void backPatch(int id, int truelist, int falselist){
     if (tacs[id]->is_swap){
         swap(truelist, falselist);
     }
-    IfTAC *if_tac = dynamic_cast<IfTAC *>(tacs[id]);
-    fprintf(stdout, "id = %d, typenam = %s truelist = %d\n", id, typeid(tacs[id]).name(), truelist);
-    fprintf(stdout, "%s\n", typeid(if_tac).name());
-    fprintf(stdout, "%s\n", if_tac->name.c_str());
-    fprintf(stdout, "%d\n", (*if_tac).address);
-    fprintf(stdout, "tacs[id])->label = %d\n", *(dynamic_cast<IfTAC *>(tacs[id])->label));
     *dynamic_cast<IfTAC *>(tacs[id])->label = truelist;
     *dynamic_cast<GoToTAC *>(tacs[id + 1])->label = falselist;
 }
@@ -635,6 +683,15 @@ float parsePrimitive(string name, string value){
 string operator_to_string(Operator op) {
     switch (op) {
         case Operator::PLUS_OPERATOR: return "+";
+        case Operator::MINUS_OPERATOR: return "-";
+        case Operator::MUL_OPERATOR: return "*";
+        case Operator::DIV_OPERATOR: return "/";
+        case Operator::LE_OPERATOR: return "<=";
+        case Operator::LT_OPERATOR: return "<";
+        case Operator::GE_OPERATOR: return ">=";
+        case Operator::GT_OPERATOR: return ">";
+        case Operator::NE_OPERATOR: return "!=";
+        case Operator::EQ_OPERATOR: return "==";
         default: exit(-10);
     }
 }

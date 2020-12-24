@@ -170,6 +170,8 @@ public:
     }
     string to_string() {
         // IF v1 > t2 GOTO label1
+        DEBUG("IfTAC::to_string")
+        fprintf(stdout, "IF v%d %s t%d GOTO label%d", left_address, operator_to_string(op).c_str(), right_address, *label);
         char buffer[INFO_SIZE];
         sprintf(buffer, "IF v%d %s t%d GOTO label%d", left_address, operator_to_string(op).c_str(), right_address, *label);
         return buffer;
