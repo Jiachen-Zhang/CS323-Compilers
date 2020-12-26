@@ -3,7 +3,6 @@ const int INFO_SIZE = 100;
 vector<TAC*> tacs;
 map<string, int> table;
 vector<int> con, br;
-vector<TAC*> tac_vector;
 
 void init_ir() {
     tacs.clear();
@@ -138,35 +137,36 @@ void irStmt(AST *node) {
 
 // DefList: Def DefList | %empty
 void irDefList(AST *node) {
-    DEBUG("CompSt begin");
+    DEBUG("DefList begin");
     while (node->child_num){
         irDef(node->child[0]);
         node = node->child[1];
     }
-    DEBUG("CompSt end");
+    DEBUG("DefList end");
 }
 
 // Def: Specifier DecList SEMI
 void irDef(AST *node) {
-    DEBUG("CompSt begin");
+    DEBUG("Def begin");
     Type * type = irSpecifier(node->child[0]);
     irDecList(node->child[1], type);
-    DEBUG("CompSt end");
+    DEBUG("Def end");
 }
 
 // DecList: Dec | Dec COMMA DecList
 void irDecList(AST *node, Type*type) {
-    DEBUG("CompSt begin");
+    DEBUG("DecList begin");
     irDec(node->child[0], type);
     while (node->child_num>1){
         node = node->child[2];
         irDec(node->child[0], type);
     }
-    DEBUG("CompSt end");
+    DEBUG("DecList end");
 }
 
 // Dec: VarDec | VarDec ASSIGN Exp
 void irDec(AST *node, Type *type) {
+    DEBUG("Dec begin");
     int expid = 0;
     if (node->child_num>1){
         expid = irExp(node->child[2]);
@@ -176,6 +176,7 @@ void irDec(AST *node, Type *type) {
         dynamic_cast<AssignTAC *>(tac)->right_address = expid;
     }
     putIR(tac->name, tac->emit());
+    DEBUG("Dec end");
 }
 
 // Exp: Exp ASSIGN Exp
@@ -245,8 +246,10 @@ int irExp(AST *node, bool single){
     //ID
     if (node->child[0]->type_name.compare("ID") == 0){
         DEBUG("Exp begin > ID")
+        fprintf(stdout, "name = %s\n", node->child[0]->value.c_str());
         string name = node->child[0]->value;
         int id = getIR(name);
+        fprintf(stdout, "id = %d\n", id);
         int res = 0;
         if (single) {
             if (!id) {
@@ -254,10 +257,9 @@ int irExp(AST *node, bool single){
                 putIR(name, id);
             }
             res = emit(new AssignTAC(id, 0));
-        }
-        else if (!id){ //on the right but never show up before
+        } else if (!id){ //on the right but never show up before
             res = emit(new AssignTAC(tacs.size(), 0));
-        }else{
+        } else{
             res = id;
         }
         DEBUG("Exp end > ID")
@@ -471,16 +473,26 @@ int irExp(AST *node, bool single){
             return emit(new AssignValueTAC(tacs.size(), head));
         }
     }
-    //Exp DOT ID
+    // Exp DOT ID
     if (node->child[1]->type_name.compare("DOT") == 0){
+        assert(node->child[0]->type_name.compare("Exp") == 0);
+        assert(node->child[2]->type_name.compare("ID") == 0);
+        DEBUG("Exp begin > Exp DOT ID")
         vector<AST *> _stack = {node};
         int head;
-        while (!_stack.empty())
-        {
+        while (!_stack.empty()) {
             AST *top = _stack.back();
-            if (top->child[0]->type_name.compare("ID") == 0){
+            if (top->child_num == 1) {
+                assert(top->child[0]->type_name.compare("ID") == 0);
+                DEBUG("cp 1")
+                fprintf(stdout, "top->child_num = %d\n", top->child_num);
+                fprintf(stdout, "top.type_name = %s %s at line %d\n", top->type_name.c_str(), top->value.c_str(), top->lineno);
                 head = irExp(top);
+                fprintf(stdout, "cp 1.2 %s %s\n", typeid(*tacs[head]).name(), tacs[head]->name.c_str());
+                assert(tacs[head]->type);
+                fprintf(stdout, "%d\n", tacs[head]->type->lineno);
                 Type *type = tacs[head]->type;
+                fprintf(stdout, "type->lineno = %d\n", type->lineno);
                 _stack.pop_back();
                 if (typeid(*tacs[head])==typeid(DecTAC)){
                     head = emit(new AssignAddressTAC(tacs.size(), head));
@@ -494,9 +506,14 @@ int irExp(AST *node, bool single){
                     int offset = dynamic_cast<Structure_Type *>(type)->getOffset(name);
                     head = emit(new ArithmeticTAC(tacs.size(), Operator::PLUS_OPERATOR, head, -offset));
                 }
-            }
-            else {
+            } else if (top->child_num == 3) {
+                DEBUG("cp 2")
+                assert(top->child[0]->type_name.compare("Exp") == 0);
+                assert(top->child[1]->type_name.compare("DOT") == 0);
+                assert(top->child[2]->type_name.compare("ID") == 0);
                 _stack.push_back(top->child[0]);
+            } else {
+                assert(NULL);
             }
         }
         if (single) {
@@ -504,10 +521,13 @@ int irExp(AST *node, bool single){
         } else {
             return emit(new AssignValueTAC(tacs.size(), head));
         }
+        DEBUG("Exp end > Exp DOT ID")
     }
     // LP Exp RP
     if (node->child[0]->type_name.compare("LP") == 0){
+        DEBUG("Exp begin > LP Exp RP")
         return irExp(node->child[1]);
+        DEBUG("Exp end > LP Exp RP")
     }
     assert(NULL);
 }
@@ -664,6 +684,9 @@ void backPatchLoop(vector<int>* sta, int last, int target){
     }
 }
 void putIR(string name, int id){
+    if (name.compare("op") == 0) {
+        fprintf(stdout, "put op into table with value %d\n", id);
+    }
     table[name] = id;
 }
 int getIR(string name){

@@ -5,7 +5,7 @@ using namespace std;
 class TAC;
 enum class Operator;
 extern const int INFO_SIZE;
-extern vector<TAC *> tac_vector;
+extern vector<TAC*> tacs;
 #define DEBUG(msg) fprintf(stdout, "%s\n", msg);
 string addr_to_string(int addr);
 
@@ -35,8 +35,8 @@ public:
     TAC(int address) : address(address) {}
     virtual string to_string() { return ""; }
     virtual int emit(){
-        int index = tac_vector.size();
-        tac_vector.push_back(this);
+        int index = tacs.size();
+        tacs.push_back(this);
         return index;
     }
 };
