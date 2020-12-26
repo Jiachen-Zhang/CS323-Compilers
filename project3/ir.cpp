@@ -194,6 +194,7 @@ void irDec(AST *node, Type *type) {
 //    | INT | FLOAT | CHAR
 //    | READ LP RP
 int irExp(AST *node, bool single){
+    // fprintf(stdout, "Exp beigin %d\n", node->lineno);
     //READ
     if (node->child[0]->type_name.compare("READ") == 0) {
         DEBUG("Exp begin > READ")
@@ -268,29 +269,27 @@ int irExp(AST *node, bool single){
     // Exp OR Exp
     if (node->child[1]->type_name.compare("OR") == 0) {
         DEBUG("Exp begin > Exp OR Exp")
+        // fprintf(stdout, "%d %d\n", node->child[0]->child_num, node->child[2]->child_num);
+        // exit(0);
         int leftid = irExp(node->child[0]);
         //backpatch exp1.falselist=M.inst
         int id = emit(new LabelTAC(tacs.size()));
         int leftIsSwap = tacs[leftid]->is_swap;
         int rightid = irExp(node->child[2]);
         int rightIsSwap = tacs[rightid]->is_swap;
-
         //merge exp1.truelist | exp2.truelist
-        if (leftIsSwap)
-        { //exp1.falselist
+        if (leftIsSwap) { //exp1.falselist
             *dynamic_cast<IfTAC *>(tacs[leftid])->label = id;
-            if (rightIsSwap){//exp2.falselist
+            if (rightIsSwap) {//exp2.falselist
                 dynamic_cast<GoToTAC *>(tacs[leftid + 1])->label = dynamic_cast<GoToTAC *>(tacs[rightid + 1])->label;
-            }
-            else{ //exp2.truelist
+            } else { //exp2.truelist
                 dynamic_cast<GoToTAC *>(tacs[leftid + 1])->label = dynamic_cast<IfTAC *>(tacs[rightid])->label;
             }
-        }else{//exp1.truelist
+        } else {//exp1.truelist
             *dynamic_cast<GoToTAC *>(tacs[leftid + 1])->label = id;
             if (rightIsSwap){//exp2.falselist
                 dynamic_cast<IfTAC *>(tacs[leftid])->label = dynamic_cast<GoToTAC *>(tacs[rightid + 1])->label;
-            }
-            else{ //exp2.truelist
+            } else { //exp2.truelist
                 dynamic_cast<IfTAC *>(tacs[leftid])->label = dynamic_cast<IfTAC *>(tacs[rightid])->label;
             }
         }

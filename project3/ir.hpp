@@ -149,6 +149,7 @@ public:
         this->label = label;
     }
     string to_string() {
+        DEBUG("GoToTAC::to_string")
         char buffer[INFO_SIZE];
         sprintf(buffer, "GOTO label%d", *label);
         return buffer;

@@ -87,7 +87,11 @@ extern int yydebug;
     EQ = 297,
     WRITE = 298,
     READ = 299,
-    UMINUS = 300
+    BITOR = 300,
+    BITXOR = 301,
+    BITAND = 302,
+    UMINUS = 303,
+    BITWISE = 304
   };
 #endif
 /* Tokens.  */
@@ -133,7 +137,11 @@ extern int yydebug;
 #define EQ 297
 #define WRITE 298
 #define READ 299
-#define UMINUS 300
+#define BITOR 300
+#define BITXOR 301
+#define BITAND 302
+#define UMINUS 303
+#define BITWISE 304
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -144,7 +152,7 @@ union YYSTYPE
 
     class AST *ast_node;
 
-#line 148 "y.tab.h" /* yacc.c:1909  */
+#line 156 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

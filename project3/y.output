@@ -6,26 +6,30 @@ Terminals unused in grammar
    QUOTE
    LITERAL
    INCLUDE
+   BITOR
+   BITXOR
+   BITAND
+   BITWISE
 
 
 State 21 conflicts: 2 shift/reduce
 State 25 conflicts: 2 shift/reduce
-State 73 conflicts: 12 shift/reduce, 19 reduce/reduce
-State 74 conflicts: 16 shift/reduce
+State 73 conflicts: 1 shift/reduce, 17 reduce/reduce
+State 74 conflicts: 1 shift/reduce
 State 113 conflicts: 16 shift/reduce
-State 115 conflicts: 16 shift/reduce
-State 117 conflicts: 12 shift/reduce
-State 118 conflicts: 12 shift/reduce
-State 119 conflicts: 12 shift/reduce
-State 120 conflicts: 12 shift/reduce
-State 121 conflicts: 16 shift/reduce
-State 122 conflicts: 16 shift/reduce
-State 123 conflicts: 16 shift/reduce
-State 124 conflicts: 16 shift/reduce
-State 125 conflicts: 16 shift/reduce
-State 126 conflicts: 16 shift/reduce
-State 127 conflicts: 16 shift/reduce
-State 128 conflicts: 16 shift/reduce
+State 115 conflicts: 1 shift/reduce
+State 117 conflicts: 1 shift/reduce
+State 118 conflicts: 1 shift/reduce
+State 119 conflicts: 1 shift/reduce
+State 120 conflicts: 1 shift/reduce
+State 121 conflicts: 1 shift/reduce
+State 122 conflicts: 1 shift/reduce
+State 123 conflicts: 1 shift/reduce
+State 124 conflicts: 1 shift/reduce
+State 125 conflicts: 1 shift/reduce
+State 126 conflicts: 1 shift/reduce
+State 127 conflicts: 1 shift/reduce
+State 128 conflicts: 1 shift/reduce
 State 137 conflicts: 1 shift/reduce
 
 
@@ -174,53 +178,57 @@ GE (296) 51
 EQ (297) 53
 WRITE (298) 35
 READ (299) 72
-UMINUS (300)
+BITOR (300)
+BITXOR (301)
+BITAND (302)
+UMINUS (303)
+BITWISE (304)
 
 
 Nonterminals, with rules where they appear
 
-$accept (46)
+$accept (50)
     on left: 0
-Program (47)
+Program (51)
     on left: 1, on right: 0
-ExtDefList (48)
+ExtDefList (52)
     on left: 2 3, on right: 1 2
-ExtDef (49)
+ExtDef (53)
     on left: 4 5 6, on right: 2
-ExtDecList (50)
+ExtDecList (54)
     on left: 7 8, on right: 4 8
-Specifier (51)
+Specifier (55)
     on left: 9 10, on right: 4 5 6 21 38 39
-StructSpecifier (52)
+StructSpecifier (56)
     on left: 11 12, on right: 10
-VarDec (53)
+VarDec (57)
     on left: 13 14, on right: 7 8 14 21 42 43
-FunDec (54)
+FunDec (58)
     on left: 15 16 17 18, on right: 6
-VarList (55)
+VarList (59)
     on left: 19 20, on right: 15 16 19
-ParamDec (56)
+ParamDec (60)
     on left: 21, on right: 19 20
-CompSt (57)
+CompSt (61)
     on left: 22 23, on right: 6 28
-StmtList (58)
+StmtList (62)
     on left: 24 25, on right: 22 23 24
-Stmt (59)
+Stmt (63)
     on left: 26 27 28 29 30 31 32 33 34 35, on right: 24 32 33 34
-DefList (60)
+DefList (64)
     on left: 36 37, on right: 11 22 23 36
-Def (61)
+Def (65)
     on left: 38 39, on right: 36
-DecList (62)
+DecList (66)
     on left: 40 41, on right: 38 39 41
-Dec (63)
+Dec (67)
     on left: 42 43, on right: 40 41
-Exp (64)
+Exp (68)
     on left: 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61
     62 63 64 65 66 67 68 69 70 71 72 73, on right: 26 27 30 31 32 33
     34 35 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61
     66 67 74 75
-Args (65)
+Args (69)
     on left: 74 75, on right: 62 63 74
 
 
@@ -1126,33 +1134,20 @@ State 73
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     error         reduce using rule 59 (Exp)
     error         [reduce using rule 60 (Exp)]
     ERROR_LEXEME  [reduce using rule 59 (Exp)]
     ERROR_LEXEME  [reduce using rule 60 (Exp)]
-    DOT           [reduce using rule 59 (Exp)]
-    DOT           [reduce using rule 60 (Exp)]
     COMMA         reduce using rule 59 (Exp)
     COMMA         [reduce using rule 60 (Exp)]
-    ASSIGN        [reduce using rule 59 (Exp)]
+    ASSIGN        reduce using rule 59 (Exp)
     ASSIGN        [reduce using rule 60 (Exp)]
     SEMI          reduce using rule 59 (Exp)
     SEMI          [reduce using rule 60 (Exp)]
     RP            reduce using rule 59 (Exp)
     RP            [reduce using rule 60 (Exp)]
-    LB            [reduce using rule 59 (Exp)]
-    LB            [reduce using rule 60 (Exp)]
     RB            reduce using rule 59 (Exp)
     RB            [reduce using rule 60 (Exp)]
     PLUS          reduce using rule 59 (Exp)
@@ -1161,21 +1156,21 @@ State 73
     MINUS         reduce using rule 59 (Exp)
     MINUS         [reduce using rule 60 (Exp)]
     DIV           reduce using rule 60 (Exp)
-    OR            [reduce using rule 59 (Exp)]
+    OR            reduce using rule 59 (Exp)
     OR            [reduce using rule 60 (Exp)]
-    AND           [reduce using rule 59 (Exp)]
+    AND           reduce using rule 59 (Exp)
     AND           [reduce using rule 60 (Exp)]
-    NE            [reduce using rule 59 (Exp)]
+    NE            reduce using rule 59 (Exp)
     NE            [reduce using rule 60 (Exp)]
-    LT            [reduce using rule 59 (Exp)]
+    LT            reduce using rule 59 (Exp)
     LT            [reduce using rule 60 (Exp)]
-    LE            [reduce using rule 59 (Exp)]
+    LE            reduce using rule 59 (Exp)
     LE            [reduce using rule 60 (Exp)]
-    GT            [reduce using rule 59 (Exp)]
+    GT            reduce using rule 59 (Exp)
     GT            [reduce using rule 60 (Exp)]
-    GE            [reduce using rule 59 (Exp)]
+    GE            reduce using rule 59 (Exp)
     GE            [reduce using rule 60 (Exp)]
-    EQ            [reduce using rule 59 (Exp)]
+    EQ            reduce using rule 59 (Exp)
     EQ            [reduce using rule 60 (Exp)]
     $default      reduce using rule 59 (Exp)
 
@@ -1202,37 +1197,9 @@ State 74
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
-    PLUS          shift, and go to state 86
-    MUL           shift, and go to state 87
-    MINUS         shift, and go to state 88
-    DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 61 (Exp)]
-    DOT           [reduce using rule 61 (Exp)]
-    ASSIGN        [reduce using rule 61 (Exp)]
-    LB            [reduce using rule 61 (Exp)]
-    PLUS          [reduce using rule 61 (Exp)]
-    MUL           [reduce using rule 61 (Exp)]
-    MINUS         [reduce using rule 61 (Exp)]
-    DIV           [reduce using rule 61 (Exp)]
-    OR            [reduce using rule 61 (Exp)]
-    AND           [reduce using rule 61 (Exp)]
-    NE            [reduce using rule 61 (Exp)]
-    LT            [reduce using rule 61 (Exp)]
-    LE            [reduce using rule 61 (Exp)]
-    GT            [reduce using rule 61 (Exp)]
-    GE            [reduce using rule 61 (Exp)]
-    EQ            [reduce using rule 61 (Exp)]
     $default      reduce using rule 61 (Exp)
 
 
@@ -1930,21 +1897,6 @@ State 115
     EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 44 (Exp)]
-    DOT           [reduce using rule 44 (Exp)]
-    ASSIGN        [reduce using rule 44 (Exp)]
-    LB            [reduce using rule 44 (Exp)]
-    PLUS          [reduce using rule 44 (Exp)]
-    MUL           [reduce using rule 44 (Exp)]
-    MINUS         [reduce using rule 44 (Exp)]
-    DIV           [reduce using rule 44 (Exp)]
-    OR            [reduce using rule 44 (Exp)]
-    AND           [reduce using rule 44 (Exp)]
-    NE            [reduce using rule 44 (Exp)]
-    LT            [reduce using rule 44 (Exp)]
-    LE            [reduce using rule 44 (Exp)]
-    GT            [reduce using rule 44 (Exp)]
-    GE            [reduce using rule 44 (Exp)]
-    EQ            [reduce using rule 44 (Exp)]
     $default      reduce using rule 44 (Exp)
 
 
@@ -2009,31 +1961,11 @@ State 117
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     MUL           shift, and go to state 87
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 54 (Exp)]
-    DOT           [reduce using rule 54 (Exp)]
-    ASSIGN        [reduce using rule 54 (Exp)]
-    LB            [reduce using rule 54 (Exp)]
-    OR            [reduce using rule 54 (Exp)]
-    AND           [reduce using rule 54 (Exp)]
-    NE            [reduce using rule 54 (Exp)]
-    LT            [reduce using rule 54 (Exp)]
-    LE            [reduce using rule 54 (Exp)]
-    GT            [reduce using rule 54 (Exp)]
-    GE            [reduce using rule 54 (Exp)]
-    EQ            [reduce using rule 54 (Exp)]
     $default      reduce using rule 54 (Exp)
 
 
@@ -2059,29 +1991,9 @@ State 118
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 56 (Exp)]
-    DOT           [reduce using rule 56 (Exp)]
-    ASSIGN        [reduce using rule 56 (Exp)]
-    LB            [reduce using rule 56 (Exp)]
-    OR            [reduce using rule 56 (Exp)]
-    AND           [reduce using rule 56 (Exp)]
-    NE            [reduce using rule 56 (Exp)]
-    LT            [reduce using rule 56 (Exp)]
-    LE            [reduce using rule 56 (Exp)]
-    GT            [reduce using rule 56 (Exp)]
-    GE            [reduce using rule 56 (Exp)]
-    EQ            [reduce using rule 56 (Exp)]
     $default      reduce using rule 56 (Exp)
 
 
@@ -2107,31 +2019,11 @@ State 119
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     MUL           shift, and go to state 87
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 55 (Exp)]
-    DOT           [reduce using rule 55 (Exp)]
-    ASSIGN        [reduce using rule 55 (Exp)]
-    LB            [reduce using rule 55 (Exp)]
-    OR            [reduce using rule 55 (Exp)]
-    AND           [reduce using rule 55 (Exp)]
-    NE            [reduce using rule 55 (Exp)]
-    LT            [reduce using rule 55 (Exp)]
-    LE            [reduce using rule 55 (Exp)]
-    GT            [reduce using rule 55 (Exp)]
-    GE            [reduce using rule 55 (Exp)]
-    EQ            [reduce using rule 55 (Exp)]
     $default      reduce using rule 55 (Exp)
 
 
@@ -2157,29 +2049,9 @@ State 120
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 57 (Exp)]
-    DOT           [reduce using rule 57 (Exp)]
-    ASSIGN        [reduce using rule 57 (Exp)]
-    LB            [reduce using rule 57 (Exp)]
-    OR            [reduce using rule 57 (Exp)]
-    AND           [reduce using rule 57 (Exp)]
-    NE            [reduce using rule 57 (Exp)]
-    LT            [reduce using rule 57 (Exp)]
-    LE            [reduce using rule 57 (Exp)]
-    GT            [reduce using rule 57 (Exp)]
-    GE            [reduce using rule 57 (Exp)]
-    EQ            [reduce using rule 57 (Exp)]
     $default      reduce using rule 57 (Exp)
 
 
@@ -2205,13 +2077,11 @@ State 121
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
     AND           shift, and go to state 91
     NE            shift, and go to state 92
     LT            shift, and go to state 93
@@ -2221,21 +2091,6 @@ State 121
     EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 47 (Exp)]
-    DOT           [reduce using rule 47 (Exp)]
-    ASSIGN        [reduce using rule 47 (Exp)]
-    LB            [reduce using rule 47 (Exp)]
-    PLUS          [reduce using rule 47 (Exp)]
-    MUL           [reduce using rule 47 (Exp)]
-    MINUS         [reduce using rule 47 (Exp)]
-    DIV           [reduce using rule 47 (Exp)]
-    OR            [reduce using rule 47 (Exp)]
-    AND           [reduce using rule 47 (Exp)]
-    NE            [reduce using rule 47 (Exp)]
-    LT            [reduce using rule 47 (Exp)]
-    LE            [reduce using rule 47 (Exp)]
-    GT            [reduce using rule 47 (Exp)]
-    GE            [reduce using rule 47 (Exp)]
-    EQ            [reduce using rule 47 (Exp)]
     $default      reduce using rule 47 (Exp)
 
 
@@ -2261,14 +2116,11 @@ State 122
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
     NE            shift, and go to state 92
     LT            shift, and go to state 93
     LE            shift, and go to state 94
@@ -2277,21 +2129,6 @@ State 122
     EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 46 (Exp)]
-    DOT           [reduce using rule 46 (Exp)]
-    ASSIGN        [reduce using rule 46 (Exp)]
-    LB            [reduce using rule 46 (Exp)]
-    PLUS          [reduce using rule 46 (Exp)]
-    MUL           [reduce using rule 46 (Exp)]
-    MINUS         [reduce using rule 46 (Exp)]
-    DIV           [reduce using rule 46 (Exp)]
-    OR            [reduce using rule 46 (Exp)]
-    AND           [reduce using rule 46 (Exp)]
-    NE            [reduce using rule 46 (Exp)]
-    LT            [reduce using rule 46 (Exp)]
-    LE            [reduce using rule 46 (Exp)]
-    GT            [reduce using rule 46 (Exp)]
-    GE            [reduce using rule 46 (Exp)]
-    EQ            [reduce using rule 46 (Exp)]
     $default      reduce using rule 46 (Exp)
 
 
@@ -2317,37 +2154,17 @@ State 123
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
     LT            shift, and go to state 93
     LE            shift, and go to state 94
     GT            shift, and go to state 95
     GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 52 (Exp)]
-    DOT           [reduce using rule 52 (Exp)]
-    ASSIGN        [reduce using rule 52 (Exp)]
-    LB            [reduce using rule 52 (Exp)]
-    PLUS          [reduce using rule 52 (Exp)]
-    MUL           [reduce using rule 52 (Exp)]
-    MINUS         [reduce using rule 52 (Exp)]
-    DIV           [reduce using rule 52 (Exp)]
-    OR            [reduce using rule 52 (Exp)]
-    AND           [reduce using rule 52 (Exp)]
-    NE            [reduce using rule 52 (Exp)]
-    LT            [reduce using rule 52 (Exp)]
-    LE            [reduce using rule 52 (Exp)]
-    GT            [reduce using rule 52 (Exp)]
-    GE            [reduce using rule 52 (Exp)]
-    EQ            [reduce using rule 52 (Exp)]
     $default      reduce using rule 52 (Exp)
 
 
@@ -2373,37 +2190,13 @@ State 124
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 48 (Exp)]
-    DOT           [reduce using rule 48 (Exp)]
-    ASSIGN        [reduce using rule 48 (Exp)]
-    LB            [reduce using rule 48 (Exp)]
-    PLUS          [reduce using rule 48 (Exp)]
-    MUL           [reduce using rule 48 (Exp)]
-    MINUS         [reduce using rule 48 (Exp)]
-    DIV           [reduce using rule 48 (Exp)]
-    OR            [reduce using rule 48 (Exp)]
-    AND           [reduce using rule 48 (Exp)]
-    NE            [reduce using rule 48 (Exp)]
-    LT            [reduce using rule 48 (Exp)]
-    LE            [reduce using rule 48 (Exp)]
-    GT            [reduce using rule 48 (Exp)]
-    GE            [reduce using rule 48 (Exp)]
-    EQ            [reduce using rule 48 (Exp)]
     $default      reduce using rule 48 (Exp)
 
 
@@ -2429,37 +2222,13 @@ State 125
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 49 (Exp)]
-    DOT           [reduce using rule 49 (Exp)]
-    ASSIGN        [reduce using rule 49 (Exp)]
-    LB            [reduce using rule 49 (Exp)]
-    PLUS          [reduce using rule 49 (Exp)]
-    MUL           [reduce using rule 49 (Exp)]
-    MINUS         [reduce using rule 49 (Exp)]
-    DIV           [reduce using rule 49 (Exp)]
-    OR            [reduce using rule 49 (Exp)]
-    AND           [reduce using rule 49 (Exp)]
-    NE            [reduce using rule 49 (Exp)]
-    LT            [reduce using rule 49 (Exp)]
-    LE            [reduce using rule 49 (Exp)]
-    GT            [reduce using rule 49 (Exp)]
-    GE            [reduce using rule 49 (Exp)]
-    EQ            [reduce using rule 49 (Exp)]
     $default      reduce using rule 49 (Exp)
 
 
@@ -2485,37 +2254,13 @@ State 126
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 50 (Exp)]
-    DOT           [reduce using rule 50 (Exp)]
-    ASSIGN        [reduce using rule 50 (Exp)]
-    LB            [reduce using rule 50 (Exp)]
-    PLUS          [reduce using rule 50 (Exp)]
-    MUL           [reduce using rule 50 (Exp)]
-    MINUS         [reduce using rule 50 (Exp)]
-    DIV           [reduce using rule 50 (Exp)]
-    OR            [reduce using rule 50 (Exp)]
-    AND           [reduce using rule 50 (Exp)]
-    NE            [reduce using rule 50 (Exp)]
-    LT            [reduce using rule 50 (Exp)]
-    LE            [reduce using rule 50 (Exp)]
-    GT            [reduce using rule 50 (Exp)]
-    GE            [reduce using rule 50 (Exp)]
-    EQ            [reduce using rule 50 (Exp)]
     $default      reduce using rule 50 (Exp)
 
 
@@ -2541,37 +2286,13 @@ State 127
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
-    LT            shift, and go to state 93
-    LE            shift, and go to state 94
-    GT            shift, and go to state 95
-    GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 51 (Exp)]
-    DOT           [reduce using rule 51 (Exp)]
-    ASSIGN        [reduce using rule 51 (Exp)]
-    LB            [reduce using rule 51 (Exp)]
-    PLUS          [reduce using rule 51 (Exp)]
-    MUL           [reduce using rule 51 (Exp)]
-    MINUS         [reduce using rule 51 (Exp)]
-    DIV           [reduce using rule 51 (Exp)]
-    OR            [reduce using rule 51 (Exp)]
-    AND           [reduce using rule 51 (Exp)]
-    NE            [reduce using rule 51 (Exp)]
-    LT            [reduce using rule 51 (Exp)]
-    LE            [reduce using rule 51 (Exp)]
-    GT            [reduce using rule 51 (Exp)]
-    GE            [reduce using rule 51 (Exp)]
-    EQ            [reduce using rule 51 (Exp)]
     $default      reduce using rule 51 (Exp)
 
 
@@ -2597,37 +2318,17 @@ State 128
 
     ERROR_LEXEME  shift, and go to state 81
     DOT           shift, and go to state 82
-    ASSIGN        shift, and go to state 83
     LB            shift, and go to state 85
     PLUS          shift, and go to state 86
     MUL           shift, and go to state 87
     MINUS         shift, and go to state 88
     DIV           shift, and go to state 89
-    OR            shift, and go to state 90
-    AND           shift, and go to state 91
-    NE            shift, and go to state 92
     LT            shift, and go to state 93
     LE            shift, and go to state 94
     GT            shift, and go to state 95
     GE            shift, and go to state 96
-    EQ            shift, and go to state 97
 
     ERROR_LEXEME  [reduce using rule 53 (Exp)]
-    DOT           [reduce using rule 53 (Exp)]
-    ASSIGN        [reduce using rule 53 (Exp)]
-    LB            [reduce using rule 53 (Exp)]
-    PLUS          [reduce using rule 53 (Exp)]
-    MUL           [reduce using rule 53 (Exp)]
-    MINUS         [reduce using rule 53 (Exp)]
-    DIV           [reduce using rule 53 (Exp)]
-    OR            [reduce using rule 53 (Exp)]
-    AND           [reduce using rule 53 (Exp)]
-    NE            [reduce using rule 53 (Exp)]
-    LT            [reduce using rule 53 (Exp)]
-    LE            [reduce using rule 53 (Exp)]
-    GT            [reduce using rule 53 (Exp)]
-    GE            [reduce using rule 53 (Exp)]
-    EQ            [reduce using rule 53 (Exp)]
     $default      reduce using rule 53 (Exp)
 
 

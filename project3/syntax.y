@@ -36,9 +36,19 @@
 %type <ast_node> Exp
 %type <ast_node> Args
 %token <ast_node> WRITE READ
+%right ASSIGN
+%left OR
+%left AND
+%left BITOR
+%left BITXOR
+%left BITAND
+%left EQ NE
+%left LE LT GE GT
 %left PLUS MINUS
 %left MUL DIV
-%left UMINUS
+%right NOT UMINUS BITWISE
+%left LP RP LB RB
+%right DOT
 %%
 Program: ExtDefList { 
     DISPLAY_SYNTAX("Program"); 
