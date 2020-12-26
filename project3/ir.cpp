@@ -505,6 +505,10 @@ int irExp(AST *node, bool single){
             return emit(new AssignValueTAC(tacs.size(), head));
         }
     }
+    // LP Exp RP
+    if (node->child[0]->type_name.compare("LP") == 0){
+        return irExp(node->child[1]);
+    }
     assert(NULL);
 }
 
