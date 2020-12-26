@@ -1,6 +1,6 @@
 #include "semantic.hpp"
 
-#define DEBUG(s, node) fprintf(stdout, "DEBUG: %20s | ", s); node->print_self();
+#define DEBUG(s, node) //fprintf(stdout, "DEBUG: %20s | ", s); node->print_self();
 #define ERROR(s, node) //fprintf(stdout, "ERROR: %20s | ", s); node->print_self();
 
 multimap<string, Variable_Type*> var_map = multimap<string, Variable_Type*>();

@@ -246,10 +246,10 @@ int irExp(AST *node, bool single){
     //ID
     if (node->child[0]->type_name.compare("ID") == 0){
         DEBUG("Exp begin > ID")
-        fprintf(stdout, "name = %s\n", node->child[0]->value.c_str());
+        // fprintf(stdout, "name = %s\n", node->child[0]->value.c_str());
         string name = node->child[0]->value;
         int id = getIR(name);
-        fprintf(stdout, "id = %d\n", id);
+        // fprintf(stdout, "id = %d\n", id);
         int res = 0;
         if (single) {
             if (!id) {
@@ -363,19 +363,12 @@ int irExp(AST *node, bool single){
     }
     if (node->child[1]->type_name.compare("GT") == 0) {
         DEBUG("Exp begin > Exp GT")
-        DEBUG("$1")
         int leftid = irExp(node->child[0]);
-        DEBUG("$2")
         int rightid = irExp(node->child[2]);
-        DEBUG("$3")
         IfTAC *if_tac = new IfTAC(tacs.size(), Operator::GT_OPERATOR, leftid, rightid, emitlist()); //back
-        fprintf(stdout, "%s\n", operator_to_string(Operator::GT_OPERATOR).c_str());
-        fprintf(stdout, "%s\n", if_tac->to_string().c_str());
         int ifid = emit(if_tac);
-        DEBUG("$4")
         TAC *goinst = new GoToTAC(tacs.size(), emitlist());//back
         int goid = emit(goinst);
-        DEBUG("$5")
         DEBUG("Exp end > Exp GT")
         return ifid;
     }
@@ -484,15 +477,9 @@ int irExp(AST *node, bool single){
             AST *top = _stack.back();
             if (top->child_num == 1) {
                 assert(top->child[0]->type_name.compare("ID") == 0);
-                DEBUG("cp 1")
-                fprintf(stdout, "top->child_num = %d\n", top->child_num);
-                fprintf(stdout, "top.type_name = %s %s at line %d\n", top->type_name.c_str(), top->value.c_str(), top->lineno);
                 head = irExp(top);
-                fprintf(stdout, "cp 1.2 %s %s\n", typeid(*tacs[head]).name(), tacs[head]->name.c_str());
                 assert(tacs[head]->type);
-                fprintf(stdout, "%d\n", tacs[head]->type->lineno);
                 Type *type = tacs[head]->type;
-                fprintf(stdout, "type->lineno = %d\n", type->lineno);
                 _stack.pop_back();
                 if (typeid(*tacs[head])==typeid(DecTAC)){
                     head = emit(new AssignAddressTAC(tacs.size(), head));
@@ -684,9 +671,6 @@ void backPatchLoop(vector<int>* sta, int last, int target){
     }
 }
 void putIR(string name, int id){
-    if (name.compare("op") == 0) {
-        fprintf(stdout, "put op into table with value %d\n", id);
-    }
     table[name] = id;
 }
 int getIR(string name){
