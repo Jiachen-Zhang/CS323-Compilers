@@ -1,0 +1,15 @@
+int add(int array[2]) 
+{
+    return (array[0] + array[1]);
+}
+int main()
+{
+    int arr[2];
+    int res;
+    arr[0] = 1;
+    arr[1] = 2;
+    res = arr[0] + arr[1];
+    write(res);
+    write(add(arr));
+    return 0;
+}
